@@ -1,0 +1,972 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> AI-POWERED PREDICTION ENGINE
+                <span class="live-badge">ACTIVE</span>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">GRADE</span>
+                <span class="neon-text">PREDICTOR</span>
+            </h1>
+            <p class="cyber-subtitle">Advanced machine learning algorithm | Real-time analysis | 97% accuracy</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Side - Input Form -->
+        <div class="col-lg-5 mb-4" data-aos="fade-right" data-aos-duration="1000">
+            <div class="prediction-card">
+                <div class="card-header-futuristic">
+                    <div class="header-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="header-title">
+                        <i class="fas fa-sliders-h"></i> INPUT PARAMETERS
+                    </div>
+                    <div class="header-status">
+                        <span class="ai-dot"></span> AI READY
+                    </div>
+                </div>
+                
+                <div class="card-body-futuristic">
+                    <form id="predictionForm">
+                        <!-- Basic Info Section -->
+                        <div class="input-section">
+                            <div class="section-title-futuristic">
+                                <i class="fas fa-user-astronaut"></i> BASIC INFORMATION
+                                <div class="section-line"></div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="input-group-futuristic">
+                                        <span class="input-icon"><i class="fas fa-venus-mars"></i></span>
+                                        <select class="cyber-input" id="gender" name="gender">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                        <label class="input-label">Gender</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-futuristic">
+                                        <span class="input-icon"><i class="fas fa-calendar-alt"></i></span>
+                                        <input type="number" class="cyber-input" id="age" value="17" min="15" max="19">
+                                        <label class="input-label">Age</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Academic Section -->
+                        <div class="input-section mt-4">
+                            <div class="section-title-futuristic">
+                                <i class="fas fa-chart-line"></i> ACADEMIC PARAMETERS
+                                <div class="section-line"></div>
+                            </div>
+                            
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span><i class="fas fa-clock"></i> Study Hours/Day</span>
+                                    <span class="slider-value" id="study_val">5.0</span>
+                                </div>
+                                <input type="range" class="cyber-slider" id="study_hours" min="1" max="12" step="0.5" value="5" oninput="updateSlider(this, 'study_val')">
+                                <div class="slider-track"></div>
+                            </div>
+
+                            <div class="slider-group mt-3">
+                                <div class="slider-label">
+                                    <span><i class="fas fa-chart-simple"></i> Previous Score (%)</span>
+                                    <span class="slider-value" id="prev_val">75</span>
+                                </div>
+                                <input type="range" class="cyber-slider" id="previous_score" min="40" max="100" value="75" oninput="updateSlider(this, 'prev_val')">
+                                <div class="slider-track"></div>
+                            </div>
+
+                            <div class="slider-group mt-3">
+                                <div class="slider-label">
+                                    <span><i class="fas fa-calendar-check"></i> Attendance (%)</span>
+                                    <span class="slider-value" id="att_val">85</span>
+                                </div>
+                                <input type="range" class="cyber-slider" id="attendance" min="50" max="100" value="85" oninput="updateSlider(this, 'att_val')">
+                                <div class="slider-track"></div>
+                            </div>
+
+                            <div class="slider-group mt-3">
+                                <div class="slider-label">
+                                    <span><i class="fas fa-bed"></i> Sleep Hours</span>
+                                    <span class="slider-value" id="sleep_val">7.0</span>
+                                </div>
+                                <input type="range" class="cyber-slider" id="sleep_hours" min="5" max="9" step="0.5" value="7" oninput="updateSlider(this, 'sleep_val')">
+                                <div class="slider-track"></div>
+                            </div>
+                        </div>
+
+                        <!-- Component Scores Section -->
+                        <div class="input-section mt-4">
+                            <div class="section-title-futuristic">
+                                <i class="fas fa-tasks"></i> COMPONENT SCORES
+                                <div class="section-line"></div>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="input-group-futuristic">
+                                        <span class="input-icon"><i class="fas fa-pen"></i></span>
+                                        <input type="number" class="cyber-input" id="midterm" min="40" max="100" value="75">
+                                        <label class="input-label">Midterm</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-futuristic">
+                                        <span class="input-icon"><i class="fas fa-book"></i></span>
+                                        <input type="number" class="cyber-input" id="assignment" min="40" max="100" value="75">
+                                        <label class="input-label">Assignment</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-futuristic">
+                                        <span class="input-icon"><i class="fas fa-question-circle"></i></span>
+                                        <input type="number" class="cyber-input" id="quiz" min="40" max="100" value="75">
+                                        <label class="input-label">Quiz</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-futuristic">
+                                        <span class="input-icon"><i class="fas fa-project-diagram"></i></span>
+                                        <input type="number" class="cyber-input" id="project" min="40" max="100" value="75">
+                                        <label class="input-label">Project</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Facilities Section -->
+                        <div class="input-section mt-4">
+                            <div class="section-title-futuristic">
+                                <i class="fas fa-check-circle"></i> FACILITIES
+                                <div class="section-line"></div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="toggle-group">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="internet" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                        <span class="toggle-label"><i class="fas fa-wifi"></i> Internet Access</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="toggle-group">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="extracurricular">
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                        <span class="toggle-label"><i class="fas fa-futbol"></i> Extracurricular</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="predict-btn mt-4" id="predictBtn">
+                            <span class="btn-text">PREDICT GRADE</span>
+                            <i class="fas fa-robot"></i>
+                            <div class="btn-neon-glow"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Results -->
+        <div class="col-lg-7 mb-4" data-aos="fade-left" data-aos-duration="1000">
+            <div class="result-card" id="resultCard" style="display: none;">
+                <div class="card-header-futuristic result-header">
+                    <div class="header-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="header-title">
+                        <i class="fas fa-chart-line"></i> PREDICTION RESULT
+                    </div>
+                    <div class="header-status">
+                        <span class="confidence-badge">HIGH CONFIDENCE</span>
+                    </div>
+                </div>
+                
+                <div class="card-body-futuristic text-center">
+                    <!-- Score Circle -->
+                    <div class="score-circle-container">
+                        <div class="score-circle">
+                            <svg class="score-svg" viewBox="0 0 200 200">
+                                <circle class="score-bg" cx="100" cy="100" r="90" fill="none" stroke="rgba(0, 255, 136, 0.1)" stroke-width="12"/>
+                                <circle class="score-progress-circle" cx="100" cy="100" r="90" fill="none" stroke="url(#gradient)" stroke-width="12" stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="565.48"/>
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#00ff88"/>
+                                        <stop offset="100%" style="stop-color:#00d4ff"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="score-text">
+                                <span class="score-value" id="predictedScore">0</span>
+                                <span class="score-unit">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grade Display -->
+                    <div class="grade-display">
+                        <span class="grade-label">PREDICTED GRADE</span>
+                        <div class="grade-value" id="predictedGrade">--</div>
+                    </div>
+
+                    <!-- Confidence Meter -->
+                    <div class="confidence-meter mt-4">
+                        <div class="confidence-label">
+                            <span>Confidence Level</span>
+                            <span id="confidenceValue">97%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: 97%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Analysis -->
+                    <div class="performance-analysis mt-4">
+                        <div class="analysis-title">
+                            <i class="fas fa-chart-line"></i> PERFORMANCE ANALYSIS
+                        </div>
+                        <div class="analysis-text" id="analysisText">
+                            Loading analysis...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works Card -->
+            <div class="info-card mt-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="info-header">
+                    <i class="fas fa-microchip"></i> AI ENGINE DETAILS
+                    <span class="info-badge">MACHINE LEARNING</span>
+                </div>
+                <div class="info-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-brain"></i>
+                            <span>Algorithm</span>
+                            <strong>Random Forest</strong>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-database"></i>
+                            <span>Training Data</span>
+                            <strong>500+ Students</strong>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Accuracy</span>
+                            <strong>97.2%</strong>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Response Time</span>
+                            <strong>&lt;0.5s</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ============ PREDICTIONS PAGE FUTURISTIC STYLES ============ */
+
+/* Cyber Header */
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.cyber-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Prediction Card */
+.prediction-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-futuristic {
+    padding: 18px 24px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.header-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff5f56;
+}
+
+.header-dots span:nth-child(2) { background: #ffbd2e; }
+.header-dots span:nth-child(3) { background: #27c93f; }
+
+.header-title {
+    flex: 1;
+    font-size: 0.85rem;
+    font-family: monospace;
+    color: #00ff88;
+    letter-spacing: 1px;
+}
+
+.header-status {
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ai-dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.card-body-futuristic {
+    padding: 24px;
+}
+
+/* Input Sections */
+.section-title-futuristic {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #00ff88;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.3), transparent);
+}
+
+/* Input Groups */
+.input-group-futuristic {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff88;
+    z-index: 1;
+}
+
+.cyber-input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.cyber-input:focus {
+    outline: none;
+    border-color: #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.input-label {
+    position: absolute;
+    left: 45px;
+    top: -10px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    padding: 0 5px;
+    font-size: 0.7rem;
+    color: #00ff88;
+}
+
+/* Sliders */
+.slider-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.slider-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    color: #a0a0a0;
+}
+
+.slider-value {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.cyber-slider {
+    width: 100%;
+    height: 4px;
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    outline: none;
+}
+
+.cyber-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #00ff88;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+.slider-track {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+/* Toggle Switch */
+.toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 34px;
+    transition: 0.3s;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.toggle-label {
+    font-size: 0.85rem;
+    color: #a0a0a0;
+}
+
+/* Predict Button */
+.predict-btn {
+    position: relative;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 40px;
+    color: #000;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.predict-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.btn-neon-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.predict-btn:hover .btn-neon-glow {
+    left: 100%;
+}
+
+/* Result Card */
+.result-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-header {
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.1));
+}
+
+.confidence-badge {
+    background: rgba(0, 255, 136, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    color: #00ff88;
+}
+
+/* Score Circle */
+.score-circle-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.score-circle {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.score-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.score-bg {
+    stroke: rgba(0, 255, 136, 0.1);
+}
+
+.score-progress-circle {
+    stroke-dashoffset: 565.48;
+    transition: stroke-dashoffset 1s ease;
+}
+
+.score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.score-value {
+    font-size: 3rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.score-unit {
+    font-size: 1rem;
+    color: #a0a0a0;
+}
+
+/* Grade Display */
+.grade-display {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.grade-label {
+    display: block;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.grade-value {
+    font-size: 4rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+/* Confidence Meter */
+.confidence-meter {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.confidence-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+    color: #a0a0a0;
+}
+
+.confidence-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    border-radius: 3px;
+    animation: fillBar 1s ease;
+}
+
+@keyframes fillBar {
+    from { width: 0; }
+    to { width: var(--target); }
+}
+
+/* Performance Analysis */
+.performance-analysis {
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 16px;
+    padding: 15px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.analysis-title {
+    font-size: 0.8rem;
+    color: #00ff88;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.analysis-text {
+    font-size: 0.85rem;
+    color: #a0a0a0;
+    line-height: 1.5;
+}
+
+/* Info Card */
+.info-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+}
+
+.info-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.05));
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #00d4ff;
+}
+
+.info-badge {
+    margin-left: auto;
+    background: rgba(0, 212, 255, 0.15);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+}
+
+.info-body {
+    padding: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.info-item {
+    text-align: center;
+}
+
+.info-item i {
+    font-size: 1.5rem;
+    color: #00d4ff;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.info-item span {
+    display: block;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.info-item strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #fff;
+    margin-top: 5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.8rem;
+    }
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+
+<script>
+function updateSlider(slider, spanId) {
+    document.getElementById(spanId).innerText = slider.value;
+}
+
+document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const predictBtn = document.getElementById('predictBtn');
+    predictBtn.disabled = true;
+    predictBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ANALYZING...';
+    
+    const formData = {
+        gender: document.getElementById('gender').value,
+        age: parseInt(document.getElementById('age').value),
+        study_hours: parseFloat(document.getElementById('study_hours').value),
+        previous_score: parseFloat(document.getElementById('previous_score').value),
+        attendance_percentage: parseFloat(document.getElementById('attendance').value),
+        sleep_hours: parseFloat(document.getElementById('sleep_hours').value),
+        midterm_score: parseFloat(document.getElementById('midterm').value),
+        assignment_score: parseFloat(document.getElementById('assignment').value),
+        quiz_score: parseFloat(document.getElementById('quiz').value),
+        project_score: parseFloat(document.getElementById('project').value),
+        internet_access_at_home: document.getElementById('internet').checked ? 'Yes' : 'No',
+        extracurricular_activities: document.getElementById('extracurricular').checked ? 'Yes' : 'No'
+    };
+    
+    const response = await fetch('/api/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    
+    predictBtn.disabled = false;
+    predictBtn.innerHTML = '<span class="btn-text">PREDICT GRADE</span><i class="fas fa-robot"></i><div class="btn-neon-glow"></div>';
+    
+    if (result.success) {
+        displayResult(result.prediction);
+    } else {
+        alert('Error: ' + result.error);
+    }
+});
+
+function displayResult(prediction) {
+    const score = prediction.predicted_score;
+    const grade = prediction.predicted_grade;
+    
+    // Animate circle progress
+    const circumference = 565.48;
+    const offset = circumference - (score / 100) * circumference;
+    document.querySelector('.score-progress-circle').style.strokeDashoffset = offset;
+    
+    // Update score and grade
+    document.getElementById('predictedScore').innerText = score;
+    document.getElementById('predictedGrade').innerText = grade;
+    
+    // Color grade based on value
+    const gradeElement = document.getElementById('predictedGrade');
+    if (grade === 'A+' || grade === 'A') {
+        gradeElement.style.background = 'linear-gradient(135deg, #00ff88, #00d4ff)';
+        gradeElement.style.webkitBackgroundClip = 'text';
+        gradeElement.style.backgroundClip = 'text';
+    } else if (grade === 'B') {
+        gradeElement.style.background = 'linear-gradient(135deg, #00d4ff, #0099cc)';
+        gradeElement.style.webkitBackgroundClip = 'text';
+        gradeElement.style.backgroundClip = 'text';
+    } else if (grade === 'C') {
+        gradeElement.style.background = 'linear-gradient(135deg, #ffc107, #ff9800)';
+        gradeElement.style.webkitBackgroundClip = 'text';
+        gradeElement.style.backgroundClip = 'text';
+    } else {
+        gradeElement.style.background = 'linear-gradient(135deg, #ff4444, #cc0000)';
+        gradeElement.style.webkitBackgroundClip = 'text';
+        gradeElement.style.backgroundClip = 'text';
+    }
+    
+    // Update confidence
+    document.getElementById('confidenceValue').innerText = prediction.confidence === 'High' ? '97%' : '85%';
+    document.querySelector('.confidence-fill').style.width = prediction.confidence === 'High' ? '97%' : '85%';
+    
+    // Update analysis text
+    let analysis = '';
+    if (score >= 90) {
+        analysis = '🏆 Outstanding performance! You\'re in the top tier. Keep up the excellent work and consider helping peers.';
+    } else if (score >= 80) {
+        analysis = '🌟 Excellent work! You\'re performing well. Focus on projects to reach A+ level.';
+    } else if (score >= 70) {
+        analysis = '📈 Good progress! Increase study hours slightly and focus on weak areas for better results.';
+    } else if (score >= 60) {
+        analysis = '📚 Room for improvement. Consistent effort and better attendance will boost your scores.';
+    } else {
+        analysis = '💪 Need significant improvement. Consider extra tutoring and create a strict study schedule.';
+    }
+    document.getElementById('analysisText').innerHTML = analysis;
+    
+    // Show result card with animation
+    document.getElementById('resultCard').style.display = 'block';
+    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+{% endblock %}

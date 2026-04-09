@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid min-vh-100">
+    <div class="row min-vh-100 align-items-center justify-content-center">
+        <div class="col-md-5" data-aos="zoom-in" data-aos-duration="800">
+            <div class="login-card glass-effect p-5">
+                <div class="text-center mb-4">
+                    <div class="cyber-icon mb-3">
+                        <i class="fas fa-user-graduate fa-4x text-info"></i>
+                    </div>
+                    <h2 class="gradient-text">Student Portal</h2>
+                    <p class="text-muted">Access your personalized dashboard</p>
+                </div>
+                
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endif %}
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label text-info">Student ID</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-info"><i class="fas fa-id-card text-info"></i></span>
+                            <input type="text" name="student_id" class="form-control cyber-input" placeholder="Enter Student ID (e.g., S0001)" required autofocus>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label text-info">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-info"><i class="fas fa-key text-info"></i></span>
+                            <input type="password" name="password" class="form-control cyber-input" placeholder="Enter password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info w-100 py-2">
+                        <i class="fas fa-graduation-cap me-2"></i> Access Dashboard
+                    </button>
+                </form>
+                
+                <div class="demo-card mt-4 p-3 rounded">
+                    <h6 class="text-info mb-2"><i class="fas fa-info-circle me-1"></i> Demo Credentials</h6>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <small class="text-muted">Student ID:</small>
+                            <div class="badge bg-info mt-1">S0xxx</div>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Password:</small>
+                            <div class="badge bg-info mt-1">s0xxx123</div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('index') }}" class="text-muted text-decoration-none">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Home
+                    </a>
+                    <span class="text-muted mx-2">|</span>
+                    <a href="{{ url_for('login') }}" class="text-success text-decoration-none">
+                        Admin Login <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                    <span class="text-muted mx-2">|</span>
+                    <a href="{{ url_for('parent_login') }}" class="text-warning text-decoration-none">
+                        Parent Login <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.login-card {
+    background: rgba(26, 26, 46, 0.9);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 28px;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
+}
+
+.cyber-input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #ffffff;
+    padding: 12px 15px;
+}
+
+.cyber-input:focus {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+    color: #ffffff;
+}
+
+.input-group-text {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.demo-card {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px dashed rgba(0, 212, 255, 0.3);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    border: none;
+    color: #000000;
+    font-weight: bold;
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.cyber-icon {
+    animation: cyberPulse 2s ease-in-out infinite;
+}
+
+@keyframes cyberPulse {
+    0%, 100% { text-shadow: 0 0 10px #00d4ff; }
+    50% { text-shadow: 0 0 30px #00d4ff, 0 0 50px #00ff88; }
+}
+</style>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init({ duration: 800 });</script>
+{% endblock %}

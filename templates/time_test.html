@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Time Test - IST</h2>
+    <div class="card bg-dark">
+        <div class="card-body">
+            <p><strong>Current IST Time:</strong> <span id="currentTime"></span></p>
+            <p><strong>Formatted Date:</strong> <span id="formattedDate"></span></p>
+            <p><strong>Formatted Time:</strong> <span id="formattedTime"></span></p>
+            <hr>
+            <p><strong>Test Timestamp (2026-04-09 15:30:00):</strong> <span id="testTimestamp"></span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateDisplay() {
+    document.getElementById('currentTime').innerHTML = TrioxTime.formatDateTime();
+    document.getElementById('formattedDate').innerHTML = TrioxTime.formatDate();
+    document.getElementById('formattedTime').innerHTML = TrioxTime.formatTime();
+    
+    // Test with a specific timestamp
+    const testDate = new Date('2026-04-09T15:30:00Z');
+    document.getElementById('testTimestamp').innerHTML = TrioxTime.toIST(testDate);
+}
+
+updateDisplay();
+setInterval(updateDisplay, 1000);
+</script>
+{% endblock %}

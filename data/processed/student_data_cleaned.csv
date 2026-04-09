@@ -1,0 +1,502 @@
+student_id,name,gender,age,study_hours,previous_score,attendance_percentage,parent_education_level,parent_income,internet_access_at_home,sleep_hours,extracurricular_activities,tuition_classes,library_access,transport_facility,midterm_score,assignment_score,quiz_score,project_score,final_score,grade
+S0001,Christian Scott,Female,16,5.5,58,65,Master's,118654,Yes,6,Yes,No,Yes,Yes,47,59,48,58,54.0,D
+S0002,Alexander Edwards,Male,19,7.1,71,83,Bachelor's,79916,Yes,9,No,Yes,No,Yes,80,68,64,61,67.6,C
+S0003,Ava Lewis,Male,15,2.0,69,79,Bachelor's,81627,Yes,5,Yes,No,Yes,Yes,41,47,57,44,45.8,F
+S0004,Christian Harris,Male,17,6.8,74,100,High School,49782,Yes,7,No,Yes,No,Yes,66,72,75,65,68.2,C
+S0005,Joseph Anderson,Female,18,1.2,85,87,High School,43721,Yes,6,No,Yes,Yes,Yes,61,68,58,48,56.8,D
+S0006,Lucas Hall,Female,17,5.0,68,81,Master's,109881,Yes,7,Yes,Yes,No,No,55,58,55,57,56.4,D
+S0007,Lily Campbell,Male,16,8.3,85,73,Bachelor's,80483,No,9,Yes,Yes,Yes,Yes,72,83,70,82,77.9,B
+S0008,Elizabeth Brown,Female,16,6.0,68,85,PhD,145422,Yes,6,No,No,No,Yes,59,64,60,56,59.0,D
+S0009,Madison Johnson,Male,17,5.6,87,97,Bachelor's,66984,No,9,No,Yes,Yes,Yes,74,66,73,66,69.1,C
+S0010,Elizabeth Collins,Female,17,8.0,76,85,Master's,108776,Yes,6,Yes,No,Yes,No,71,70,57,70,68.3,C
+S0011,Natalie Turner,Male,16,3.9,70,74,Bachelor's,83618,Yes,8,Yes,Yes,Yes,No,48,46,58,58,53.1,D
+S0012,Emma Lewis,Male,17,5.7,76,87,Bachelor's,72755,Yes,7,Yes,Yes,No,Yes,60,69,54,65,62.9,C
+S0013,Ryan Thomas,Female,15,5.9,71,82,High School,37135,Yes,8,No,Yes,Yes,Yes,63,56,57,57,58.3,D
+S0014,Madison Collins,Female,18,4.2,76,86,Bachelor's,55320,Yes,7,Yes,No,Yes,No,59,45,57,69,59.9,D
+S0015,Charles Reed,Female,16,4.3,84,78,Bachelor's,59654,Yes,7,No,No,No,Yes,64,64,59,57,60.4,C
+S0016,Andrew Evans,Female,17,4.2,74,78,PhD,131684,Yes,6,Yes,Yes,Yes,Yes,56,60,57,60,58.6,D
+S0017,Chloe Martin,Female,15,5.1,71,78,Master's,108238,Yes,6,Yes,Yes,Yes,Yes,56,66,47,53,55.4,D
+S0018,Alexander Morris,Male,17,5.8,62,91,High School,51889,Yes,9,Yes,Yes,Yes,Yes,62,54,68,49,56.1,D
+S0019,Leah Brown,Female,18,5.2,82,78,High School,46131,Yes,7,Yes,No,Yes,Yes,61,71,76,64,66.4,C
+S0020,Jonathan Martinez,Female,17,6.1,79,77,High School,40770,Yes,7,Yes,No,No,No,71,60,73,65,66.7,C
+S0021,David Lee,Female,16,2.0,61,73,Bachelor's,61553,Yes,8,Yes,Yes,No,No,44,44,43,41,42.7,F
+S0022,Christian White,Female,18,4.7,85,87,Master's,105426,Yes,7,Yes,No,Yes,Yes,67,70,62,68,67.2,C
+S0023,Sophia Young,Female,18,3.5,61,85,PhD,151777,Yes,9,Yes,Yes,No,No,55,50,51,48,50.6,D
+S0024,Amelia Cook,Female,16,5.5,87,78,High School,43482,No,8,Yes,No,Yes,Yes,67,72,62,69,68.0,C
+S0025,Benjamin Allen,Male,18,5.4,83,75,Bachelor's,62498,Yes,7,No,Yes,Yes,Yes,71,64,66,68,67.6,C
+S0026,Emma Clark,Female,19,4.8,80,100,Bachelor's,61636,Yes,8,Yes,No,Yes,No,66,65,76,71,69.3,C
+S0027,Chloe Morris,Male,16,5.8,70,63,Master's,101395,Yes,5,Yes,Yes,Yes,No,58,63,64,67,63.5,C
+S0028,William Collins,Female,18,6.5,82,87,Bachelor's,71578,Yes,7,Yes,No,Yes,Yes,80,74,72,74,75.2,B
+S0029,Ava Morris,Female,18,4.9,88,95,Master's,87537,Yes,7,No,No,No,Yes,71,75,63,73,71.4,B
+S0030,Nicholas Moore,Male,17,3.4,82,50,Master's,104226,Yes,6,Yes,No,No,No,49,59,60,46,51.4,D
+S0031,Daniel Perez,Female,16,2.6,67,90,High School,45216,Yes,8,No,No,Yes,No,54,52,56,57,55.1,D
+S0032,Savannah Campbell,Female,16,5.1,78,80,Master's,103613,Yes,9,No,No,Yes,No,62,69,61,63,63.6,C
+S0033,Sophia Johnson,Female,18,5.4,89,85,High School,33009,Yes,7,No,Yes,Yes,Yes,74,67,75,65,69.2,C
+S0034,Olivia Evans,Female,19,3.5,98,79,Master's,109368,Yes,7,Yes,Yes,No,Yes,60,76,69,65,66.6,C
+S0035,Sophia Scott,Male,18,6.1,73,93,Bachelor's,84327,Yes,9,No,Yes,No,Yes,79,67,68,66,69.8,C
+S0036,Emily Allen,Female,17,4.3,85,86,Bachelor's,69209,No,7,Yes,No,Yes,Yes,58,59,67,72,65.2,C
+S0037,Leah Carter,Female,17,2.5,89,83,PhD,158443,Yes,7,Yes,Yes,No,No,64,53,68,64,62.4,C
+S0038,Mia Perez,Male,17,6.9,65,73,Master's,100029,Yes,7,No,No,Yes,Yes,66,66,61,62,63.6,C
+S0039,Amelia Baker,Female,17,6.7,96,100,Master's,87077,Yes,9,Yes,No,Yes,Yes,73,71,87,71,73.9,B
+S0040,Brooklyn Jackson,Male,16,2.0,62,82,Bachelor's,68907,Yes,7,No,Yes,Yes,No,45,50,43,42,44.5,F
+S0041,Ava Moore,Male,18,4.2,85,100,Master's,89873,No,8,Yes,Yes,Yes,Yes,67,70,70,70,69.2,C
+S0042,Joseph Campbell,Female,17,4.1,79,100,Bachelor's,63635,Yes,8,No,Yes,Yes,Yes,65,64,64,56,61.0,C
+S0043,David Martin,Female,18,7.5,76,64,Master's,118065,No,7,Yes,Yes,Yes,No,74,69,72,69,70.7,B
+S0044,Dylan White,Male,17,4.9,98,75,Bachelor's,68095,Yes,7,Yes,Yes,Yes,No,75,68,74,66,69.9,C
+S0045,Nathan Hall,Female,15,2.8,71,72,PhD,143783,Yes,8,Yes,Yes,Yes,No,52,49,48,58,53.2,D
+S0046,Grace Young,Male,16,6.3,71,82,PhD,144152,Yes,7,No,No,Yes,Yes,62,67,63,61,62.8,C
+S0047,Dylan Parker,Male,17,3.2,91,84,Master's,114092,Yes,8,Yes,No,Yes,No,64,65,57,63,62.8,C
+S0048,Christopher Jackson,Male,19,4.6,84,84,Bachelor's,72653,No,9,Yes,Yes,Yes,No,73,62,74,77,72.6,B
+S0049,Dylan Smith,Male,16,3.8,90,93,High School,31260,Yes,7,Yes,Yes,No,Yes,67,61,73,70,67.9,C
+S0050,Charles Martinez,Male,18,4.2,76,97,Master's,105947,Yes,8,No,Yes,Yes,Yes,65,60,60,53,58.4,D
+S0051,Benjamin Hall,Female,17,6.4,79,92,High School,53281,Yes,8,Yes,No,Yes,No,68,64,73,63,66.0,C
+S0052,John Collins,Female,18,7.3,98,76,Master's,114978,Yes,8,Yes,No,Yes,Yes,72,80,80,89,81.6,A
+S0053,Ava Hall,Male,17,3.1,65,74,Bachelor's,77056,Yes,7,Yes,Yes,No,No,58,49,50,52,52.6,D
+S0054,Lucas Thompson,Female,18,5.9,74,82,Bachelor's,84007,Yes,6,Yes,Yes,No,Yes,65,59,70,62,63.4,C
+S0055,Ava Mitchell,Female,18,3.9,85,86,PhD,153169,Yes,7,Yes,No,Yes,Yes,67,58,59,62,62.0,C
+S0056,Nicholas Nelson,Male,16,3.9,73,80,Bachelor's,70519,Yes,8,Yes,No,Yes,Yes,50,61,46,58,54.8,D
+S0057,James Evans,Female,16,5.7,68,69,Bachelor's,76977,No,7,No,Yes,No,No,58,57,58,59,58.2,D
+S0058,Christian Parker,Female,18,3.5,82,89,Bachelor's,66864,Yes,8,Yes,No,Yes,Yes,56,67,68,62,62.4,C
+S0059,Chloe Martinez,Male,19,5.7,91,78,Bachelor's,70681,Yes,7,Yes,Yes,Yes,No,68,64,77,77,72.2,B
+S0060,Benjamin Rodriguez,Male,15,6.1,73,78,Master's,90543,Yes,7,Yes,Yes,Yes,No,64,62,53,57,59.1,D
+S0061,Isabella Carter,Female,18,4.4,73,81,Bachelor's,78624,Yes,6,No,No,Yes,No,64,59,59,50,56.6,D
+S0062,Ryan Rogers,Female,19,7.0,67,80,PhD,131067,Yes,8,No,No,Yes,No,59,63,69,61,62.1,C
+S0063,Joseph Hall,Male,18,3.1,71,78,Master's,110097,Yes,7,No,Yes,Yes,No,61,61,44,48,53.3,D
+S0064,Jonathan Mitchell,Female,19,7.0,88,69,Bachelor's,65079,Yes,6,Yes,No,Yes,Yes,67,71,80,74,72.6,B
+S0065,Leah Campbell,Female,18,2.1,76,81,Master's,88809,No,7,Yes,Yes,No,No,58,57,39,54,53.4,D
+S0066,Madison King,Female,17,9.0,65,89,Bachelor's,77191,Yes,8,Yes,No,Yes,No,75,74,57,77,72.9,B
+S0067,Nicholas Smith,Female,17,4.4,78,85,Bachelor's,76267,Yes,7,Yes,Yes,No,Yes,55,57,77,72,65.5,C
+S0068,Nicholas Roberts,Female,17,3.3,88,91,PhD,138992,Yes,6,Yes,No,Yes,Yes,61,55,68,61,60.9,C
+S0069,Nathan Moore,Male,18,4.7,68,75,High School,43746,Yes,9,No,No,Yes,No,55,72,55,53,57.6,D
+S0070,Michael Smith,Male,18,3.4,59,69,Bachelor's,70995,Yes,8,No,Yes,Yes,Yes,48,43,44,42,44.0,F
+S0071,James Allen,Female,16,5.6,98,80,Bachelor's,71035,No,9,No,No,No,No,72,72,76,77,74.6,B
+S0072,Amelia Phillips,Female,18,7.1,58,76,Bachelor's,66671,No,7,Yes,No,No,Yes,64,57,56,60,59.8,D
+S0073,Andrew Lee,Male,18,3.5,71,77,Bachelor's,68210,No,7,No,No,Yes,Yes,60,52,51,60,57.0,D
+S0074,Alexander Jackson,Female,17,5.9,78,84,Master's,102793,No,8,Yes,Yes,No,No,73,70,75,61,67.9,C
+S0075,Grace Evans,Female,17,2.7,72,77,Bachelor's,81270,Yes,7,Yes,No,Yes,Yes,47,48,51,57,51.8,D
+S0076,Ethan Adams,Male,17,6.5,74,69,Bachelor's,84240,Yes,8,No,No,No,Yes,63,61,76,63,64.6,C
+S0077,Christian Reed,Female,16,5.6,82,76,High School,35197,Yes,7,Yes,Yes,Yes,No,59,71,56,63,62.6,C
+S0078,Samantha Williams,Female,16,6.6,46,85,Bachelor's,70553,Yes,7,Yes,No,No,Yes,56,50,60,61,57.4,D
+S0079,Natalie Roberts,Female,16,4.8,60,89,High School,37452,Yes,6,Yes,Yes,Yes,No,59,63,64,63,62.2,C
+S0080,Joseph Phillips,Female,16,4.3,76,89,Bachelor's,63718,Yes,6,No,Yes,Yes,No,60,59,52,59,58.2,D
+S0081,Dylan Jackson,Male,17,6.2,70,86,Bachelor's,69859,Yes,5,No,Yes,Yes,No,68,66,59,62,63.9,C
+S0082,Samuel Scott,Female,17,3.0,77,80,High School,32172,Yes,5,Yes,No,Yes,Yes,46,54,60,58,54.5,D
+S0083,Lily Taylor,Male,15,2.4,78,86,Bachelor's,68158,Yes,9,No,No,Yes,Yes,52,53,61,56,55.2,D
+S0084,Samantha Martinez,Male,18,5.0,50,82,High School,46663,Yes,6,Yes,Yes,Yes,No,56,51,52,56,54.4,D
+S0085,Madison Wright,Female,17,4.4,90,83,PhD,129053,Yes,8,Yes,No,Yes,No,65,61,60,70,65.4,C
+S0086,Emma Evans,Male,19,5.8,69,73,PhD,121085,Yes,8,No,Yes,Yes,No,60,61,53,62,60.0,C
+S0087,Dylan Garcia,Male,19,6.6,65,82,Bachelor's,79209,Yes,7,No,Yes,Yes,No,59,66,65,68,64.9,C
+S0088,Chloe Wright,Female,16,5.8,78,86,PhD,169095,Yes,6,No,Yes,Yes,Yes,60,78,70,67,67.9,C
+S0089,Leah Collins,Male,17,6.5,76,85,Master's,88981,Yes,8,Yes,No,No,Yes,68,65,66,68,67.1,C
+S0090,Abigail Green,Male,15,5.5,89,69,Bachelor's,76153,Yes,7,No,No,Yes,Yes,62,68,72,64,65.5,C
+S0091,Lucas Wright,Female,17,5.7,78,83,High School,35247,Yes,8,No,No,Yes,Yes,63,72,67,70,68.2,C
+S0092,Charles Phillips,Female,17,4.8,89,68,Master's,95553,Yes,8,No,No,Yes,Yes,68,70,59,59,63.4,C
+S0093,Ryan Smith,Male,16,5.7,64,84,Master's,105811,Yes,9,Yes,Yes,Yes,No,64,57,64,56,59.4,D
+S0094,Andrew Taylor,Female,17,5.2,77,75,Bachelor's,84845,Yes,7,No,Yes,Yes,Yes,58,59,68,57,59.3,D
+S0095,Brandon Brown,Female,16,5.5,62,99,Master's,91135,Yes,7,Yes,Yes,Yes,Yes,64,56,59,50,56.0,D
+S0096,Christian Garcia,Female,16,4.7,76,83,Bachelor's,60573,Yes,7,Yes,Yes,Yes,Yes,59,59,63,64,61.6,C
+S0097,Ava King,Female,18,6.2,74,90,Master's,98731,Yes,6,Yes,Yes,No,No,72,65,65,63,66.0,C
+S0098,Benjamin Roberts,Female,17,3.9,73,100,PhD,117189,Yes,8,Yes,No,Yes,No,56,61,65,66,62.4,C
+S0099,Ryan Evans,Female,17,5.0,73,74,Bachelor's,69541,Yes,6,Yes,Yes,Yes,No,56,58,48,59,56.4,D
+S0100,Leah Hall,Female,17,7.0,84,86,Master's,96087,Yes,7,No,No,Yes,No,68,72,63,66,67.2,C
+S0101,Alexander Adams,Female,19,3.6,56,70,Bachelor's,68667,Yes,8,Yes,Yes,Yes,Yes,44,48,43,45,45.0,F
+S0102,Samantha Hall,Male,16,1.8,64,85,Master's,87776,Yes,7,No,Yes,No,No,46,54,58,59,54.6,D
+S0103,Brandon Reed,Male,17,5.5,75,100,Master's,112564,Yes,7,Yes,No,Yes,Yes,64,67,70,70,67.9,C
+S0104,Gabriel Thomas,Female,18,4.6,61,76,High School,37697,Yes,7,Yes,Yes,Yes,Yes,45,48,52,56,51.1,D
+S0105,Christian Johnson,Female,17,6.5,76,73,Bachelor's,69629,Yes,8,Yes,No,Yes,No,67,66,70,59,64.1,C
+S0106,Michael Reed,Female,19,4.8,74,81,High School,38386,Yes,7,Yes,No,Yes,No,63,56,63,56,58.8,D
+S0107,Jonathan Reed,Male,18,4.1,58,100,Master's,102046,Yes,8,Yes,Yes,Yes,Yes,54,53,59,62,57.8,D
+S0108,Daniel Reed,Female,18,4.9,58,90,Bachelor's,80055,Yes,6,Yes,No,No,Yes,61,47,57,62,58.0,D
+S0109,Emma Johnson,Male,18,6.6,44,73,Master's,93044,Yes,8,Yes,Yes,No,No,50,48,46,44,46.6,F
+S0110,Chloe Walker,Male,19,5.9,60,97,High School,50602,Yes,8,Yes,Yes,No,Yes,58,65,52,58,58.5,D
+S0111,Jonathan Adams,Female,19,1.3,75,65,Bachelor's,64615,Yes,6,Yes,No,No,Yes,50,41,59,42,46.4,F
+S0112,Ryan Smith,Female,18,5.3,77,100,Bachelor's,70034,No,7,Yes,Yes,Yes,Yes,66,67,59,74,68.4,C
+S0113,Matthew Johnson,Female,18,5.4,77,91,Master's,90060,Yes,6,Yes,No,Yes,Yes,60,62,68,61,62.0,C
+S0114,Leah Allen,Female,16,5.0,66,100,PhD,170519,Yes,8,No,No,No,No,51,66,61,71,63.5,C
+S0115,Samantha Garcia,Male,16,4.1,75,66,PhD,171158,Yes,7,No,No,No,Yes,45,55,48,57,52.2,D
+S0116,Samantha Williams,Female,17,6.8,80,84,Master's,119782,Yes,7,No,Yes,No,Yes,64,74,79,65,68.6,C
+S0117,Lucas Thompson,Male,15,6.9,60,81,Master's,105173,Yes,6,Yes,Yes,Yes,No,70,59,66,55,61.2,C
+S0118,Hannah Hall,Female,17,1.7,76,72,High School,42997,Yes,6,No,No,Yes,No,53,51,53,47,50.2,D
+S0119,James Carter,Female,16,3.8,83,69,Bachelor's,65635,Yes,5,No,Yes,No,Yes,59,58,49,67,60.5,C
+S0120,Olivia Robinson,Female,17,4.8,69,87,Bachelor's,80487,No,7,No,Yes,Yes,Yes,56,57,58,72,62.9,C
+S0121,Lucas Rogers,Female,18,6.4,88,88,Master's,92148,Yes,7,Yes,Yes,No,Yes,66,77,71,74,72.2,B
+S0122,Charlotte Nelson,Female,19,5.1,69,95,PhD,166918,Yes,8,No,Yes,Yes,No,62,60,67,62,62.4,C
+S0123,Benjamin Garcia,Female,16,4.0,65,77,High School,48748,No,8,No,Yes,Yes,No,60,56,65,59,59.6,D
+S0124,Charlotte Scott,Male,17,6.1,82,81,PhD,135256,Yes,7,Yes,No,Yes,No,70,73,60,69,68.7,C
+S0125,Michael Clark,Male,18,4.7,98,68,Master's,115005,No,9,No,No,No,No,74,70,65,57,65.0,C
+S0126,Lily Harris,Male,16,4.8,76,97,Bachelor's,61638,Yes,8,Yes,Yes,Yes,No,63,70,69,64,65.7,C
+S0127,Grace Brown,Male,18,5.0,83,83,High School,34651,Yes,9,Yes,Yes,Yes,No,60,66,61,69,65.0,C
+S0128,Matthew Clark,Female,17,5.9,69,89,High School,30609,Yes,7,Yes,Yes,No,Yes,68,62,63,59,62.4,C
+S0129,Samantha Martinez,Female,17,4.5,60,90,Bachelor's,62940,Yes,7,No,No,Yes,Yes,46,62,59,61,57.2,D
+S0130,Brandon Nelson,Male,19,6.0,77,97,Master's,101755,No,6,Yes,Yes,No,No,71,71,73,66,69.3,C
+S0131,Sarah Phillips,Male,16,4.9,79,74,High School,53382,Yes,8,Yes,No,Yes,Yes,69,59,65,60,62.8,C
+S0132,Emily Campbell,Male,18,3.4,71,89,Bachelor's,71999,Yes,6,Yes,Yes,No,Yes,58,57,64,59,59.1,D
+S0133,John Anderson,Female,18,4.9,83,82,Master's,107394,Yes,7,Yes,No,Yes,No,67,69,61,60,63.7,C
+S0134,Chloe Young,Female,15,3.5,67,100,Master's,87253,Yes,7,Yes,Yes,No,Yes,48,66,56,48,52.8,D
+S0135,Savannah Walker,Male,18,5.1,64,74,PhD,110864,Yes,7,No,No,No,No,49,57,62,60,57.0,D
+S0136,Joshua Green,Female,19,6.2,88,94,Bachelor's,56268,Yes,7,No,Yes,Yes,No,74,67,61,80,73.0,B
+S0137,Zoe Mitchell,Female,16,3.4,88,86,Bachelor's,62454,Yes,6,Yes,No,Yes,Yes,66,62,63,71,66.8,C
+S0138,William Martin,Male,18,5.5,67,85,Master's,98666,Yes,7,Yes,Yes,Yes,No,48,64,60,65,59.8,D
+S0139,Grace Rogers,Female,17,3.8,96,83,Bachelor's,80360,Yes,7,Yes,No,Yes,Yes,65,71,64,70,68.1,C
+S0140,Gabriel Johnson,Female,17,5.3,72,95,High School,50955,Yes,9,No,No,No,Yes,60,58,65,60,60.4,C
+S0141,John Rogers,Male,17,6.3,76,85,Bachelor's,67370,Yes,8,Yes,Yes,Yes,No,65,66,56,67,64.6,C
+S0142,Isabella Jones,Male,17,1.8,74,67,Bachelor's,60229,Yes,9,Yes,No,Yes,No,49,46,45,53,49.4,F
+S0143,Jonathan Adams,Male,19,3.3,81,94,Bachelor's,71309,Yes,8,Yes,No,Yes,No,57,59,55,68,61.5,C
+S0144,Benjamin Parker,Male,19,4.4,78,92,Bachelor's,73621,Yes,7,No,Yes,No,Yes,65,60,68,63,63.6,C
+S0145,Nicholas Harris,Female,17,5.5,78,88,Bachelor's,59054,Yes,6,No,Yes,No,No,64,63,61,57,60.6,C
+S0146,Brooklyn Martin,Female,18,4.8,63,71,High School,30935,Yes,8,No,Yes,Yes,Yes,51,58,51,58,55.2,D
+S0147,Michael Clark,Male,17,4.9,55,72,Bachelor's,67172,Yes,7,No,No,Yes,No,52,51,55,57,54.2,D
+S0148,Elizabeth Nelson,Male,17,8.1,89,63,Bachelor's,77778,Yes,7,Yes,No,Yes,Yes,70,78,72,71,72.3,B
+S0149,Elizabeth Anderson,Male,18,3.2,68,87,Master's,101709,Yes,7,Yes,Yes,Yes,No,51,43,55,59,53.2,D
+S0150,Gabriel Rodriguez,Male,17,6.7,74,69,High School,39726,Yes,7,Yes,Yes,Yes,Yes,62,58,68,65,63.3,C
+S0151,Lily Turner,Female,17,4.5,79,65,Bachelor's,83056,Yes,7,Yes,No,Yes,Yes,57,52,59,64,59.1,D
+S0152,Sarah Clark,Male,18,5.8,95,95,Bachelor's,62774,Yes,7,Yes,No,Yes,Yes,63,66,67,74,68.6,C
+S0153,Nicholas Rogers,Male,17,8.2,77,90,Bachelor's,75245,No,6,Yes,Yes,Yes,No,62,76,78,75,72.4,B
+S0154,Charles Mitchell,Male,15,6.0,70,79,Bachelor's,56985,Yes,8,Yes,No,Yes,No,69,66,62,62,64.6,C
+S0155,Charles Scott,Female,16,5.6,69,81,Bachelor's,69252,Yes,6,No,Yes,Yes,No,66,60,64,65,64.1,C
+S0156,Emily Sanchez,Male,17,7.4,75,58,PhD,131316,No,6,No,Yes,Yes,Yes,71,62,57,64,64.3,C
+S0157,Emily Johnson,Female,18,6.7,64,91,Bachelor's,59603,Yes,7,No,No,No,Yes,54,68,68,67,64.1,C
+S0158,Nicholas Martin,Male,17,3.8,75,75,Bachelor's,74162,Yes,8,No,Yes,Yes,Yes,58,60,67,52,57.4,D
+S0159,Brandon Perez,Female,18,5.4,74,85,Master's,100960,Yes,7,Yes,Yes,Yes,No,62,70,64,65,65.1,C
+S0160,Ryan Williams,Female,17,2.4,95,57,Bachelor's,64462,Yes,7,No,Yes,Yes,Yes,52,51,50,55,52.7,D
+S0161,Ryan Moore,Male,17,4.2,74,92,Bachelor's,80216,No,7,Yes,No,No,No,63,65,63,60,62.2,C
+S0162,David Rogers,Male,17,5.5,52,74,Bachelor's,69166,No,7,No,No,No,No,53,60,57,49,53.4,D
+S0163,Abigail Rodriguez,Female,17,4.1,98,68,Master's,92754,Yes,9,Yes,Yes,Yes,No,67,55,61,68,64.1,C
+S0164,William Brown,Female,18,5.4,86,79,Bachelor's,69246,Yes,9,No,Yes,Yes,No,66,58,58,70,64.8,C
+S0165,Daniel Nelson,Male,18,5.0,98,76,High School,34078,No,7,Yes,Yes,Yes,No,68,73,81,63,69.0,C
+S0166,Brooklyn Thomas,Female,17,5.8,61,93,Bachelor's,67853,Yes,7,Yes,No,Yes,No,62,62,63,53,58.6,D
+S0167,Madison Robinson,Female,15,4.4,72,78,Master's,89042,Yes,8,No,Yes,Yes,Yes,58,55,49,54,54.4,D
+S0168,Audrey Green,Female,16,3.6,83,96,High School,46284,No,5,Yes,No,Yes,No,55,61,66,61,60.2,C
+S0169,Hannah Turner,Male,15,7.2,81,85,PhD,124389,Yes,7,No,Yes,Yes,Yes,74,72,77,81,76.8,B
+S0170,Dylan Rodriguez,Female,18,4.3,79,91,Bachelor's,57575,Yes,7,No,Yes,Yes,Yes,69,54,52,69,63.4,C
+S0171,Andrew King,Male,17,6.0,49,82,PhD,160733,Yes,9,No,Yes,Yes,Yes,49,58,46,56,53.2,D
+S0172,Victoria Lewis,Female,17,7.2,54,95,PhD,144754,No,5,No,Yes,Yes,Yes,67,64,53,56,59.9,D
+S0173,Natalie Nelson,Male,17,5.2,93,70,Bachelor's,73624,Yes,7,No,No,Yes,Yes,66,68,58,66,65.2,C
+S0174,Chloe Morris,Male,16,3.7,95,83,High School,50350,Yes,8,Yes,Yes,Yes,Yes,60,68,68,71,67.2,C
+S0175,Ryan Jones,Male,17,4.7,74,78,High School,53988,Yes,7,No,Yes,Yes,No,55,66,63,57,59.2,D
+S0176,Brooklyn Harris,Female,16,6.5,92,96,High School,45470,Yes,6,No,Yes,No,Yes,85,71,67,63,70.7,B
+S0177,Sophia Mitchell,Male,17,5.3,63,97,Master's,109704,Yes,9,No,Yes,Yes,No,67,66,61,55,61.1,C
+S0178,Gabriel Thompson,Male,16,3.2,65,82,Bachelor's,60968,Yes,7,Yes,Yes,Yes,Yes,55,46,58,46,50.1,D
+S0179,Leah Wright,Male,18,5.9,62,69,Bachelor's,84377,Yes,7,No,Yes,No,No,66,57,67,65,64.0,C
+S0180,Natalie Scott,Female,16,6.2,65,86,Bachelor's,83572,Yes,6,No,Yes,Yes,No,64,68,52,66,63.8,C
+S0181,Audrey Garcia,Female,19,4.5,84,65,PhD,117493,No,7,No,No,Yes,No,54,61,57,50,54.2,D
+S0182,Nicholas Parker,Male,17,5.9,65,98,High School,34103,Yes,7,Yes,Yes,Yes,No,63,67,65,61,63.3,C
+S0183,Jonathan Hall,Female,18,5.4,98,77,High School,32076,No,6,Yes,Yes,No,Yes,68,71,73,69,69.8,C
+S0184,Christopher Reed,Female,17,4.7,81,82,High School,51615,Yes,6,Yes,No,No,No,67,64,57,63,63.3,C
+S0185,Audrey Baker,Female,18,3.1,88,75,PhD,112994,Yes,8,No,Yes,Yes,Yes,57,65,68,60,61.4,C
+S0186,Nicholas Nelson,Male,18,6.6,81,73,Bachelor's,58744,Yes,6,No,Yes,Yes,Yes,72,69,64,70,69.4,C
+S0187,David Adams,Male,17,6.1,90,89,Bachelor's,69466,Yes,6,Yes,Yes,Yes,No,73,63,72,79,73.2,B
+S0188,Joseph Nelson,Male,17,5.9,65,80,High School,44523,No,7,Yes,Yes,Yes,Yes,69,63,54,60,62.0,C
+S0189,Michael White,Male,17,7.3,92,82,Bachelor's,82332,Yes,8,Yes,No,Yes,No,73,78,66,66,70.2,B
+S0190,Charles Evans,Male,17,6.4,77,72,High School,35594,Yes,6,Yes,Yes,Yes,No,64,65,73,69,67.6,C
+S0191,Joshua Brown,Female,15,6.0,90,91,PhD,117371,Yes,7,No,No,Yes,Yes,65,79,71,69,70.3,B
+S0192,Sarah Sanchez,Male,17,1.7,58,92,Master's,103028,Yes,6,No,Yes,No,Yes,49,44,50,43,45.8,F
+S0193,Elizabeth Cook,Male,17,6.8,77,80,Bachelor's,83947,Yes,5,Yes,Yes,Yes,Yes,72,68,72,61,66.8,C
+S0194,Samantha Morris,Female,17,5.1,77,95,Master's,98990,Yes,6,Yes,No,Yes,No,70,74,71,64,68.6,C
+S0195,Madison Walker,Male,18,5.5,68,81,High School,44083,Yes,8,Yes,Yes,Yes,No,61,60,63,56,59.1,D
+S0196,Emma King,Female,18,5.5,79,90,Master's,101626,Yes,6,No,No,No,Yes,65,60,73,67,66.0,C
+S0197,Zoe Johnson,Female,19,6.2,93,66,Master's,105469,Yes,5,Yes,Yes,Yes,Yes,77,64,71,77,73.5,B
+S0198,Grace Thompson,Male,17,6.7,67,86,Bachelor's,62954,Yes,7,Yes,No,Yes,No,68,68,59,62,64.2,C
+S0199,Sarah Nelson,Female,17,6.0,87,79,Master's,92130,Yes,8,Yes,Yes,Yes,No,68,69,66,77,71.5,B
+S0200,Benjamin Edwards,Female,17,5.7,61,84,Bachelor's,61828,Yes,7,No,No,Yes,Yes,58,65,55,70,63.8,C
+S0201,Brooklyn Phillips,Female,17,5.3,98,83,Bachelor's,79746,Yes,7,No,Yes,No,Yes,72,71,60,73,70.4,B
+S0202,Christopher Evans,Female,18,1.0,84,83,High School,38844,Yes,5,No,No,Yes,No,50,63,67,51,55.6,D
+S0203,Grace Mitchell,Female,16,4.6,96,88,Bachelor's,69220,Yes,7,Yes,Yes,Yes,Yes,65,75,69,64,67.2,C
+S0204,Savannah Young,Female,18,3.6,83,76,Master's,102883,Yes,7,Yes,No,Yes,Yes,57,57,47,66,59.1,D
+S0205,Elizabeth Taylor,Male,17,6.8,80,88,PhD,153059,No,7,Yes,Yes,Yes,No,69,67,73,68,68.8,C
+S0206,William Perez,Male,17,5.9,85,94,Bachelor's,73542,Yes,7,No,No,No,No,70,72,73,68,70.0,B
+S0207,Dylan Clark,Male,17,4.3,73,68,Master's,95450,Yes,7,Yes,Yes,Yes,Yes,55,57,56,46,52.0,D
+S0208,John Rodriguez,Female,17,4.5,56,74,Master's,105423,No,6,Yes,Yes,Yes,Yes,52,53,54,54,53.3,D
+S0209,Audrey Martin,Male,17,4.4,80,75,High School,32035,Yes,7,No,Yes,Yes,Yes,65,74,66,62,65.8,C
+S0210,Amelia Thomas,Female,17,4.4,66,71,Bachelor's,66463,Yes,6,No,Yes,Yes,Yes,62,60,54,58,58.8,D
+S0211,Joseph Jackson,Female,16,2.8,62,77,High School,37977,No,8,Yes,Yes,No,No,48,49,43,48,47.4,F
+S0212,Chloe Carter,Female,17,2.5,83,92,Master's,102241,Yes,9,Yes,No,Yes,Yes,57,49,56,58,55.6,D
+S0213,Emma Adams,Female,16,5.0,72,96,PhD,162975,Yes,9,Yes,No,No,No,65,64,64,54,60.2,C
+S0214,Joseph Robinson,Female,17,6.6,87,83,High School,53154,Yes,8,No,Yes,No,No,62,75,75,68,69.0,C
+S0215,Charles Robinson,Female,17,4.2,66,79,Master's,110625,Yes,7,No,No,Yes,Yes,53,59,50,53,53.8,D
+S0216,Madison Reed,Male,17,5.5,69,90,Bachelor's,67182,Yes,8,Yes,Yes,Yes,Yes,67,69,71,53,62.4,C
+S0217,Zoe Garcia,Female,18,6.1,89,58,Bachelor's,55298,Yes,7,Yes,Yes,Yes,No,58,72,76,56,62.7,C
+S0218,Alexander Edwards,Male,16,3.5,78,71,Bachelor's,78628,Yes,7,No,No,Yes,No,60,63,58,51,56.7,D
+S0219,Jonathan Nelson,Male,18,5.0,57,59,Bachelor's,55923,Yes,7,No,No,Yes,No,48,50,58,54,52.3,D
+S0220,Ava Collins,Female,17,4.0,78,71,High School,50616,No,7,Yes,No,Yes,Yes,50,61,61,69,61.4,C
+S0221,Leah Jones,Female,17,7.4,93,74,High School,43331,Yes,8,Yes,Yes,Yes,No,72,80,80,74,75.6,B
+S0222,Christian Williams,Male,18,7.3,69,97,High School,50690,No,7,Yes,No,Yes,No,76,84,68,81,78.4,B
+S0223,Olivia Stewart,Female,15,3.5,82,54,Bachelor's,74183,No,7,Yes,Yes,Yes,No,50,50,57,55,53.0,D
+S0224,Samantha Green,Female,17,5.6,65,78,High School,36578,Yes,9,No,Yes,Yes,Yes,65,68,55,64,63.7,C
+S0225,Nathan Mitchell,Female,17,6.6,73,88,Master's,89875,Yes,6,No,Yes,Yes,No,57,68,65,75,67.6,C
+S0226,Sarah Martin,Female,17,6.3,88,86,Bachelor's,76710,Yes,7,No,No,Yes,No,67,72,70,65,67.6,C
+S0227,Ethan Cook,Female,16,5.1,78,97,Master's,97254,No,9,Yes,No,No,Yes,66,66,60,71,67.1,C
+S0228,Zoe Green,Female,16,7.0,90,84,Bachelor's,77966,Yes,7,No,No,Yes,Yes,71,76,56,76,71.8,B
+S0229,Matthew Thompson,Female,18,3.6,80,86,Bachelor's,83621,Yes,7,Yes,Yes,No,Yes,59,63,59,57,59.0,D
+S0230,Matthew Wright,Female,17,4.5,98,64,PhD,156121,Yes,6,Yes,Yes,Yes,Yes,68,63,70,58,63.3,C
+S0231,Grace Roberts,Female,17,3.7,56,72,High School,45882,Yes,7,Yes,Yes,Yes,Yes,44,49,45,39,43.2,F
+S0232,Grace Walker,Female,17,6.2,72,64,Bachelor's,82429,Yes,8,Yes,Yes,Yes,No,61,53,48,61,57.4,D
+S0233,Benjamin Thomas,Male,18,4.1,62,88,Master's,104041,Yes,7,No,Yes,Yes,Yes,58,61,56,49,54.7,D
+S0234,John Smith,Male,16,4.7,63,85,High School,49730,Yes,7,Yes,No,Yes,Yes,52,61,64,60,58.8,D
+S0235,Nathan Carter,Male,17,5.9,63,85,High School,39663,Yes,6,Yes,Yes,Yes,No,58,58,70,57,59.4,D
+S0236,Samantha Rogers,Male,17,6.0,77,73,Bachelor's,74333,No,5,Yes,Yes,Yes,Yes,68,61,72,53,61.2,C
+S0237,Charles Campbell,Female,19,3.6,78,72,High School,30941,Yes,9,Yes,Yes,Yes,Yes,54,54,52,65,58.1,D
+S0238,Dylan Smith,Female,17,6.6,80,84,Bachelor's,56907,No,7,Yes,Yes,Yes,No,73,63,63,79,71.9,B
+S0239,Charlotte Phillips,Female,17,5.7,62,75,High School,34837,Yes,7,Yes,Yes,No,No,69,55,65,69,65.6,C
+S0240,James Robinson,Male,17,3.4,71,72,Master's,109489,Yes,6,No,No,Yes,No,63,50,52,62,58.4,D
+S0241,Christopher Brown,Female,17,3.0,63,77,Master's,102627,Yes,8,Yes,No,Yes,No,51,41,46,50,47.8,F
+S0242,Isabella Allen,Female,17,5.0,86,75,Master's,90696,Yes,9,Yes,No,Yes,Yes,58,69,63,63,63.0,C
+S0243,Charlotte Roberts,Female,17,6.3,65,73,Bachelor's,71226,No,7,Yes,Yes,No,No,57,59,54,69,61.8,C
+S0244,Madison Scott,Female,18,6.3,72,70,Master's,98543,Yes,6,No,Yes,No,Yes,67,53,66,54,58.8,D
+S0245,Amelia Wright,Female,18,5.5,82,86,High School,42615,No,7,Yes,Yes,Yes,No,60,71,72,71,68.4,C
+S0246,James Morris,Male,17,5.1,68,98,Master's,86466,Yes,8,Yes,No,No,Yes,66,63,66,66,65.4,C
+S0247,Gabriel Green,Female,18,5.8,83,82,Master's,115771,Yes,7,Yes,No,Yes,No,58,68,65,64,63.4,C
+S0248,Audrey Jones,Male,17,3.7,94,84,Master's,103350,Yes,8,Yes,Yes,Yes,No,69,63,70,72,69.2,C
+S0249,Isabella Martin,Male,17,7.5,77,87,Bachelor's,55375,Yes,7,Yes,Yes,No,No,82,75,68,73,74.9,B
+S0250,Grace Allen,Female,15,7.5,86,86,High School,30262,Yes,8,No,Yes,No,Yes,77,72,80,77,76.4,B
+S0251,Brooklyn Lewis,Male,19,5.6,50,74,Bachelor's,75746,No,7,No,No,Yes,Yes,55,61,52,62,58.6,D
+S0252,Christian Perez,Female,16,5.3,70,99,Master's,107886,Yes,6,Yes,No,No,No,64,58,63,69,64.6,C
+S0253,Ryan Green,Male,16,4.4,77,74,High School,41580,Yes,7,No,No,Yes,No,66,61,65,67,65.2,C
+S0254,Jonathan Walker,Female,16,5.8,62,88,Master's,117651,Yes,6,No,Yes,No,Yes,64,72,61,57,62.4,C
+S0255,Mia Jones,Male,17,4.0,77,87,High School,37833,Yes,9,Yes,Yes,Yes,No,55,60,60,62,59.6,D
+S0256,Lily Carter,Female,16,1.7,88,62,High School,31893,Yes,8,Yes,Yes,Yes,No,49,51,62,50,51.8,D
+S0257,Joshua Wilson,Female,16,1.0,52,78,High School,38106,Yes,8,Yes,Yes,Yes,Yes,40,40,37,40,39.6,F
+S0258,Matthew Adams,Male,16,3.8,61,83,High School,41826,Yes,7,Yes,Yes,Yes,No,53,50,52,51,51.4,D
+S0259,John Jones,Female,16,5.2,77,83,Bachelor's,56652,Yes,6,No,No,Yes,No,59,58,71,61,61.4,C
+S0260,Dylan Williams,Female,17,5.5,81,85,High School,51924,Yes,8,No,No,Yes,Yes,66,64,69,66,66.0,C
+S0261,Charlotte Hall,Male,18,4.3,84,90,PhD,143367,Yes,7,No,Yes,Yes,Yes,70,66,62,69,67.6,C
+S0262,Charlotte Johnson,Male,17,5.2,76,82,Bachelor's,76199,Yes,6,No,No,Yes,No,66,60,64,69,65.7,C
+S0263,Gabriel Wright,Female,17,4.6,81,86,High School,48296,Yes,7,Yes,Yes,Yes,No,70,65,73,78,72.6,B
+S0264,Samantha King,Female,18,3.5,86,82,Master's,110868,Yes,5,Yes,Yes,Yes,Yes,60,58,62,70,63.9,C
+S0265,Abigail Hall,Female,15,4.9,70,72,Master's,93792,Yes,7,No,Yes,Yes,No,55,54,58,64,58.8,D
+S0266,Isabella Cook,Female,17,6.2,68,82,Master's,105597,Yes,7,Yes,Yes,Yes,No,69,60,61,64,64.0,C
+S0267,Nicholas Nelson,Male,19,3.6,73,89,High School,33637,Yes,6,No,Yes,No,No,57,60,63,59,59.3,D
+S0268,Ryan Edwards,Male,17,3.6,77,93,Master's,117696,Yes,9,No,Yes,No,Yes,54,62,59,53,56.0,D
+S0269,Jonathan Thomas,Female,17,3.4,67,87,Master's,100989,Yes,6,No,Yes,Yes,No,49,54,58,51,52.2,D
+S0270,Michael Smith,Male,17,2.1,70,95,High School,39290,Yes,6,No,No,Yes,Yes,51,44,54,55,51.6,D
+S0271,Ryan Campbell,Male,17,4.3,80,86,High School,35599,Yes,6,Yes,Yes,Yes,Yes,65,63,51,52,57.3,D
+S0272,Mia Edwards,Female,17,6.1,77,91,Bachelor's,77832,Yes,8,No,Yes,Yes,Yes,73,65,64,68,68.1,C
+S0273,Leah Scott,Female,16,5.3,73,91,High School,44342,Yes,7,No,Yes,Yes,Yes,64,74,70,66,67.7,C
+S0274,Ethan Thomas,Female,16,4.7,54,80,Master's,109941,No,7,Yes,No,No,No,49,57,57,53,53.4,D
+S0275,Joshua Sanchez,Female,16,5.2,75,89,Bachelor's,68945,Yes,5,No,Yes,Yes,Yes,63,63,68,63,63.8,C
+S0276,Emma Cook,Female,19,4.3,63,73,PhD,140133,Yes,5,Yes,No,Yes,No,57,60,50,53,55.0,D
+S0277,Nicholas Walker,Female,18,2.1,87,85,Bachelor's,69312,Yes,7,No,Yes,Yes,Yes,61,57,54,62,59.6,D
+S0278,Daniel Allen,Female,16,6.2,71,88,High School,37382,No,8,Yes,Yes,No,Yes,69,59,63,48,57.7,D
+S0279,Ava Scott,Male,16,6.6,63,93,High School,38982,Yes,8,Yes,No,Yes,No,65,65,64,63,64.1,C
+S0280,Grace Wilson,Male,18,3.9,74,90,Bachelor's,74953,No,6,Yes,Yes,Yes,No,55,58,61,65,60.5,C
+S0281,Grace Carter,Female,16,4.8,90,93,Master's,102130,Yes,7,No,Yes,Yes,Yes,70,75,69,62,67.6,C
+S0282,Brandon Martinez,Female,16,4.6,83,81,Master's,116086,Yes,9,Yes,Yes,Yes,No,66,60,61,63,62.8,C
+S0283,Sophia Cook,Male,19,5.5,78,79,Bachelor's,79888,Yes,7,Yes,No,Yes,Yes,62,70,58,60,62.2,C
+S0284,Dylan Anderson,Male,17,7.5,59,79,High School,34633,Yes,8,Yes,Yes,Yes,Yes,58,62,62,68,63.4,C
+S0285,Christopher Perez,Male,18,6.7,94,85,High School,47304,No,6,No,Yes,No,No,75,76,76,79,77.0,B
+S0286,Charles Lewis,Male,19,4.4,68,64,Master's,117284,Yes,9,Yes,No,Yes,No,43,48,51,46,46.4,F
+S0287,Lily Wilson,Female,17,5.8,86,95,High School,43778,Yes,8,Yes,Yes,Yes,Yes,65,79,70,82,75.4,B
+S0288,Jonathan Lee,Male,15,6.9,71,82,Bachelor's,62008,Yes,9,No,No,Yes,No,57,62,54,68,62.0,C
+S0289,Elizabeth Mitchell,Female,16,5.6,85,78,Bachelor's,70523,Yes,8,Yes,No,Yes,No,70,68,67,66,67.6,C
+S0290,Gabriel Mitchell,Female,18,5.0,91,57,PhD,137405,Yes,7,No,Yes,Yes,Yes,69,66,76,65,67.8,C
+S0291,Brooklyn Perez,Female,18,5.7,83,82,Bachelor's,73765,Yes,9,Yes,Yes,Yes,No,69,63,69,51,60.6,C
+S0292,Emily Reed,Female,18,3.9,84,80,High School,33618,No,7,No,Yes,Yes,No,70,60,60,68,65.7,C
+S0293,Christian Adams,Male,16,4.2,74,73,Master's,110373,Yes,7,Yes,No,No,No,49,60,60,51,53.6,D
+S0294,Elizabeth Walker,Female,18,3.4,70,75,Bachelor's,75827,Yes,8,Yes,No,Yes,Yes,50,48,56,61,54.9,D
+S0295,Samantha Roberts,Male,19,5.5,77,82,Bachelor's,55272,Yes,8,No,No,Yes,No,66,65,63,59,62.6,C
+S0296,Isabella Reed,Male,17,4.8,71,76,PhD,170354,Yes,9,Yes,No,No,Yes,65,56,60,61,60.9,C
+S0297,Ethan Walker,Female,19,3.8,98,88,Master's,98007,Yes,6,No,No,Yes,No,61,61,76,78,70.1,B
+S0298,Charles Mitchell,Male,18,4.8,63,75,High School,48157,No,8,Yes,Yes,Yes,No,52,49,45,56,52.0,D
+S0299,Brandon Green,Male,18,5.7,87,84,High School,32547,Yes,8,Yes,Yes,Yes,Yes,75,69,77,77,74.9,B
+S0300,Daniel Reed,Female,17,7.9,81,94,Bachelor's,58164,Yes,6,Yes,No,Yes,No,85,74,63,75,75.5,B
+S0301,Abigail Rogers,Male,17,6.5,78,82,Master's,106164,Yes,7,No,Yes,No,No,73,69,64,72,70.4,B
+S0302,Charles Robinson,Female,16,1.6,93,86,High School,44414,No,7,Yes,Yes,Yes,No,62,52,70,58,59.6,D
+S0303,Ethan Harris,Male,17,5.4,79,85,Master's,99327,Yes,7,Yes,No,Yes,Yes,67,59,61,65,63.7,C
+S0304,Gabriel Perez,Female,17,7.1,67,82,Bachelor's,70576,Yes,9,Yes,Yes,Yes,Yes,70,64,61,61,63.9,C
+S0305,Isabella Parker,Female,18,3.0,79,81,High School,30946,Yes,7,Yes,No,Yes,No,53,57,44,57,54.0,D
+S0306,Matthew Thomas,Female,19,5.8,73,76,Master's,99693,Yes,8,Yes,No,Yes,Yes,61,61,59,56,58.7,D
+S0307,Benjamin Martinez,Female,18,4.6,81,84,PhD,137241,Yes,9,No,Yes,Yes,No,60,64,50,59,58.9,D
+S0308,Chloe Moore,Male,16,6.7,85,79,High School,46890,Yes,7,Yes,No,No,Yes,65,77,67,76,72.1,B
+S0309,Joshua Harris,Female,17,5.6,65,97,Bachelor's,70540,Yes,8,No,Yes,No,Yes,61,58,71,55,59.5,D
+S0310,Nathan Martin,Male,16,3.7,89,90,Bachelor's,61719,Yes,7,Yes,Yes,Yes,Yes,57,63,60,62,60.6,C
+S0311,James Mitchell,Female,18,4.7,72,67,Master's,110081,Yes,8,No,Yes,Yes,Yes,58,55,60,55,56.5,D
+S0312,Isabella Young,Male,18,4.8,80,68,PhD,171861,Yes,6,No,Yes,No,No,61,44,64,57,56.4,D
+S0313,David Perez,Female,19,4.8,82,81,Bachelor's,66350,Yes,9,Yes,Yes,Yes,Yes,69,61,56,63,63.0,C
+S0314,Joseph Martin,Male,17,6.7,79,78,Master's,117021,Yes,6,No,Yes,Yes,Yes,65,66,66,70,67.4,C
+S0315,Christian Stewart,Female,19,3.7,74,80,Bachelor's,65064,Yes,7,Yes,Yes,Yes,Yes,59,53,55,49,53.2,D
+S0316,Zoe Phillips,Female,18,6.5,69,89,Bachelor's,83369,Yes,8,No,Yes,No,No,71,60,71,60,64.4,C
+S0317,Amelia Baker,Female,17,4.5,72,85,Bachelor's,72576,Yes,7,No,No,No,Yes,69,61,56,53,59.0,D
+S0318,James Mitchell,Male,18,5.3,94,85,High School,47848,Yes,7,Yes,No,Yes,No,60,70,68,76,69.6,C
+S0319,Joseph Scott,Female,17,5.1,65,96,Bachelor's,55390,Yes,7,Yes,Yes,Yes,No,56,56,66,60,59.1,D
+S0320,Samuel Anderson,Male,17,5.0,66,68,Bachelor's,76999,No,8,Yes,Yes,Yes,No,63,44,54,61,57.0,D
+S0321,Emily Morris,Male,17,5.0,66,83,High School,42668,Yes,6,Yes,Yes,Yes,No,58,52,63,65,60.4,C
+S0322,Isabella Lee,Male,17,7.2,77,76,PhD,121569,No,6,Yes,Yes,Yes,No,71,60,69,61,64.5,C
+S0323,Mia Collins,Male,17,6.3,57,96,High School,43029,Yes,7,Yes,No,No,No,60,42,56,62,56.6,D
+S0324,Daniel Turner,Female,17,4.5,59,60,High School,52490,Yes,7,Yes,No,Yes,Yes,47,53,55,53,51.8,D
+S0325,William Sanchez,Female,17,7.4,72,60,Bachelor's,68107,Yes,6,No,Yes,No,Yes,66,55,65,63,62.4,C
+S0326,Ethan Campbell,Male,17,5.4,60,85,Master's,90867,Yes,7,Yes,Yes,Yes,Yes,62,56,66,60,60.6,C
+S0327,Zoe Lee,Male,17,5.5,61,93,High School,45284,Yes,7,Yes,Yes,Yes,No,65,50,50,67,60.6,C
+S0328,Savannah King,Male,17,3.7,60,90,Bachelor's,56211,Yes,6,No,No,Yes,No,59,63,54,55,57.4,D
+S0329,Emma Jones,Male,17,4.3,65,74,PhD,119121,No,7,Yes,Yes,Yes,No,62,53,55,53,55.6,D
+S0330,Christopher Roberts,Female,17,4.0,84,97,Bachelor's,56539,Yes,8,Yes,No,Yes,Yes,64,65,59,68,65.1,C
+S0331,Hannah Harris,Male,15,5.1,86,70,Bachelor's,80488,Yes,6,Yes,No,No,No,61,67,75,65,65.9,C
+S0332,Ava Rogers,Male,17,6.0,98,95,Master's,102027,Yes,7,No,Yes,No,Yes,68,83,73,74,74.2,B
+S0333,Dylan Smith,Male,16,5.6,98,71,High School,38693,Yes,8,No,No,Yes,Yes,72,66,75,61,66.9,C
+S0334,Madison Thompson,Female,17,7.4,84,78,Bachelor's,63921,Yes,7,Yes,No,Yes,Yes,72,65,73,72,70.8,B
+S0335,William Young,Female,18,3.7,87,88,Bachelor's,72667,Yes,8,No,No,No,Yes,59,65,62,65,63.0,C
+S0336,Dylan Williams,Female,17,5.2,77,67,Bachelor's,79064,No,7,Yes,Yes,Yes,No,63,71,56,55,60.4,C
+S0337,Lily Garcia,Female,17,3.1,81,97,Bachelor's,65310,Yes,7,No,Yes,Yes,Yes,56,60,63,60,59.4,D
+S0338,Joshua Harris,Female,19,3.6,98,78,High School,53729,Yes,5,No,No,Yes,Yes,66,65,68,61,64.1,C
+S0339,Leah Phillips,Male,18,6.9,79,83,Bachelor's,67744,Yes,8,No,No,No,No,64,73,64,75,70.2,B
+S0340,Andrew Wilson,Female,19,4.3,89,94,High School,34386,Yes,8,Yes,No,Yes,No,72,69,73,71,71.2,B
+S0341,Grace Harris,Female,18,3.8,64,74,Master's,117263,Yes,5,Yes,No,Yes,No,54,52,59,54,54.4,D
+S0342,Christian Brown,Female,16,1.8,67,93,Bachelor's,83412,Yes,7,Yes,No,No,Yes,57,49,51,53,52.9,D
+S0343,Dylan Taylor,Female,16,3.8,79,98,Bachelor's,72303,Yes,9,No,No,Yes,No,63,67,68,66,65.8,C
+S0344,Savannah Wright,Female,17,4.7,77,75,Master's,97242,Yes,7,Yes,Yes,Yes,No,60,55,55,52,55.0,D
+S0345,Abigail Wright,Female,16,3.0,68,96,Master's,93947,Yes,7,No,Yes,Yes,Yes,65,61,47,54,57.1,D
+S0346,Ava Parker,Female,17,4.6,98,64,High School,43946,No,9,No,No,No,No,67,58,59,65,63.2,C
+S0347,Christian Smith,Female,17,6.9,77,86,PhD,171816,Yes,8,Yes,No,Yes,Yes,76,69,75,73,73.2,B
+S0348,Michael Taylor,Female,17,3.9,70,70,High School,46017,Yes,7,No,No,No,Yes,57,55,53,46,51.6,D
+S0349,Chloe Reed,Female,18,3.6,77,91,High School,51659,Yes,8,No,Yes,Yes,No,63,64,58,56,59.6,D
+S0350,Charles Nelson,Male,18,3.3,75,91,Master's,85507,Yes,8,No,No,Yes,No,58,58,62,57,58.2,D
+S0351,Hannah Garcia,Female,17,3.3,77,100,Bachelor's,56436,Yes,7,No,No,No,Yes,64,57,56,68,63.0,C
+S0352,Leah Stewart,Male,18,5.8,56,96,Bachelor's,82151,Yes,7,No,Yes,Yes,No,63,57,57,63,60.9,C
+S0353,Samantha Stewart,Female,17,5.1,91,80,High School,41618,Yes,7,Yes,Yes,Yes,No,70,62,66,67,66.6,C
+S0354,Nathan Lewis,Female,18,6.4,91,71,Bachelor's,63750,Yes,9,No,Yes,Yes,No,67,66,71,72,69.4,C
+S0355,Charlotte Lewis,Female,16,8.0,93,88,Bachelor's,71122,Yes,8,Yes,Yes,Yes,Yes,72,83,87,73,76.8,B
+S0356,Lucas Roberts,Male,19,2.3,79,81,PhD,117354,Yes,6,No,Yes,Yes,No,48,51,41,54,50.0,D
+S0357,Lily Mitchell,Male,18,5.6,83,98,High School,41294,No,8,No,Yes,Yes,Yes,73,74,77,78,75.8,B
+S0358,Matthew Clark,Male,17,3.3,65,60,Master's,115979,No,7,Yes,Yes,Yes,No,45,63,55,57,54.9,D
+S0359,Emily Morris,Female,16,6.2,85,100,Bachelor's,75900,Yes,6,No,No,No,Yes,67,68,74,68,68.6,C
+S0360,Brandon Reed,Male,17,4.6,78,87,Master's,98840,Yes,7,Yes,No,Yes,Yes,69,63,68,52,60.8,C
+S0361,Amelia Jackson,Male,16,5.0,69,74,Master's,90037,Yes,7,Yes,No,No,No,58,61,50,61,58.6,D
+S0362,Joshua Smith,Male,16,3.1,85,89,Master's,113633,No,8,Yes,Yes,Yes,Yes,64,61,60,59,60.8,C
+S0363,Michael Martin,Female,17,4.4,86,95,Bachelor's,79495,Yes,6,No,Yes,Yes,Yes,71,61,72,67,67.6,C
+S0364,Joseph Anderson,Female,17,5.1,76,83,High School,45848,No,8,No,No,Yes,Yes,66,68,61,55,61.2,C
+S0365,Isabella Wilson,Male,18,7.0,80,64,High School,33715,Yes,7,No,Yes,Yes,No,56,72,60,64,63.0,C
+S0366,Samantha Martin,Male,19,3.8,63,79,Master's,92837,Yes,6,Yes,No,Yes,Yes,54,54,57,46,51.2,D
+S0367,Ava Turner,Female,17,4.2,90,92,Master's,119069,Yes,9,No,No,No,No,64,62,67,69,66.0,C
+S0368,Isabella Hall,Female,17,6.4,64,87,Bachelor's,62370,No,7,No,Yes,No,Yes,59,72,62,71,66.8,C
+S0369,Chloe Rodriguez,Female,16,3.7,67,80,High School,51569,No,7,Yes,No,No,Yes,48,56,65,52,53.8,D
+S0370,Chloe Perez,Male,18,6.7,76,95,Bachelor's,73539,Yes,7,Yes,Yes,Yes,Yes,64,65,71,66,66.0,C
+S0371,Grace Rodriguez,Female,17,5.0,88,89,Bachelor's,61411,Yes,8,Yes,Yes,No,Yes,68,77,70,66,69.3,C
+S0372,Savannah Wright,Female,19,5.5,88,90,Bachelor's,61365,Yes,7,No,No,Yes,Yes,75,82,76,68,73.8,B
+S0373,Chloe Roberts,Female,18,5.6,75,78,Master's,115499,Yes,6,No,Yes,Yes,Yes,63,62,56,67,63.4,C
+S0374,Brandon Perez,Female,17,4.1,84,77,PhD,110692,Yes,6,No,No,No,No,60,51,55,65,59.4,D
+S0375,Andrew Thompson,Male,16,5.6,55,65,High School,31478,Yes,7,Yes,Yes,Yes,No,46,49,51,51,49.4,F
+S0376,Benjamin Nelson,Male,18,3.8,66,79,Bachelor's,61396,Yes,8,No,Yes,Yes,Yes,53,46,67,54,54.1,D
+S0377,Abigail Taylor,Female,18,4.2,67,91,Bachelor's,63448,Yes,7,Yes,No,Yes,Yes,69,48,61,65,62.0,C
+S0378,Chloe Rogers,Female,16,5.8,90,80,Bachelor's,65622,Yes,6,Yes,No,Yes,No,71,64,70,68,68.2,C
+S0379,Christopher Taylor,Female,17,5.4,83,86,High School,46825,Yes,6,No,Yes,Yes,Yes,73,64,66,74,70.6,B
+S0380,Audrey Mitchell,Female,18,4.9,77,93,High School,40073,Yes,7,Yes,Yes,Yes,Yes,59,63,66,73,66.4,C
+S0381,Olivia White,Female,16,3.1,78,86,Master's,90209,Yes,9,No,No,No,No,60,55,70,51,56.9,D
+S0382,James Morris,Female,19,3.5,94,87,Bachelor's,83396,Yes,7,Yes,Yes,Yes,No,66,65,64,69,66.7,C
+S0383,Charles Johnson,Male,17,5.4,73,68,Bachelor's,61533,Yes,9,No,No,Yes,No,74,55,51,47,56.0,D
+S0384,Mia Green,Female,16,6.1,59,79,PhD,117211,Yes,7,Yes,No,Yes,Yes,64,59,44,53,55.6,D
+S0385,Savannah Stewart,Male,18,3.3,88,99,Master's,94927,Yes,6,Yes,No,Yes,Yes,56,58,60,63,59.8,D
+S0386,James Nelson,Male,17,3.7,77,83,High School,41927,Yes,8,Yes,No,Yes,No,46,55,66,52,53.2,D
+S0387,John White,Female,17,5.2,86,100,Bachelor's,74029,Yes,7,Yes,Yes,Yes,Yes,68,80,71,70,71.6,B
+S0388,Samantha Morris,Male,16,5.2,74,75,Bachelor's,79594,Yes,8,No,No,No,No,60,58,55,64,60.4,C
+S0389,Gabriel Anderson,Male,15,2.6,65,84,Master's,94316,No,9,Yes,No,No,No,49,53,49,54,51.8,D
+S0390,David Allen,Male,17,5.2,80,78,Master's,97177,No,6,No,Yes,No,Yes,57,66,56,61,60.2,C
+S0391,Charles Robinson,Female,17,4.1,75,88,Master's,95846,Yes,6,No,No,No,No,67,63,61,59,62.1,C
+S0392,Andrew Reed,Male,17,7.5,77,91,Bachelor's,62933,Yes,8,Yes,Yes,Yes,No,72,81,66,71,72.5,B
+S0393,Ethan Nelson,Male,18,5.4,94,88,Master's,87080,Yes,7,Yes,Yes,No,No,80,74,66,81,77.1,B
+S0394,Victoria Parker,Male,17,5.6,62,92,High School,36089,No,6,No,Yes,Yes,Yes,67,52,65,62,61.7,C
+S0395,Nicholas Smith,Male,16,5.7,78,82,High School,53780,Yes,5,No,No,Yes,Yes,70,63,60,61,63.5,C
+S0396,David Rogers,Male,17,3.2,65,80,Bachelor's,81123,Yes,5,No,Yes,Yes,Yes,54,48,50,50,50.6,D
+S0397,Olivia Wright,Male,19,7.9,44,64,High School,37797,Yes,8,Yes,No,Yes,Yes,54,68,50,48,53.8,D
+S0398,Daniel Jones,Female,18,2.6,74,88,High School,47245,Yes,6,No,No,Yes,No,57,56,52,51,53.6,D
+S0399,Joshua Jones,Male,17,6.2,75,84,Master's,93346,Yes,7,Yes,Yes,No,Yes,63,56,68,70,65.2,C
+S0400,Hannah Brown,Male,17,5.9,82,81,PhD,143672,Yes,7,No,Yes,Yes,Yes,64,68,77,72,70.0,B
+S0401,Joseph Roberts,Male,17,4.3,72,80,Bachelor's,72653,Yes,7,No,No,Yes,Yes,48,53,67,62,57.4,D
+S0402,Jonathan Wilson,Male,18,6.0,57,82,Bachelor's,71788,Yes,5,Yes,Yes,Yes,No,53,60,52,59,56.6,D
+S0403,Mia Harris,Female,18,4.5,65,80,Bachelor's,80419,Yes,8,Yes,No,Yes,Yes,61,52,63,59,58.7,D
+S0404,Daniel Lewis,Female,18,4.0,91,77,Bachelor's,64974,Yes,5,Yes,Yes,Yes,Yes,61,62,63,64,62.7,C
+S0405,Amelia Lee,Male,18,5.7,65,84,High School,31184,No,8,Yes,Yes,Yes,Yes,64,57,59,67,63.0,C
+S0406,Audrey Smith,Male,18,3.5,94,87,PhD,144493,Yes,8,No,No,Yes,No,69,67,66,68,67.8,C
+S0407,Dylan Taylor,Male,16,4.7,88,74,High School,41380,Yes,7,Yes,Yes,Yes,Yes,56,64,70,61,61.7,C
+S0408,Sophia Smith,Female,17,4.1,71,78,Bachelor's,79846,Yes,7,Yes,Yes,No,No,49,54,54,62,56.0,D
+S0409,Gabriel Campbell,Female,16,4.5,66,80,High School,43057,Yes,7,Yes,Yes,Yes,No,57,53,52,61,57.0,D
+S0410,Samantha Carter,Female,16,5.6,88,82,Master's,107195,No,7,No,Yes,Yes,Yes,73,64,80,67,69.8,C
+S0411,Chloe Baker,Male,18,4.1,72,81,Master's,90606,Yes,8,No,Yes,Yes,No,56,58,78,54,58.9,D
+S0412,Ava Phillips,Female,17,4.7,56,89,PhD,113956,No,8,Yes,No,Yes,Yes,51,52,60,59,55.8,D
+S0413,Grace Carter,Male,17,4.2,82,65,Master's,101555,Yes,7,Yes,Yes,No,No,61,67,56,65,63.0,C
+S0414,Michael Cook,Male,16,7.2,80,67,Bachelor's,79849,No,7,No,Yes,Yes,No,60,68,71,70,67.2,C
+S0415,Isabella Smith,Male,17,5.5,89,84,High School,48690,Yes,9,No,No,Yes,Yes,73,68,72,72,71.4,B
+S0416,Leah Jones,Male,16,5.3,79,76,Master's,111347,Yes,9,Yes,Yes,No,Yes,61,63,67,70,65.9,C
+S0417,Natalie Green,Female,16,6.0,68,91,Bachelor's,55421,Yes,7,Yes,Yes,Yes,Yes,60,66,56,53,57.8,D
+S0418,Daniel Rogers,Female,17,4.1,90,94,Bachelor's,60540,No,7,Yes,No,Yes,No,68,70,65,64,66.4,C
+S0419,Nathan Walker,Male,17,6.3,91,84,High School,46288,No,7,Yes,No,Yes,Yes,67,74,72,70,70.4,B
+S0420,Alexander Roberts,Female,17,5.5,78,71,High School,45966,Yes,9,Yes,No,No,No,61,59,56,64,61.0,C
+S0421,David Moore,Female,16,2.7,76,93,Bachelor's,70882,No,6,No,No,No,Yes,53,58,54,61,57.4,D
+S0422,Emma Anderson,Female,16,2.9,59,84,Bachelor's,59675,Yes,7,Yes,Yes,Yes,No,42,46,54,49,47.4,F
+S0423,Christian Turner,Female,17,4.1,68,67,Master's,98009,Yes,7,No,No,Yes,Yes,46,50,39,53,48.6,F
+S0424,Victoria Turner,Female,17,3.0,84,68,High School,36748,Yes,7,Yes,Yes,Yes,No,49,60,50,67,58.6,D
+S0425,Savannah Carter,Female,18,4.6,68,97,Bachelor's,61103,Yes,7,No,Yes,No,Yes,61,62,52,62,60.2,C
+S0426,Emily Green,Female,17,3.5,58,96,High School,47857,Yes,9,No,Yes,No,No,47,46,46,48,47.1,F
+S0427,Alexander King,Male,17,4.9,98,57,High School,49627,Yes,6,Yes,Yes,Yes,Yes,69,80,73,64,69.8,C
+S0428,Victoria Turner,Male,18,7.1,57,68,Bachelor's,84054,Yes,7,Yes,Yes,No,Yes,68,50,59,62,60.6,C
+S0429,Ryan Hall,Female,15,4.9,98,93,High School,48565,Yes,6,No,No,Yes,Yes,64,70,72,72,69.6,C
+S0430,Alexander Green,Male,17,4.5,71,82,High School,49480,Yes,6,Yes,Yes,Yes,No,54,64,57,54,56.4,D
+S0431,Zoe Thompson,Female,18,5.6,74,89,Bachelor's,78030,Yes,7,Yes,Yes,Yes,Yes,66,65,61,58,61.8,C
+S0432,James Scott,Male,17,4.0,67,81,Bachelor's,82832,Yes,7,Yes,Yes,Yes,No,52,51,59,47,50.9,D
+S0433,Sophia Wilson,Male,17,6.3,84,89,High School,41348,Yes,7,No,Yes,No,Yes,82,64,63,78,74.0,B
+S0434,Daniel Wilson,Male,19,5.7,58,82,High School,39782,Yes,7,Yes,No,Yes,No,61,45,44,58,54.0,D
+S0435,Daniel Clark,Male,18,5.1,53,78,High School,35882,Yes,6,No,Yes,Yes,No,64,52,48,58,56.8,D
+S0436,Elizabeth Jones,Female,17,5.2,94,93,High School,52366,Yes,7,Yes,Yes,No,No,72,72,69,75,72.8,B
+S0437,Victoria Garcia,Female,17,8.1,65,84,Bachelor's,83557,Yes,9,No,Yes,No,Yes,68,64,68,71,68.4,C
+S0438,Emma Taylor,Female,17,6.4,84,89,Bachelor's,60798,Yes,9,Yes,No,Yes,Yes,78,74,66,63,69.4,C
+S0439,Samuel Edwards,Female,17,8.3,62,84,Bachelor's,64627,Yes,7,No,Yes,Yes,Yes,62,62,73,58,62.0,C
+S0440,Brooklyn Anderson,Male,17,5.8,84,77,Bachelor's,63415,Yes,7,Yes,Yes,Yes,Yes,62,69,71,66,66.4,C
+S0441,Nathan Walker,Female,17,2.8,95,98,Master's,97466,Yes,9,No,Yes,Yes,No,66,73,70,67,68.4,C
+S0442,Charlotte Baker,Female,17,4.6,69,86,Master's,97720,Yes,5,No,Yes,No,No,56,50,60,58,56.2,D
+S0443,Lucas Martin,Female,17,2.4,52,78,Master's,91559,No,8,Yes,Yes,No,No,42,53,41,46,45.7,F
+S0444,Ava Williams,Male,18,5.8,95,95,Master's,104158,No,9,Yes,No,Yes,Yes,77,71,80,80,77.4,B
+S0445,Sarah Williams,Female,18,6.1,86,69,Bachelor's,77057,Yes,6,Yes,No,Yes,No,70,65,63,63,65.2,C
+S0446,Charles Brown,Female,16,3.7,69,100,Master's,96706,Yes,6,Yes,No,Yes,Yes,59,57,66,52,56.8,D
+S0447,Samantha Brown,Female,17,4.0,72,80,Bachelor's,72737,Yes,9,No,Yes,No,No,59,54,63,59,58.6,D
+S0448,Andrew Scott,Female,17,5.2,62,69,High School,42070,Yes,7,Yes,Yes,Yes,Yes,55,58,60,55,56.4,D
+S0449,Samantha Cook,Male,17,3.2,92,100,High School,50238,No,5,Yes,Yes,Yes,Yes,65,65,63,66,65.1,C
+S0450,Matthew Lewis,Female,18,3.1,69,77,Bachelor's,63134,Yes,7,No,No,Yes,Yes,58,45,54,47,50.4,D
+S0451,James White,Female,16,6.9,58,84,PhD,110924,Yes,7,Yes,No,Yes,No,65,66,66,60,63.4,C
+S0452,Chloe Evans,Male,17,5.2,78,89,Bachelor's,73554,Yes,8,Yes,No,Yes,No,67,56,52,65,61.8,C
+S0453,Madison Lewis,Female,16,4.2,65,94,Master's,111478,No,8,Yes,Yes,Yes,Yes,62,52,56,56,56.7,D
+S0454,Olivia Smith,Female,16,2.5,63,85,Bachelor's,60506,Yes,9,No,Yes,No,Yes,40,55,49,42,45.2,F
+S0455,James Parker,Male,17,6.3,70,76,Bachelor's,68650,Yes,7,No,Yes,No,Yes,66,67,70,54,62.0,C
+S0456,Isabella Allen,Male,17,4.0,76,84,High School,32395,Yes,7,No,No,No,No,63,57,58,56,58.2,D
+S0457,Audrey Carter,Male,19,7.8,58,78,High School,54604,Yes,7,Yes,No,Yes,Yes,60,70,65,61,63.2,C
+S0458,Gabriel Moore,Male,17,6.3,92,84,Master's,100310,Yes,7,No,No,Yes,No,71,71,70,78,73.6,B
+S0459,Grace Stewart,Male,17,3.8,83,98,Bachelor's,63226,Yes,6,Yes,Yes,Yes,No,65,62,63,65,64.1,C
+S0460,Andrew Lee,Female,17,3.9,71,90,Bachelor's,66781,No,9,Yes,Yes,Yes,No,57,56,71,64,61.7,C
+S0461,Grace Morris,Male,16,7.6,64,84,Master's,90515,No,8,Yes,No,No,Yes,61,68,59,66,64.1,C
+S0462,Madison Morris,Male,19,4.9,74,89,High School,49054,No,7,Yes,No,Yes,No,59,59,71,55,59.2,D
+S0463,Natalie Edwards,Female,17,4.2,86,90,PhD,146133,Yes,7,Yes,Yes,Yes,No,70,66,62,64,65.6,C
+S0464,Brooklyn Thompson,Female,18,5.0,84,71,Bachelor's,71972,Yes,6,Yes,Yes,No,Yes,65,60,62,61,62.0,C
+S0465,Grace Perez,Male,16,4.2,88,82,Bachelor's,66410,Yes,7,Yes,Yes,No,No,66,65,67,70,67.6,C
+S0466,John Rodriguez,Male,17,5.4,69,100,Bachelor's,74522,Yes,8,Yes,Yes,Yes,No,61,62,65,62,62.2,C
+S0467,Gabriel Mitchell,Male,17,4.9,40,94,High School,39095,Yes,7,No,Yes,Yes,Yes,48,50,45,47,47.6,F
+S0468,Alexander Morris,Female,18,6.3,90,77,High School,53047,Yes,9,Yes,No,Yes,Yes,66,78,68,75,72.3,B
+S0469,Madison Moore,Male,15,4.4,73,76,Bachelor's,75470,Yes,7,No,Yes,Yes,Yes,53,62,61,70,62.8,C
+S0470,Grace Wright,Female,17,3.7,83,76,Master's,93531,Yes,7,Yes,Yes,Yes,No,72,60,70,62,65.3,C
+S0471,Joseph Moore,Female,19,4.5,95,91,Master's,107403,Yes,8,No,Yes,Yes,Yes,74,63,70,76,72.0,B
+S0472,Elizabeth Johnson,Male,17,4.5,98,98,High School,39906,Yes,6,Yes,No,No,No,72,76,67,64,68.8,C
+S0473,Dylan Allen,Female,17,4.9,67,88,Bachelor's,84268,Yes,7,Yes,No,Yes,No,53,63,51,68,60.7,C
+S0474,Amelia Martinez,Female,16,6.0,77,84,High School,46940,Yes,7,Yes,Yes,Yes,No,73,64,63,62,65.3,C
+S0475,Michael Morris,Male,19,5.9,91,78,High School,54406,Yes,7,No,No,Yes,Yes,68,73,69,56,64.4,C
+S0476,Joseph Sanchez,Female,15,6.8,65,85,Master's,96279,Yes,8,No,No,Yes,No,65,54,73,67,64.8,C
+S0477,Samuel Morris,Female,18,3.8,68,74,Bachelor's,60452,Yes,7,Yes,Yes,No,Yes,56,59,49,56,55.6,D
+S0478,Dylan White,Female,18,5.6,68,63,High School,49951,Yes,8,Yes,Yes,Yes,Yes,52,60,59,64,59.4,D
+S0479,Hannah Mitchell,Female,16,6.1,75,98,High School,50283,Yes,7,No,No,Yes,No,60,68,72,72,68.2,C
+S0480,Alexander Young,Female,18,4.0,72,72,PhD,166652,Yes,7,No,No,Yes,Yes,62,55,67,53,57.8,D
+S0481,Jonathan Wright,Female,16,4.7,68,79,High School,47400,Yes,8,Yes,No,No,No,53,60,58,66,60.4,C
+S0482,Mia Phillips,Female,17,2.4,63,89,Bachelor's,61470,Yes,6,Yes,No,Yes,Yes,47,56,53,48,50.1,D
+S0483,Daniel Phillips,Female,18,6.4,85,96,Bachelor's,57062,Yes,6,Yes,No,No,Yes,75,76,70,70,72.4,B
+S0484,Madison Allen,Female,18,4.7,91,85,High School,39030,Yes,7,No,Yes,Yes,Yes,65,72,72,75,71.4,B
+S0485,Leah Young,Female,17,6.2,93,70,High School,50705,Yes,7,Yes,Yes,Yes,No,65,73,67,72,69.7,C
+S0486,Daniel Taylor,Male,17,5.3,69,79,Bachelor's,74880,Yes,5,No,Yes,Yes,No,56,58,56,58,57.2,D
+S0487,Abigail Young,Male,16,4.7,85,75,Master's,119581,Yes,7,Yes,Yes,No,No,67,72,66,66,67.4,C
+S0488,Sophia Wilson,Male,16,2.6,78,82,Bachelor's,66671,No,7,Yes,No,No,Yes,53,55,65,59,57.6,D
+S0489,Michael Parker,Male,16,2.9,68,94,Bachelor's,77640,Yes,7,Yes,No,Yes,Yes,50,51,50,56,52.6,D
+S0490,Dylan White,Male,16,1.1,84,57,PhD,124308,Yes,9,No,No,Yes,No,61,46,55,49,52.3,D
+S0491,Nathan Perez,Female,17,4.2,68,78,Master's,111027,Yes,7,No,Yes,Yes,Yes,43,55,54,61,54.2,D
+S0492,Nathan Robinson,Male,17,8.4,70,77,Bachelor's,57313,Yes,8,Yes,No,Yes,Yes,62,67,75,70,68.2,C
+S0493,Victoria Morris,Female,17,3.1,58,69,Bachelor's,64706,Yes,6,No,Yes,Yes,No,52,48,44,45,47.2,F
+S0494,Ava Campbell,Male,16,1.1,69,88,Bachelor's,72615,Yes,7,Yes,Yes,No,Yes,52,48,42,52,49.7,F
+S0495,Gabriel Collins,Female,17,6.4,78,68,Master's,94837,Yes,8,Yes,No,No,No,62,60,65,70,65.2,C
+S0496,Matthew Evans,Female,18,8.5,94,69,Bachelor's,60831,Yes,7,Yes,No,Yes,No,66,74,75,78,73.8,B
+S0497,Brandon Roberts,Male,17,5.4,71,91,Bachelor's,74383,Yes,8,Yes,No,Yes,Yes,64,58,69,60,62.0,C
+S0498,Olivia Allen,Female,19,5.4,63,97,High School,49824,Yes,7,Yes,Yes,No,Yes,67,67,57,62,63.5,C
+S0499,Victoria Stewart,Male,18,4.5,93,81,Bachelor's,59056,Yes,6,No,Yes,No,Yes,71,75,58,63,66.6,C
+S0500,Olivia Roberts,Female,16,2.3,69,70,Bachelor's,55305,Yes,7,Yes,Yes,Yes,No,50,46,52,53,50.7,D
+,Kashinath S,Male,19,6.0,84,90,Bachelor's,80000,Yes,6,Yes,Yes,Yes,Yes,84,90,80,88,86.2,A

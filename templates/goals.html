@@ -1,0 +1,1117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> ACHIEVEMENT TRACKER
+                <span class="live-badge">ACTIVE</span>
+            </div>
+            <div class="goal-icon">
+                <i class="fas fa-bullseye"></i>
+                <div class="goal-icon-ring"></div>
+                <div class="goal-icon-ring delay-1"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">GOAL</span>
+                <span class="neon-text">CRUSHER</span>
+            </h1>
+            <p class="cyber-subtitle">Set targets • Track progress • Crush your goals • Earn rewards</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Panel - Create Goal -->
+        <div class="col-lg-4 mb-4" data-aos="fade-right" data-aos-delay="100">
+            <div class="glass-card">
+                <div class="card-header-cyber">
+                    <i class="fas fa-plus-circle"></i> CREATE NEW GOAL
+                    <div class="header-glow"></div>
+                </div>
+                <div class="card-body-cyber">
+                    <form id="createGoalForm">
+                        <div class="input-group-cyber">
+                            <i class="fas fa-trophy"></i>
+                            <input type="text" id="goalTitle" placeholder="Goal Title" required>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                        
+                        <div class="input-group-cyber mt-3">
+                            <i class="fas fa-chart-line"></i>
+                            <input type="number" id="targetScore" placeholder="Target Score (%)" min="0" max="100" required>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                        
+                        <div class="input-group-cyber mt-3">
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="date" id="targetDate" required>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                        
+                        <div class="input-group-cyber mt-3">
+                            <i class="fas fa-list-check"></i>
+                            <textarea id="checkpoints" rows="3" placeholder="Checkpoints (one per line)&#10;Complete chapter 1&#10;Score 80% on practice test&#10;Review weak topics"></textarea>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                        
+                        <button type="submit" class="cyber-btn-primary w-100 mt-4">
+                            <i class="fas fa-rocket"></i> LAUNCH GOAL
+                            <div class="btn-ripple"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="stats-glass mt-4" data-aos="fade-right" data-aos-delay="200">
+                <div class="stats-header">
+                    <i class="fas fa-chart-simple"></i> YOUR STATS
+                </div>
+                <div class="stats-body">
+                    <div class="stat-item">
+                        <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                        <div class="stat-info">
+                            <span>Active Goals</span>
+                            <strong id="activeGoalsCount">0</strong>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-info">
+                            <span>Completed Goals</span>
+                            <strong id="completedGoalsCount">0</strong>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                        <div class="stat-info">
+                            <span>Success Rate</span>
+                            <strong id="successRate">0%</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Goals List -->
+        <div class="col-lg-8 mb-4" data-aos="fade-left" data-aos-delay="300">
+            <div class="goals-container">
+                <div class="goals-header">
+                    <div class="goals-header-left">
+                        <i class="fas fa-list-check"></i> MY GOALS
+                        <span class="goals-badge" id="goalsCount">0 Total</span>
+                    </div>
+                    <div class="goals-header-right">
+                        <button class="view-toggle-btn active" onclick="toggleView('grid')"><i class="fas fa-th-large"></i></button>
+                        <button class="view-toggle-btn" onclick="toggleView('list')"><i class="fas fa-list"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Grid View -->
+                <div id="gridView" class="goals-grid">
+                    <div class="loading-container">
+                        <div class="cyber-spinner"></div>
+                        <span>Loading your goals...</span>
+                    </div>
+                </div>
+                
+                <!-- List View -->
+                <div id="listView" class="goals-list" style="display: none;">
+                    <div class="loading-container">
+                        <div class="cyber-spinner"></div>
+                        <span>Loading your goals...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ============ FUTURISTIC GOALS PAGE STYLES ============ */
+
+/* Cyber Header */
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.goal-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.goal-icon i {
+    font-size: 3rem;
+    color: #00ff88;
+}
+
+.goal-icon-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+.goal-icon-ring.delay-1 {
+    animation-delay: 1s;
+}
+
+@keyframes ringPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Glass Card */
+.glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-cyber {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    font-size: 0.85rem;
+    color: #00ff88;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.card-body-cyber {
+    padding: 20px;
+}
+
+/* Input Groups */
+.input-group-cyber {
+    position: relative;
+}
+
+.input-group-cyber i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff88;
+    z-index: 1;
+}
+
+.input-group-cyber input, .input-group-cyber textarea, .input-group-cyber select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.input-group-cyber textarea {
+    padding: 12px 15px 12px 45px;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.input-group-cyber input:focus, .input-group-cyber textarea:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.input-focus-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-group-cyber input:focus + .input-focus-glow,
+.input-group-cyber textarea:focus + .input-focus-glow {
+    opacity: 1;
+}
+
+/* Stats Card */
+.stats-glass {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+}
+
+.stats-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.05));
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    font-size: 0.85rem;
+    color: #00d4ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats-body {
+    padding: 20px;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon i {
+    font-size: 1.3rem;
+    color: #00d4ff;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-info span {
+    display: block;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.stat-info strong {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #00d4ff;
+}
+
+/* Goals Container */
+.goals-container {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.goals-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.goals-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #00ff88;
+}
+
+.goals-badge {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.goals-header-right {
+    display: flex;
+    gap: 8px;
+}
+
+.view-toggle-btn {
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 10px;
+    padding: 8px 12px;
+    color: #6b6b6b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-toggle-btn.active {
+    background: #00ff88;
+    color: #000;
+}
+
+/* Goals Grid */
+.goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 24px;
+}
+
+.goal-card-3d {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.goal-card-3d:hover {
+    transform: translateY(-5px);
+    border-color: #00ff88;
+    box-shadow: 0 15px 30px rgba(0, 255, 136, 0.15);
+}
+
+.goal-card-3d.completed {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 212, 255, 0.05));
+    border-color: #00ff88;
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.goal-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.goal-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.goal-status.active {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+}
+
+.goal-status.completed {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.goal-dates {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.goal-progress {
+    margin-bottom: 15px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+    color: #a0a0a0;
+}
+
+.progress-bar-container {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.goal-scores {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+
+.score-item {
+    text-align: center;
+}
+
+.score-label {
+    display: block;
+    font-size: 0.65rem;
+    color: #6b6b6b;
+}
+
+.score-value {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.goal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.goal-view-btn, .goal-delete-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.8rem;
+}
+
+.goal-view-btn {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.goal-delete-btn {
+    background: rgba(255, 68, 68, 0.15);
+    color: #ff4444;
+}
+
+.goal-view-btn:hover, .goal-delete-btn:hover {
+    transform: translateY(-2px);
+}
+
+.goal-view-btn:hover {
+    background: #00ff88;
+    color: #000;
+}
+
+.goal-delete-btn:hover {
+    background: #ff4444;
+    color: #fff;
+}
+
+/* Goals List View */
+.goals-list {
+    padding: 20px;
+}
+
+.goal-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 15px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.goal-list-item:hover {
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.goal-list-info {
+    flex: 1;
+}
+
+.goal-list-title {
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.goal-list-meta {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+    margin-top: 5px;
+}
+
+.goal-list-progress {
+    width: 200px;
+}
+
+.goal-list-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Loading */
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 60px;
+    color: #a0a0a0;
+}
+
+.cyber-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Buttons */
+.cyber-btn-primary {
+    position: relative;
+    padding: 12px 24px;
+    border-radius: 30px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    color: #000;
+}
+
+.cyber-btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.btn-ripple {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.cyber-btn-primary:hover .btn-ripple {
+    left: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .goals-grid {
+        grid-template-columns: 1fr;
+    }
+    .goal-list-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .goal-list-progress {
+        width: 100%;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+let currentView = 'grid';
+
+async function loadGoals() {
+    try {
+        const response = await fetch('/api/my-goals');
+        const goals = await response.json();
+        
+        // Update stats
+        const activeGoals = goals.filter(g => g.status === 'active').length;
+        const completedGoals = goals.filter(g => g.status === 'completed').length;
+        const totalGoals = goals.length;
+        const successRate = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+        
+        document.getElementById('activeGoalsCount').innerText = activeGoals;
+        document.getElementById('completedGoalsCount').innerText = completedGoals;
+        document.getElementById('successRate').innerText = successRate + '%';
+        document.getElementById('goalsCount').innerText = `${totalGoals} Total`;
+        
+        // Render goals
+        renderGoals(goals);
+        
+    } catch(err) {
+        console.error('Error loading goals:', err);
+    }
+}
+
+function renderGoals(goals) {
+    // Grid View
+    const gridContainer = document.getElementById('gridView');
+    if (goals.length === 0) {
+        gridContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-bullseye"></i>
+                <p>No goals yet. Create your first goal!</p>
+            </div>
+        `;
+    } else {
+        let gridHtml = '';
+        goals.forEach(goal => {
+            const progress = goal.total_checkpoints > 0 ? (goal.completed_checkpoints / goal.total_checkpoints) * 100 : 0;
+            const statusClass = goal.status === 'active' ? 'active' : 'completed';
+            const statusText = goal.status === 'active' ? 'IN PROGRESS' : 'COMPLETED ✓';
+            
+            gridHtml += `
+                <div class="goal-card-3d ${goal.status === 'completed' ? 'completed' : ''}">
+                    <div class="goal-header">
+                        <div class="goal-title">${escapeHtml(goal.goal_title)}</div>
+                        <div class="goal-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="goal-dates">
+                        <span><i class="fas fa-calendar"></i> Due: ${new Date(goal.target_date).toLocaleDateString()}</span>
+                        <span><i class="fas fa-clock"></i> Created: ${new Date(goal.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span>${goal.completed_checkpoints}/${goal.total_checkpoints} checkpoints</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="goal-scores">
+                        <div class="score-item">
+                            <span class="score-label">Target Score</span>
+                            <span class="score-value">${goal.target_score}%</span>
+                        </div>
+                        <div class="score-item">
+                            <span class="score-label">Current Score</span>
+                            <span class="score-value">${goal.current_score}%</span>
+                        </div>
+                    </div>
+                    <div class="goal-actions">
+                        <button class="goal-view-btn" onclick="viewGoal(${goal.goal_id})">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        <button class="goal-delete-btn" onclick="deleteGoal(${goal.goal_id})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        gridContainer.innerHTML = gridHtml;
+    }
+    
+    // List View
+    const listContainer = document.getElementById('listView');
+    if (goals.length === 0) {
+        listContainer.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-bullseye"></i>
+                <p>No goals yet. Create your first goal!</p>
+            </div>
+        `;
+    } else {
+        let listHtml = '';
+        goals.forEach(goal => {
+            const progress = goal.total_checkpoints > 0 ? (goal.completed_checkpoints / goal.total_checkpoints) * 100 : 0;
+            listHtml += `
+                <div class="goal-list-item">
+                    <div class="goal-list-info">
+                        <div class="goal-list-title">${escapeHtml(goal.goal_title)}</div>
+                        <div class="goal-list-meta">
+                            Target: ${goal.target_score}% | Current: ${goal.current_score}% | Due: ${new Date(goal.target_date).toLocaleDateString()}
+                        </div>
+                    </div>
+                    <div class="goal-list-progress">
+                        <div class="progress-bar-container">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                        <div class="progress-label mt-1">
+                            <span>${goal.completed_checkpoints}/${goal.total_checkpoints}</span>
+                        </div>
+                    </div>
+                    <div class="goal-list-actions">
+                        <button class="goal-view-btn" onclick="viewGoal(${goal.goal_id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="goal-delete-btn" onclick="deleteGoal(${goal.goal_id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        listContainer.innerHTML = listHtml;
+    }
+}
+
+function toggleView(view) {
+    currentView = view;
+    document.getElementById('gridView').style.display = view === 'grid' ? 'block' : 'none';
+    document.getElementById('listView').style.display = view === 'list' ? 'block' : 'none';
+    
+    document.querySelectorAll('.view-toggle-btn').forEach(btn => btn.classList.remove('active'));
+    if (view === 'grid') {
+        document.querySelector('.view-toggle-btn:first-child').classList.add('active');
+    } else {
+        document.querySelector('.view-toggle-btn:last-child').classist.add('active');
+    }
+}
+
+async function viewGoal(goalId) {
+    const response = await fetch(`/api/goal-details/${goalId}`);
+    const goal = await response.json();
+    
+    let checkpointsHtml = '<div class="checkpoints-list">';
+    goal.checkpoints.forEach(cp => {
+        const completedClass = cp.is_completed ? 'completed' : '';
+        checkpointsHtml += `
+            <div class="checkpoint-item ${completedClass}">
+                <div class="checkpoint-info">
+                    <i class="fas ${cp.is_completed ? 'fa-check-circle' : 'fa-circle'}"></i>
+                    <span>${escapeHtml(cp.title)}</span>
+                </div>
+                ${!cp.is_completed ? `<button class="checkpoint-complete" onclick="completeCheckpoint(${goalId}, ${cp.checkpoint_id})">Complete</button>` : '<span class="checkpoint-done">✓ Done</span>'}
+            </div>
+        `;
+    });
+    checkpointsHtml += '</div>';
+    
+    Swal.fire({
+        title: goal.goal_title,
+        html: `
+            <div class="goal-detail-modal">
+                <div class="detail-stats">
+                    <div class="detail-stat">
+                        <span>Target Score</span>
+                        <strong>${goal.target_score}%</strong>
+                    </div>
+                    <div class="detail-stat">
+                        <span>Current Score</span>
+                        <strong>${goal.current_score}%</strong>
+                    </div>
+                    <div class="detail-stat">
+                        <span>Due Date</span>
+                        <strong>${new Date(goal.target_date).toLocaleDateString()}</strong>
+                    </div>
+                </div>
+                <div class="detail-progress">
+                    <div class="progress-label">Checkpoints Progress</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-fill" style="width: ${goal.checkpoints.filter(c => c.is_completed).length / goal.checkpoints.length * 100}%"></div>
+                    </div>
+                </div>
+                <div class="detail-checkpoints">
+                    <h6>Checkpoints:</h6>
+                    ${checkpointsHtml}
+                </div>
+            </div>
+        `,
+        width: 600,
+        confirmButtonColor: '#00ff88',
+        confirmButtonText: 'Close',
+        background: '#1a1a2e',
+        color: '#ffffff',
+        showConfirmButton: true
+    });
+}
+
+async function completeCheckpoint(goalId, checkpointId) {
+    const response = await fetch('/api/update-goal-progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ goal_id: goalId, checkpoint_id: checkpointId })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        if (result.completed) {
+            Swal.fire({
+                title: '🎉 Goal Completed!',
+                text: 'Congratulations! You earned +100 bonus points!',
+                icon: 'success',
+                confirmButtonColor: '#00ff88',
+                background: '#1a1a2e',
+                color: '#ffffff'
+            });
+        }
+        loadGoals();
+        Swal.close();
+    }
+}
+
+async function deleteGoal(goalId) {
+    const result = await Swal.fire({
+        title: 'Delete Goal?',
+        text: 'This action cannot be undone!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        confirmButtonText: 'Delete',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+    
+    if (result.isConfirmed) {
+        const response = await fetch(`/api/delete-goal/${goalId}`, { method: 'DELETE' });
+        const data = await response.json();
+        if (data.success) {
+            Swal.fire('Deleted!', 'Goal has been deleted.', 'success');
+            loadGoals();
+        }
+    }
+}
+
+document.getElementById('createGoalForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const checkpointsText = document.getElementById('checkpoints').value;
+    const checkpoints = checkpointsText.split('\n').filter(c => c.trim());
+    
+    const goalData = {
+        goal_title: document.getElementById('goalTitle').value,
+        target_score: parseInt(document.getElementById('targetScore').value),
+        target_date: document.getElementById('targetDate').value,
+        checkpoints: checkpoints
+    };
+    
+    const response = await fetch('/api/create-goal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(goalData)
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        Swal.fire('Success!', 'Goal created successfully!', 'success');
+        document.getElementById('createGoalForm').reset();
+        loadGoals();
+    } else {
+        Swal.fire('Error!', result.error, 'error');
+    }
+});
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Add styles for modal
+const modalStyle = document.createElement('style');
+modalStyle.textContent = `
+    .goal-detail-modal {
+        text-align: left;
+    }
+    .detail-stats {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .detail-stat {
+        flex: 1;
+        text-align: center;
+        background: rgba(0, 255, 136, 0.05);
+        padding: 10px;
+        border-radius: 12px;
+    }
+    .detail-stat span {
+        display: block;
+        font-size: 0.7rem;
+        color: #6b6b6b;
+    }
+    .detail-stat strong {
+        display: block;
+        font-size: 1.2rem;
+        color: #00ff88;
+    }
+    .detail-progress {
+        margin-bottom: 20px;
+    }
+    .detail-checkpoints h6 {
+        margin-bottom: 10px;
+        color: #00ff88;
+    }
+    .checkpoints-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .checkpoint-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background: rgba(0, 255, 136, 0.05);
+        border-radius: 10px;
+        margin-bottom: 8px;
+    }
+    .checkpoint-item.completed {
+        opacity: 0.6;
+    }
+    .checkpoint-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .checkpoint-info i {
+        color: #00ff88;
+    }
+    .checkpoint-complete {
+        background: #00ff88;
+        border: none;
+        border-radius: 8px;
+        padding: 5px 12px;
+        color: #000;
+        cursor: pointer;
+    }
+    .checkpoint-done {
+        color: #00ff88;
+        font-size: 0.8rem;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 60px;
+        color: #6b6b6b;
+    }
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+`;
+document.head.appendChild(modalStyle);
+
+loadGoals();
+setInterval(loadGoals, 30000);
+</script>
+{% endblock %}

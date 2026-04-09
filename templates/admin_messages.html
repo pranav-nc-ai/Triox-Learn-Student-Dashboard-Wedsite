@@ -1,0 +1,1424 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyberpunk Hero Section -->
+    <div class="cyber-hero mb-5" data-aos="fade-down" data-aos-duration="1000">
+        <div class="cyber-hero-glow"></div>
+        <div class="cyber-hero-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> PARENT COMMUNICATION HUB
+                <span class="live-badge">LIVE</span>
+                <span class="stats-badge" id="liveStats">0 active</span>
+            </div>
+            <div class="hero-icon">
+                <i class="fas fa-message"></i>
+                <div class="hero-ring"></div>
+                <div class="hero-ring delay-1"></div>
+                <div class="hero-ring delay-2"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">PARENT</span>
+                <span class="neon-text">MESSAGES</span>
+            </h1>
+            <p class="cyber-subtitle">Real-time parent communications • Smart responses • Analytics</p>
+        </div>
+    </div>
+
+    <!-- Premium Stats Dashboard -->
+    <div class="stats-dashboard-premium mb-5">
+        <div class="row g-4">
+            <div class="col-md-3" data-aos="flip-left" data-aos-delay="100">
+                <div class="premium-stat-card">
+                    <div class="stat-glow-bg"></div>
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-envelope-open-text"></i>
+                        <div class="stat-pulse"></div>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">TOTAL MESSAGES</span>
+                        <div class="stat-value-wrapper">
+                            <span class="stat-value" id="totalCount">0</span>
+                            <span class="stat-trend up"><i class="fas fa-chart-line"></i> +12%</span>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="flip-left" data-aos-delay="200">
+                <div class="premium-stat-card">
+                    <div class="stat-glow-bg"></div>
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-pulse"></div>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">UNREAD</span>
+                        <div class="stat-value-wrapper">
+                            <span class="stat-value" id="unreadCount">0</span>
+                            <span class="stat-trend urgent"><i class="fas fa-exclamation-circle"></i> Pending</span>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-fill urgent-fill" id="unreadProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="flip-left" data-aos-delay="300">
+                <div class="premium-stat-card">
+                    <div class="stat-glow-bg"></div>
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-reply-all"></i>
+                        <div class="stat-pulse"></div>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">REPLIED</span>
+                        <div class="stat-value-wrapper">
+                            <span class="stat-value" id="repliedCount">0</span>
+                            <span class="stat-trend success"><i class="fas fa-check-circle"></i> Resolved</span>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-fill success-fill" id="repliedProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="flip-left" data-aos-delay="400">
+                <div class="premium-stat-card">
+                    <div class="stat-glow-bg"></div>
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="stat-pulse"></div>
+                    </div>
+                    <div class="stat-content">
+                        <span class="stat-label">RESPONSE RATE</span>
+                        <div class="stat-value-wrapper">
+                            <span class="stat-value" id="responseRate">0</span>
+                            <span class="stat-trend up"><i class="fas fa-arrow-up"></i> +5%</span>
+                        </div>
+                        <div class="stat-progress">
+                            <div class="progress-fill" id="rateProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Filter Bar -->
+    <div class="filter-premium mb-4" data-aos="fade-up" data-aos-delay="500">
+        <div class="filter-premium-content">
+            <div class="filter-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by parent, student, or subject..." onkeyup="filterMessages()">
+                <div class="search-glow"></div>
+            </div>
+            <div class="filter-options">
+                <select id="statusFilter" class="premium-select" onchange="filterMessages()">
+                    <option value="all">📋 All Status</option>
+                    <option value="unread">🔴 Unread</option>
+                    <option value="read">📖 Read</option>
+                    <option value="replied">✅ Replied</option>
+                </select>
+                <select id="priorityFilter" class="premium-select" onchange="filterMessages()">
+                    <option value="all">⚡ All Priority</option>
+                    <option value="urgent">🔴 Urgent</option>
+                    <option value="high">🟠 High</option>
+                    <option value="normal">🟢 Normal</option>
+                </select>
+                <input type="date" id="dateFilter" class="premium-date" onchange="filterMessages()">
+                <button class="refresh-premium" onclick="loadMessages()">
+                    <i class="fas fa-sync-alt"></i> SYNC
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Messages Table -->
+    <div class="messages-premium-card" data-aos="fade-up" data-aos-delay="600">
+        <div class="card-premium-header">
+            <div class="header-title">
+                <i class="fas fa-inbox"></i>
+                <span>MESSAGE INBOX</span>
+                <span class="header-badge" id="msgCount">0 conversations</span>
+            </div>
+            <div class="header-actions">
+                <button class="export-premium" onclick="exportMessages()">
+                    <i class="fas fa-download"></i> EXPORT
+                </button>
+                <button class="mark-all-read" onclick="markAllAsRead()">
+                    <i class="fas fa-check-double"></i> MARK ALL READ
+                </button>
+            </div>
+            <div class="header-glow-line"></div>
+        </div>
+        
+        <div class="messages-premium-body">
+            <div id="messagesContainer" class="messages-grid">
+                <div class="loading-premium">
+                    <div class="cyber-loader"></div>
+                    <span>Loading conversations...</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pagination-premium" id="pagination"></div>
+    </div>
+</div>
+
+<!-- Premium Reply Modal -->
+<div class="modal fade premium-modal" id="replyModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-premium-header">
+                <div class="modal-header-glow"></div>
+                <div class="modal-header-content">
+                    <div class="modal-icon">
+                        <i class="fas fa-reply-all"></i>
+                    </div>
+                    <h5 class="modal-title">RESPOND TO PARENT</h5>
+                    <button type="button" class="btn-close-modal" data-bs-dismiss="modal">×</button>
+                </div>
+            </div>
+            <div class="modal-premium-body">
+                <!-- Message Thread -->
+                <div class="message-thread">
+                    <div class="thread-header">
+                        <div class="thread-user">
+                            <div class="user-avatar">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="user-info">
+                                <h4 id="parentNameDisplay"></h4>
+                                <span class="user-role">Parent</span>
+                            </div>
+                        </div>
+                        <div class="thread-meta" id="threadMeta"></div>
+                    </div>
+                    
+                    <div class="thread-message">
+                        <div class="message-bubble parent">
+                            <div class="bubble-header">
+                                <span class="bubble-author">Parent</span>
+                                <span class="bubble-time" id="msgTime"></span>
+                            </div>
+                            <div class="bubble-content" id="msgContentDisplay"></div>
+                            <div class="bubble-footer">
+                                <span class="priority-badge" id="priorityBadge"></span>
+                                <span class="subject-badge" id="subjectBadge"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="reply-editor">
+                        <div class="editor-header">
+                            <i class="fas fa-edit"></i>
+                            <span>YOUR RESPONSE</span>
+                            <div class="editor-tools">
+                                <button type="button" class="tool-tip" onclick="insertTemplate('thankyou')">📝 Thank You</button>
+                                <button type="button" class="tool-tip" onclick="insertTemplate('followup')">🔄 Follow Up</button>
+                                <button type="button" class="tool-tip" onclick="insertTemplate('resolved')">✅ Resolved</button>
+                            </div>
+                        </div>
+                        <textarea id="replyText" class="reply-textarea" placeholder="Type your response here..."></textarea>
+                        <div class="editor-footer">
+                            <span class="char-counter"><span id="charCount">0</span> characters</span>
+                            <button class="send-reply-btn" onclick="sendReply()">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>SEND RESPONSE</span>
+                                <div class="btn-shine"></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ============ PREMIUM ADMIN MESSAGES STYLES ============ */
+
+/* Cyber Hero */
+.cyber-hero {
+    position: relative;
+    text-align: center;
+    padding: 50px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(0, 212, 255, 0.03));
+    border-radius: 60px;
+    overflow: hidden;
+}
+
+.cyber-hero-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.15), transparent);
+    animation: heroGlow 3s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 25px;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 25px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+.stats-badge {
+    background: rgba(0, 212, 255, 0.2);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+}
+
+.hero-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 25px;
+}
+
+.hero-icon i {
+    font-size: 3.5rem;
+    color: #00ff88;
+}
+
+.hero-ring {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    animation: ringExpand 2s ease-out infinite;
+}
+
+.hero-ring.delay-1 { animation-delay: 0.7s; }
+.hero-ring.delay-2 { animation-delay: 1.4s; }
+
+@keyframes ringExpand {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff, #0088ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+/* Premium Stat Cards */
+.premium-stat-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 22px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.premium-stat-card:hover {
+    transform: translateY(-5px);
+    border-color: #00ff88;
+    box-shadow: 0 15px 40px rgba(0, 255, 136, 0.15);
+}
+
+.stat-glow-bg {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.premium-stat-card:hover .stat-glow-bg {
+    opacity: 1;
+}
+
+.stat-icon-wrapper {
+    position: relative;
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.1));
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.stat-icon-wrapper i {
+    font-size: 1.6rem;
+    color: #00ff88;
+}
+
+.stat-pulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 18px;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.stat-value-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.stat-trend {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.stat-trend.up {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.stat-trend.urgent {
+    background: rgba(255, 68, 68, 0.15);
+    color: #ff4444;
+}
+
+.stat-trend.success {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.stat-progress {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-fill.urgent-fill {
+    background: linear-gradient(90deg, #ff4444, #ff6b6b);
+}
+
+.progress-fill.success-fill {
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+}
+
+/* Premium Filter */
+.filter-premium {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    padding: 5px;
+}
+
+.filter-premium-content {
+    display: flex;
+    gap: 15px;
+    padding: 15px 20px;
+    flex-wrap: wrap;
+}
+
+.filter-search {
+    position: relative;
+    flex: 2;
+    min-width: 250px;
+}
+
+.filter-search i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff88;
+}
+
+.filter-search input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.filter-search input:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.search-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.filter-search input:focus + .search-glow {
+    opacity: 1;
+}
+
+.filter-options {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.premium-select, .premium-date {
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.refresh-premium {
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 15px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.refresh-premium:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Premium Messages Card */
+.messages-premium-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-premium-header {
+    padding: 20px 25px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.header-badge {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.export-premium, .mark-all-read {
+    padding: 8px 18px;
+    border-radius: 25px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.export-premium {
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #00d4ff;
+}
+
+.mark-all-read {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    color: #00ff88;
+}
+
+.export-premium:hover, .mark-all-read:hover {
+    transform: translateY(-2px);
+}
+
+.header-glow-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+/* Messages Grid */
+.messages-premium-body {
+    padding: 20px;
+}
+
+.messages-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message-premium-item {
+    background: rgba(0, 255, 136, 0.03);
+    border: 1px solid rgba(0, 255, 136, 0.15);
+    border-radius: 20px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.message-premium-item:hover {
+    transform: translateX(8px);
+    border-color: #00ff88;
+    background: rgba(0, 255, 136, 0.08);
+}
+
+.message-premium-item.unread {
+    background: rgba(0, 255, 136, 0.08);
+    border-left: 4px solid #00ff88;
+}
+
+.message-premium-item.urgent {
+    background: rgba(255, 68, 68, 0.05);
+    border-left: 4px solid #ff4444;
+}
+
+.message-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.sender-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sender-avatar {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sender-avatar i {
+    font-size: 1.3rem;
+    color: #000;
+}
+
+.sender-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.sender-name {
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.sender-student {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.message-badges {
+    display: flex;
+    gap: 8px;
+}
+
+.badge-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+}
+
+.badge-status.unread {
+    background: rgba(255, 68, 68, 0.15);
+    color: #ff4444;
+}
+
+.badge-status.replied {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.badge-status.read {
+    background: rgba(0, 212, 255, 0.15);
+    color: #00d4ff;
+}
+
+.badge-priority {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+}
+
+.badge-priority.urgent {
+    background: rgba(255, 68, 68, 0.15);
+    color: #ff4444;
+}
+
+.message-subject {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.message-preview {
+    font-size: 0.85rem;
+    color: #a0a0a0;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.message-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.reply-button {
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    padding: 5px 15px;
+    color: #00d4ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reply-button:hover {
+    background: rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Premium Modal */
+.premium-modal .modal-content {
+    background: linear-gradient(135deg, #0a0a15, #12122a);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 28px;
+    overflow: hidden;
+}
+
+.modal-premium-header {
+    position: relative;
+    padding: 20px 25px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.modal-header-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+.modal-header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.modal-icon {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-icon i {
+    font-size: 1.3rem;
+    color: #000;
+}
+
+.modal-title {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #00ff88;
+    margin: 0;
+}
+
+.btn-close-modal {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Message Thread */
+.message-thread {
+    padding: 20px;
+}
+
+.thread-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.thread-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 55px;
+    height: 55px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-avatar i {
+    font-size: 1.5rem;
+    color: #000;
+}
+
+.user-info h4 {
+    margin: 0;
+    color: #fff;
+}
+
+.user-role {
+    font-size: 0.7rem;
+    color: #00ff88;
+}
+
+.thread-meta {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.thread-message {
+    margin-bottom: 30px;
+}
+
+.message-bubble.parent {
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 20px;
+    padding: 20px;
+    border-left: 4px solid #00ff88;
+}
+
+.bubble-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.bubble-author {
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.bubble-time {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.bubble-content {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #e0e0e0;
+    margin-bottom: 12px;
+}
+
+.bubble-footer {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.priority-badge, .subject-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.priority-badge.urgent {
+    background: rgba(255, 68, 68, 0.15);
+    color: #ff4444;
+}
+
+.subject-badge {
+    background: rgba(0, 212, 255, 0.15);
+    color: #00d4ff;
+}
+
+/* Reply Editor */
+.reply-editor {
+    margin-top: 25px;
+    background: rgba(0, 255, 136, 0.03);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    overflow: hidden;
+}
+
+.editor-header {
+    padding: 15px 20px;
+    background: rgba(0, 255, 136, 0.05);
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.editor-header i {
+    color: #00ff88;
+}
+
+.editor-tools {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.tool-tip {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    padding: 5px 12px;
+    color: #00d4ff;
+    cursor: pointer;
+    font-size: 0.7rem;
+}
+
+.reply-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    resize: vertical;
+}
+
+.reply-textarea:focus {
+    outline: none;
+}
+
+.editor-footer {
+    padding: 15px 20px;
+    background: rgba(0, 255, 136, 0.05);
+    border-top: 1px solid rgba(0, 255, 136, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.char-counter {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.send-reply-btn {
+    position: relative;
+    padding: 10px 30px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.btn-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.send-reply-btn:hover .btn-shine {
+    left: 100%;
+}
+
+/* Loading */
+.loading-premium {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 60px;
+    color: #a0a0a0;
+}
+
+.cyber-loader {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Pagination */
+.pagination-premium {
+    padding: 20px;
+    border-top: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+}
+
+.page-item {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 12px;
+    padding: 8px 16px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.page-item.active, .page-item:hover {
+    background: #00ff88;
+    color: #000;
+}
+
+@media (max-width: 768px) {
+    .cyber-title { font-size: 1.8rem; }
+    .filter-premium-content { flex-direction: column; }
+    .message-item-header { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once: true });
+
+let allMessages = [];
+let currentPage = 1;
+let currentMessageId = null;
+let currentMessageData = null;
+const itemsPerPage = 10;
+
+async function loadMessages() {
+    try {
+        const response = await fetch('/api/admin-messages');
+        allMessages = await response.json();
+        
+        updateStats();
+        displayMessages();
+        updateBadge();
+        
+    } catch(err) {
+        console.error('Error:', err);
+        document.getElementById('messagesContainer').innerHTML = '<div class="text-center text-danger p-4">Error loading messages</div>';
+    }
+}
+
+function updateStats() {
+    const total = allMessages.length;
+    const unread = allMessages.filter(m => m.status === 'unread').length;
+    const replied = allMessages.filter(m => m.status === 'replied').length;
+    const responseRate = total > 0 ? Math.round((replied / total) * 100) : 0;
+    
+    document.getElementById('totalCount').innerText = total;
+    document.getElementById('unreadCount').innerText = unread;
+    document.getElementById('repliedCount').innerText = replied;
+    document.getElementById('responseRate').innerText = responseRate + '%';
+    document.getElementById('msgCount').innerText = `${total} conversations`;
+    document.getElementById('liveStats').innerText = `${unread} unread`;
+    
+    // Update progress bars
+    const unreadPercent = total > 0 ? (unread / total) * 100 : 0;
+    const repliedPercent = total > 0 ? (replied / total) * 100 : 0;
+    
+    document.getElementById('unreadProgress').style.width = unreadPercent + '%';
+    document.getElementById('repliedProgress').style.width = repliedPercent + '%';
+    document.getElementById('rateProgress').style.width = responseRate + '%';
+}
+
+function displayMessages() {
+    let filtered = [...allMessages];
+    
+    // Apply filters
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+    const priorityFilter = document.getElementById('priorityFilter').value;
+    const dateFilter = document.getElementById('dateFilter').value;
+    
+    if (searchTerm) {
+        filtered = filtered.filter(m => 
+            m.parent_name.toLowerCase().includes(searchTerm) ||
+            m.student_name.toLowerCase().includes(searchTerm) ||
+            m.subject.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    if (statusFilter !== 'all') {
+        filtered = filtered.filter(m => m.status === statusFilter);
+    }
+    
+    if (priorityFilter !== 'all') {
+        filtered = filtered.filter(m => m.priority === priorityFilter);
+    }
+    
+    if (dateFilter) {
+        filtered = filtered.filter(m => m.created_at && m.created_at.startsWith(dateFilter));
+    }
+    
+    // Pagination
+    const start = (currentPage - 1) * itemsPerPage;
+    const paginated = filtered.slice(start, start + itemsPerPage);
+    const totalPages = Math.ceil(filtered.length / itemsPerPage);
+    
+    const container = document.getElementById('messagesContainer');
+    
+    if (paginated.length === 0) {
+        container.innerHTML = '<div class="text-center py-5"><i class="fas fa-inbox fa-3x text-muted mb-3"></i><p>No messages found</p></div>';
+        updatePagination(1);
+        return;
+    }
+    
+    let html = '<div class="messages-grid">';
+    paginated.forEach(msg => {
+        const statusClass = msg.status;
+        const priorityClass = msg.priority;
+        const statusText = msg.status === 'unread' ? '🔴 UNREAD' : (msg.status === 'replied' ? '✅ REPLIED' : '📖 READ');
+        
+        html += `
+            <div class="message-premium-item ${statusClass} ${priorityClass}" onclick="openReplyModal(${msg.id})">
+                <div class="message-item-header">
+                    <div class="sender-info">
+                        <div class="sender-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="sender-details">
+                            <div class="sender-name">${escapeHtml(msg.parent_name)}</div>
+                            <div class="sender-student">🎓 ${escapeHtml(msg.student_name)}</div>
+                        </div>
+                    </div>
+                    <div class="message-badges">
+                        <span class="badge-status ${statusClass}">${statusText}</span>
+                        ${msg.priority !== 'normal' ? `<span class="badge-priority ${priorityClass}">⚡ ${msg.priority.toUpperCase()}</span>` : ''}
+                    </div>
+                </div>
+                <div class="message-subject">📌 ${escapeHtml(msg.subject)}</div>
+                <div class="message-preview">${escapeHtml(msg.message.substring(0, 120))}${msg.message.length > 120 ? '...' : ''}</div>
+                <div class="message-footer">
+                    <span><i class="fas fa-clock"></i> ${new Date(msg.created_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}</span>
+                    <span><i class="fas fa-reply"></i> To: ${escapeHtml(msg.recipient_name)}</span>
+                    <button class="reply-button" onclick="event.stopPropagation(); openReplyModal(${msg.id})">
+                        <i class="fas fa-reply"></i> Respond
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+    updatePagination(totalPages);
+}
+
+function updatePagination(totalPages) {
+    const container = document.getElementById('pagination');
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    let html = '<div class="pagination">';
+    for (let i = 1; i <= Math.min(totalPages, 7); i++) {
+        html += `<div class="page-item ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</div>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+function goToPage(page) {
+    currentPage = page;
+    displayMessages();
+}
+
+function filterMessages() {
+    currentPage = 1;
+    displayMessages();
+}
+
+function openReplyModal(msgId) {
+    const msg = allMessages.find(m => m.id === msgId);
+    if (!msg) return;
+    
+    currentMessageId = msgId;
+    currentMessageData = msg;
+    
+    document.getElementById('parentNameDisplay').innerText = msg.parent_name;
+    document.getElementById('msgContentDisplay').innerHTML = escapeHtml(msg.message);
+    document.getElementById('msgTime').innerHTML = new Date(msg.created_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"});
+    
+    const priorityBadge = document.getElementById('priorityBadge');
+    priorityBadge.className = `priority-badge ${msg.priority}`;
+    priorityBadge.innerHTML = msg.priority === 'urgent' ? '🔴 URGENT' : (msg.priority === 'high' ? '🟠 HIGH PRIORITY' : '🟢 NORMAL');
+    
+    document.getElementById('subjectBadge').innerHTML = `📌 ${escapeHtml(msg.subject)}`;
+    document.getElementById('threadMeta').innerHTML = `
+        <span><i class="fas fa-user-graduate"></i> Student: ${escapeHtml(msg.student_name)}</span>
+        <span><i class="fas fa-building"></i> To: ${escapeHtml(msg.recipient_name)}</span>
+    `;
+    
+    document.getElementById('replyText').value = '';
+    document.getElementById('charCount').innerText = '0';
+    
+    new bootstrap.Modal(document.getElementById('replyModal')).show();
+    
+    // Mark as read
+    fetch(`/api/mark-message-read/${msgId}`, { method: 'POST' });
+}
+
+function insertTemplate(type) {
+    const textarea = document.getElementById('replyText');
+    let template = '';
+    
+    if (type === 'thankyou') {
+        template = 'Thank you for reaching out to us. We have received your message and will get back to you shortly.\n\nBest regards,\nSchool Administration';
+    } else if (type === 'followup') {
+        template = 'Thank you for your message. We are looking into this matter and will update you within 24 hours.\n\nRegards,\nSchool Administration';
+    } else if (type === 'resolved') {
+        template = 'Your concern has been addressed and resolved. Please let us know if you need any further assistance.\n\nBest regards,\nSchool Administration';
+    }
+    
+    textarea.value = template;
+    document.getElementById('charCount').innerText = template.length;
+}
+
+async function sendReply() {
+    const reply = document.getElementById('replyText').value.trim();
+    if (!reply) {
+        Swal.fire('Error', 'Please enter a reply', 'error');
+        return;
+    }
+    
+    const response = await fetch('/api/reply-to-parent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message_id: currentMessageId, reply: reply })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        Swal.fire({
+            title: 'Response Sent!',
+            text: 'Your reply has been sent to the parent.',
+            icon: 'success',
+            confirmButtonColor: '#00ff88',
+            background: '#1a1a2e',
+            color: '#ffffff'
+        });
+        bootstrap.Modal.getInstance(document.getElementById('replyModal')).hide();
+        loadMessages();
+    } else {
+        Swal.fire('Error', result.error, 'error');
+    }
+}
+
+async function markAllAsRead() {
+    const result = await Swal.fire({
+        title: 'Mark all as read?',
+        text: 'This will mark all unread messages as read.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#00ff88',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+    
+    if (result.isConfirmed) {
+        const unreadMessages = allMessages.filter(m => m.status === 'unread');
+        for (const msg of unreadMessages) {
+            await fetch(`/api/mark-message-read/${msg.id}`, { method: 'POST' });
+        }
+        loadMessages();
+        Swal.fire('Done!', 'All messages marked as read.', 'success');
+    }
+}
+
+function exportMessages() {
+    let csv = 'Parent Name,Student Name,Recipient,Subject,Message,Priority,Status,Date\n';
+    allMessages.forEach(msg => {
+        csv += `"${msg.parent_name}","${msg.student_name}","${msg.recipient_name}","${msg.subject}","${msg.message.replace(/"/g, '""')}","${msg.priority}","${msg.status}","${msg.created_at}"\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `parent_messages_${new Date().toISOString().slice(0,19)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    Swal.fire('Exported!', 'Messages exported to CSV', 'success');
+}
+
+function updateBadge() {
+    const unread = allMessages.filter(m => m.status === 'unread').length;
+    const badge = document.getElementById('adminMsgBadge');
+    if (badge && unread > 0) {
+        badge.style.display = 'inline-block';
+        badge.innerText = unread;
+    } else if (badge) {
+        badge.style.display = 'none';
+    }
+}
+
+// Character counter
+document.addEventListener('input', function(e) {
+    if (e.target.id === 'replyText') {
+        document.getElementById('charCount').innerText = e.target.value.length;
+    }
+});
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+loadMessages();
+setInterval(loadMessages, 30000);
+</script>
+{% endblock %}

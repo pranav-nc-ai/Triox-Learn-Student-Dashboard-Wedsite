@@ -1,0 +1,439 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="cyber-header mb-4">
+        <div class="text-center">
+            <div class="cyber-badge">
+                <i class="fas fa-shield-alt"></i> PROCTORED EXAM
+                <span class="live-badge" id="fullscreenStatus">⚠️ FULLSCREEN REQUIRED</span>
+            </div>
+            <h1 class="cyber-title" id="examTitle">Loading Exam...</h1>
+            <p class="cyber-subtitle" id="examDesc"></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Proctor Status Bar -->
+            <div class="proctor-bar mb-3">
+                <div class="proctor-status">
+                    <i class="fas fa-video"></i>
+                    <span id="proctorStatus">Monitoring Active</span>
+                    <span class="violation-counter" id="violationCount">0</span>
+                </div>
+                <div class="proctor-warning" id="proctorWarning" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="warningMessage"></span>
+                </div>
+                <button class="fullscreen-btn" onclick="enterFullscreen()" id="fullscreenBtn">
+                    <i class="fas fa-expand"></i> Enter Fullscreen
+                </button>
+            </div>
+
+            <!-- Exam Content -->
+            <div class="glass-card" id="examContent" style="display: none;">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-clock"></i> TIME REMAINING
+                    </div>
+                    <div class="timer-badge" id="timerDisplay">00:00</div>
+                </div>
+                <div class="card-body-cyber" id="questionsContainer">
+                    <div class="loading-container">
+                        <div class="cyber-spinner"></div>
+                        <span>Loading exam questions...</span>
+                    </div>
+                </div>
+                <div class="card-footer-cyber">
+                    <button class="submit-quiz-btn" onclick="submitExam()">
+                        <i class="fas fa-check-circle"></i> SUBMIT EXAM
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fullscreen Required Overlay -->
+            <div id="fullscreenOverlay" class="fullscreen-overlay">
+                <div class="overlay-content">
+                    <i class="fas fa-expand fa-4x"></i>
+                    <h2>Fullscreen Mode Required</h2>
+                    <p>This exam requires fullscreen mode to prevent cheating.</p>
+                    <button class="fullscreen-start-btn" onclick="enterFullscreenAndStart()">
+                        <i class="fas fa-expand"></i> Enter Fullscreen & Start Exam
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.cyber-header { text-align: center; padding: 30px; background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,212,255,0.05)); border-radius: 30px; }
+.cyber-badge { display: inline-block; background: rgba(0,255,136,0.2); padding: 5px 15px; border-radius: 20px; font-size: 12px; color: #0f0; }
+.live-badge { background: #ff4444; color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 10px; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+.cyber-title { font-size: 1.8rem; background: linear-gradient(135deg,#0f0,#0ff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+.proctor-bar {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 15px;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.proctor-status { display: flex; align-items: center; gap: 10px; color: #0f0; }
+.violation-counter { background: #ff4444; color: #fff; border-radius: 20px; padding: 2px 10px; font-size: 12px; margin-left: 10px; }
+.proctor-warning { background: rgba(255,68,68,0.2); border: 1px solid #ff4444; border-radius: 10px; padding: 5px 15px; color: #ff4444; animation: blink 0.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.5} }
+.fullscreen-btn {
+    background: rgba(0,255,136,0.15);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 20px;
+    padding: 5px 15px;
+    color: #0f0;
+    cursor: pointer;
+}
+.fullscreen-btn:hover { background: rgba(0,255,136,0.3); }
+
+/* Fullscreen Overlay */
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 15, 0.98);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.overlay-content {
+    text-align: center;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    padding: 40px;
+    border-radius: 30px;
+    border: 1px solid #00ff88;
+    max-width: 500px;
+}
+.overlay-content i { color: #00ff88; margin-bottom: 20px; }
+.overlay-content h2 { color: #fff; margin-bottom: 15px; }
+.overlay-content p { color: #a0a0a0; margin-bottom: 25px; }
+.fullscreen-start-btn {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+}
+.fullscreen-start-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+.glass-card {
+    background: linear-gradient(135deg, rgba(15,15,26,0.95), rgba(26,26,46,0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0,255,136,0.3);
+    overflow: hidden;
+}
+.card-header-cyber {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0,255,136,0.1), rgba(0,212,255,0.05));
+    border-bottom: 1px solid rgba(0,255,136,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #0f0;
+}
+.timer-badge {
+    background: rgba(0,255,136,0.15);
+    padding: 6px 20px;
+    border-radius: 30px;
+    font-family: monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.card-body-cyber { padding: 25px; max-height: 500px; overflow-y: auto; }
+.question-card {
+    background: rgba(0,255,136,0.05);
+    border: 1px solid rgba(0,255,136,0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.question-text { font-size: 1rem; font-weight: bold; margin-bottom: 15px; color: #fff; }
+.options-list { display: flex; flex-direction: column; gap: 10px; }
+.option-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    cursor: pointer;
+}
+.option-item:hover { background: rgba(0,255,136,0.1); }
+.option-radio { width: 18px; height: 18px; accent-color: #0f0; }
+.option-text { color: #e0e0e0; cursor: pointer; flex: 1; }
+.submit-quiz-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #0f0, #0ff);
+    border: none;
+    border-radius: 30px;
+    padding: 12px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+}
+.submit-quiz-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.loading-container { text-align: center; padding: 60px; color: #a0a0a0; }
+.cyber-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0,255,136,0.2);
+    border-top-color: #0f0;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    margin-right: 10px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+const quizId = {{ quiz_id }};
+const sessionId = {{ session_id }};
+let quizData = null;
+let answers = {};
+let timerInterval = null;
+let timeLeft = 0;
+let violationCount = 0;
+let fullscreenCheck = null;
+let examStarted = false;
+
+// Log violation function
+async function logViolation(eventType, details) {
+    if (!examStarted) return; // Don't log violations before exam starts
+    
+    violationCount++;
+    document.getElementById('violationCount').innerText = violationCount;
+    
+    const warningDiv = document.getElementById('proctorWarning');
+    const warningMsg = document.getElementById('warningMessage');
+    warningMsg.innerText = `⚠️ Warning ${violationCount}/3: ${eventType} detected!`;
+    warningDiv.style.display = 'flex';
+    
+    setTimeout(() => {
+        if (violationCount < 3) warningDiv.style.display = 'none';
+    }, 3000);
+    
+    try {
+        await fetch('/api/log-proctoring-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                session_id: sessionId,
+                event_type: eventType,
+                event_data: details
+            })
+        });
+    } catch(e) { console.error(e); }
+    
+    if (violationCount >= 3) {
+        alert('Multiple violations detected! Exam will be auto-submitted.');
+        submitExam();
+    }
+}
+
+// Fullscreen functions
+function enterFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+    }
+    document.getElementById('fullscreenStatus').innerHTML = '✅ FULLSCREEN ACTIVE';
+    document.getElementById('fullscreenStatus').style.background = '#00ff88';
+    document.getElementById('fullscreenStatus').style.color = '#000';
+}
+
+function checkFullscreen() {
+    if (examStarted) {
+        const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        if (!isFullscreen) {
+            logViolation('exit_fullscreen', 'User exited fullscreen mode');
+            enterFullscreen();
+        }
+    }
+}
+
+async function enterFullscreenAndStart() {
+    enterFullscreen();
+    document.getElementById('fullscreenOverlay').style.display = 'none';
+    document.getElementById('examContent').style.display = 'block';
+    examStarted = true;
+    
+    // Start fullscreen check after a delay
+    setTimeout(() => {
+        fullscreenCheck = setInterval(checkFullscreen, 3000);
+    }, 2000);
+    
+    await loadExamQuestions();
+}
+
+// Proctoring events (only after exam starts)
+document.addEventListener('contextmenu', function(e) {
+    if (examStarted) {
+        e.preventDefault();
+        logViolation('right_click', 'User attempted right-click');
+        return false;
+    }
+});
+
+document.addEventListener('copy', function(e) {
+    if (examStarted) {
+        e.preventDefault();
+        logViolation('copy_attempt', 'User attempted to copy');
+        return false;
+    }
+});
+
+document.addEventListener('paste', function(e) {
+    if (examStarted) {
+        e.preventDefault();
+        logViolation('paste_attempt', 'User attempted to paste');
+        return false;
+    }
+});
+
+document.addEventListener('visibilitychange', function() {
+    if (examStarted && document.hidden) {
+        logViolation('tab_switch', 'User switched tab');
+    }
+});
+
+async function loadExamQuestions() {
+    try {
+        const response = await fetch(`/api/quiz/${quizId}`);
+        quizData = await response.json();
+        
+        document.getElementById('examTitle').innerText = quizData.title;
+        document.getElementById('examDesc').innerHTML = `${quizData.description || ''} • ${quizData.questions.length} questions • Proctored Mode`;
+        
+        timeLeft = (quizData.time_limit || 30) * 60;
+        startTimer();
+        
+        let html = '';
+        quizData.questions.forEach((q, idx) => {
+            html += `
+                <div class="question-card">
+                    <div class="question-text">${idx + 1}. ${escapeHtml(q.question_text)}</div>
+                    <div class="options-list">
+                        ${q.options.map((opt, optIdx) => {
+                            const letter = String.fromCharCode(65 + optIdx);
+                            if (opt && opt.trim()) {
+                                return `
+                                    <label class="option-item">
+                                        <input type="radio" name="q_${q.question_id}" value="${letter}" class="option-radio" onchange="saveAnswer(${q.question_id}, '${letter}')">
+                                        <span class="option-text">${letter}. ${escapeHtml(opt)}</span>
+                                    </label>
+                                `;
+                            }
+                            return '';
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        });
+        document.getElementById('questionsContainer').innerHTML = html;
+        
+    } catch(err) {
+        console.error('Error:', err);
+        document.getElementById('questionsContainer').innerHTML = '<div class="text-center text-danger">Error loading exam</div>';
+    }
+}
+
+function saveAnswer(questionId, answer) {
+    answers[questionId] = answer;
+}
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            submitExam();
+        } else {
+            timeLeft--;
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+    }, 1000);
+}
+
+async function submitExam() {
+    if (timerInterval) clearInterval(timerInterval);
+    if (fullscreenCheck) clearInterval(fullscreenCheck);
+    
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+    
+    try {
+        await fetch('/api/end-proctored-exam', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: sessionId })
+        });
+    } catch(e) { console.error(e); }
+    
+    try {
+        const response = await fetch('/api/submit-quiz', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ quiz_id: quizId, answers: answers })
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            let message = `Exam submitted!\nScore: ${result.score}/${result.total_possible} (${result.percentage}%)\nViolations: ${violationCount}`;
+            Swal.fire({
+                title: 'Exam Submitted',
+                text: message,
+                icon: violationCount >= 3 ? 'warning' : 'success',
+                confirmButtonColor: '#0f0',
+                background: '#1a1a2e',
+                color: '#fff'
+            }).then(() => {
+                window.location.href = '/quizzes';
+            });
+        } else {
+            Swal.fire('Error!', result.error, 'error');
+        }
+    } catch(err) {
+        Swal.fire('Error!', 'Failed to submit exam', 'error');
+    }
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+</script>
+{% endblock %}

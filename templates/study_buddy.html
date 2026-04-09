@@ -1,0 +1,964 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> AI STUDY COMPANION
+                <span class="live-badge">ACTIVE</span>
+            </div>
+            <div class="study-buddy-icon">
+                <i class="fas fa-user-astronaut"></i>
+                <div class="icon-ring"></div>
+                <div class="icon-ring delay-1"></div>
+                <div class="icon-ring delay-2"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">STUDY</span>
+                <span class="neon-text">BUDDY</span>
+            </h1>
+            <p class="cyber-subtitle">Your AI-powered study companion • Track focus • Stay motivated</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Timer Section -->
+        <div class="col-lg-6 mb-4" data-aos="fade-right" data-aos-delay="100">
+            <div class="timer-glass-card">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-clock"></i> FOCUS TIMER
+                    </div>
+                    <div class="header-right">
+                        <span class="focus-mode" id="focusModeText">🍅 Pomodoro Mode</span>
+                    </div>
+                </div>
+                <div class="card-body-cyber text-center">
+                    <!-- Animated Timer Circle -->
+                    <div class="timer-circle">
+                        <svg class="timer-svg" viewBox="0 0 300 300">
+                            <circle class="timer-bg" cx="150" cy="150" r="130" fill="none" stroke="rgba(0, 255, 136, 0.1)" stroke-width="8"/>
+                            <circle class="timer-progress" cx="150" cy="150" r="130" fill="none" stroke="url(#timerGradient)" stroke-width="8" stroke-linecap="round" stroke-dasharray="816.8" stroke-dashoffset="816.8" transform="rotate(-90 150 150)"/>
+                            <defs>
+                                <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00ff88"/>
+                                    <stop offset="100%" style="stop-color:#00d4ff"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="timer-display">
+                            <span class="timer-hours" id="timerHours">00</span>
+                            <span class="timer-sep">:</span>
+                            <span class="timer-minutes" id="timerMinutes">00</span>
+                            <span class="timer-sep">:</span>
+                            <span class="timer-seconds" id="timerSeconds">00</span>
+                        </div>
+                    </div>
+
+                    <!-- Session Type Selector -->
+                    <div class="session-selector mt-4">
+                        <button class="session-btn active" data-session="pomodoro" onclick="setSession('pomodoro', 25)">
+                            🍅 Pomodoro (25 min)
+                        </button>
+                        <button class="session-btn" data-session="short" onclick="setSession('short', 5)">
+                            ☕ Short Break (5 min)
+                        </button>
+                        <button class="session-btn" data-session="long" onclick="setSession('long', 15)">
+                            🌿 Long Break (15 min)
+                        </button>
+                        <button class="session-btn" data-session="custom" onclick="customSession()">
+                            ⚡ Custom
+                        </button>
+                    </div>
+
+                    <!-- Timer Controls -->
+                    <div class="timer-controls mt-4">
+                        <button class="control-btn" id="startBtn" onclick="startTimer()">
+                            <i class="fas fa-play"></i> START
+                        </button>
+                        <button class="control-btn" id="pauseBtn" onclick="pauseTimer()" style="display: none;">
+                            <i class="fas fa-pause"></i> PAUSE
+                        </button>
+                        <button class="control-btn" onclick="resetTimer()">
+                            <i class="fas fa-redo-alt"></i> RESET
+                        </button>
+                        <button class="control-btn" onclick="skipTimer()">
+                            <i class="fas fa-forward"></i> SKIP
+                        </button>
+                    </div>
+
+                    <!-- Session Counter -->
+                    <div class="session-counter mt-4">
+                        <div class="counter-label">
+                            <i class="fas fa-tasks"></i> Completed Pomodoros Today
+                        </div>
+                        <div class="counter-value" id="pomodoroCount">0</div>
+                        <div class="counter-progress">
+                            <div class="counter-progress-fill" id="pomodoroProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats & Motivation Section -->
+        <div class="col-lg-6 mb-4" data-aos="fade-left" data-aos-delay="200">
+            <!-- Study Stats Card -->
+            <div class="stats-glass-card mb-4">
+                <div class="card-header-cyber">
+                    <i class="fas fa-chart-line"></i> STUDY STATISTICS
+                    <div class="header-glow"></div>
+                </div>
+                <div class="card-body-cyber">
+                    <div class="stats-grid-3d">
+                        <div class="stat-card-mini">
+                            <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                            <div class="stat-data">
+                                <span>Current Streak</span>
+                                <strong id="streakDays">0</strong>
+                                <small>days</small>
+                            </div>
+                        </div>
+                        <div class="stat-card-mini">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-data">
+                                <span>Today's Focus</span>
+                                <strong id="todayMinutes">0</strong>
+                                <small>minutes</small>
+                            </div>
+                        </div>
+                        <div class="stat-card-mini">
+                            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                            <div class="stat-data">
+                                <span>Total Focus</span>
+                                <strong id="totalMinutes">0</strong>
+                                <small>minutes</small>
+                            </div>
+                        </div>
+                        <div class="stat-card-mini">
+                            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                            <div class="stat-data">
+                                <span>Pomodoros</span>
+                                <strong id="totalPomodoros">0</strong>
+                                <small>completed</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Motivational Quote Card -->
+            <div class="quote-glass-card mb-4">
+                <div class="card-header-cyber">
+                    <i class="fas fa-quote-left"></i> DAILY MOTIVATION
+                    <div class="header-glow"></div>
+                </div>
+                <div class="card-body-cyber text-center">
+                    <div class="quote-content" id="motivationalQuote">
+                        <i class="fas fa-robot quote-icon"></i>
+                        <p id="quoteText">"The future belongs to those who believe in the beauty of their dreams."</p>
+                        <span id="quoteAuthor">- Eleanor Roosevelt</span>
+                    </div>
+                    <button class="refresh-quote-btn" onclick="refreshQuote()">
+                        <i class="fas fa-sync-alt"></i> New Quote
+                    </button>
+                </div>
+            </div>
+
+            <!-- Focus Tips Card -->
+            <div class="tips-glass-card">
+                <div class="card-header-cyber">
+                    <i class="fas fa-lightbulb"></i> FOCUS TIPS
+                    <div class="header-glow"></div>
+                </div>
+                <div class="card-body-cyber">
+                    <div class="tip-item" id="currentTip">
+                        <div class="tip-icon"><i class="fas fa-brain"></i></div>
+                        <div class="tip-text">
+                            Take a 5-minute break every 25 minutes to maintain focus
+                        </div>
+                    </div>
+                    <button class="next-tip-btn" onclick="nextTip()">
+                        <i class="fas fa-arrow-right"></i> Next Tip
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Progress Section -->
+    <div class="row" data-aos="fade-up" data-aos-delay="300">
+        <div class="col-12 mb-4">
+            <div class="progress-glass-card">
+                <div class="card-header-cyber">
+                    <i class="fas fa-calendar-week"></i> WEEKLY STUDY ACTIVITY
+                    <div class="header-glow"></div>
+                </div>
+                <div class="card-body-cyber">
+                    <canvas id="weeklyChart" height="200" style="max-height: 200px; width: 100%;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ============ STUDY BUDDY FUTURISTIC STYLES ============ */
+
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.study-buddy-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.study-buddy-icon i {
+    font-size: 3rem;
+    color: #00ff88;
+}
+
+.icon-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+.icon-ring.delay-1 { animation-delay: 0.7s; }
+.icon-ring.delay-2 { animation-delay: 1.4s; }
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Timer Glass Card */
+.timer-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-cyber {
+    padding: 18px 24px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #00ff88;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.focus-mode {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.card-body-cyber {
+    padding: 30px;
+}
+
+/* Timer Circle */
+.timer-circle {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin: 0 auto;
+}
+
+.timer-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.timer-bg {
+    stroke: rgba(0, 255, 136, 0.1);
+}
+
+.timer-progress {
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.timer-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-family: monospace;
+    font-size: 2.5rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Session Selector */
+.session-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.session-btn {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 25px;
+    padding: 8px 16px;
+    color: #a0a0a0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.session-btn:hover, .session-btn.active {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    color: #000;
+    border-color: transparent;
+    transform: translateY(-2px);
+}
+
+/* Timer Controls */
+.timer-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.control-btn {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 30px;
+    padding: 10px 20px;
+    color: #00ff88;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.control-btn:hover {
+    background: rgba(0, 255, 136, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Session Counter */
+.session-counter {
+    text-align: center;
+    padding: 15px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 20px;
+}
+
+.counter-label {
+    font-size: 0.75rem;
+    color: #a0a0a0;
+    margin-bottom: 8px;
+}
+
+.counter-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.counter-progress {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.counter-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+/* Stats Glass Card */
+.stats-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+}
+
+.stats-grid-3d {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.stat-card-mini {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.stat-card-mini:hover {
+    border-color: #00d4ff;
+    transform: translateY(-3px);
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon i {
+    font-size: 1.3rem;
+    color: #00d4ff;
+}
+
+.stat-data {
+    flex: 1;
+}
+
+.stat-data span {
+    display: block;
+    font-size: 0.65rem;
+    color: #6b6b6b;
+}
+
+.stat-data strong {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #00d4ff;
+}
+
+.stat-data small {
+    font-size: 0.6rem;
+    color: #6b6b6b;
+}
+
+/* Quote Glass Card */
+.quote-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    overflow: hidden;
+}
+
+.quote-content {
+    padding: 20px;
+}
+
+.quote-icon {
+    font-size: 2rem;
+    color: #ffd700;
+    margin-bottom: 15px;
+}
+
+.quote-content p {
+    font-size: 1rem;
+    font-style: italic;
+    color: #e0e0e0;
+    line-height: 1.5;
+}
+
+.quote-content span {
+    display: block;
+    font-size: 0.8rem;
+    color: #ffd700;
+    margin-top: 10px;
+}
+
+.refresh-quote-btn {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 25px;
+    padding: 8px 20px;
+    color: #ffd700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.refresh-quote-btn:hover {
+    background: rgba(255, 215, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Tips Glass Card */
+.tips-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.tip-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 16px;
+    margin-bottom: 15px;
+}
+
+.tip-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 255, 136, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tip-icon i {
+    font-size: 1.2rem;
+    color: #00ff88;
+}
+
+.tip-text {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #e0e0e0;
+    line-height: 1.4;
+}
+
+.next-tip-btn {
+    width: 100%;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 25px;
+    padding: 10px;
+    color: #00ff88;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.next-tip-btn:hover {
+    background: rgba(0, 255, 136, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Progress Glass Card */
+.progress-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+}
+
+.header-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .timer-circle {
+        width: 220px;
+        height: 220px;
+    }
+    .timer-display {
+        font-size: 1.8rem;
+    }
+    .session-selector {
+        flex-direction: column;
+    }
+    .stats-grid-3d {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once: true });
+
+// Timer Variables
+let timerInterval = null;
+let timeLeft = 25 * 60; // 25 minutes in seconds
+let currentSession = 'pomodoro';
+let sessionDuration = 25 * 60;
+let isRunning = false;
+let pomodoroCount = 0;
+let totalStudyMinutes = 0;
+
+// Tips Array
+const tips = [
+    { icon: 'fa-brain', text: 'Take a 5-minute break every 25 minutes to maintain focus' },
+    { icon: 'fa-water', text: 'Stay hydrated! Drink water regularly during study sessions' },
+    { icon: 'fa-moon', text: 'Get 7-8 hours of sleep for better memory retention' },
+    { icon: 'fa-music', text: 'Listen to lo-fi or classical music to improve concentration' },
+    { icon: 'fa-dumbbell', text: 'Take short stretching breaks to avoid physical strain' },
+    { icon: 'fa-phone-slash', text: 'Put your phone on Do Not Disturb mode while studying' },
+    { icon: 'fa-check-circle', text: 'Use the Pomodoro technique: 25 min focus, 5 min break' },
+    { icon: 'fa-book', text: 'Review what you studied at the end of each session' }
+];
+
+let currentTipIndex = 0;
+
+// Quotes Array
+const quotes = [
+    { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+    { text: "Education is the most powerful weapon which you can use to change the world.", author: "Nelson Mandela" },
+    { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+    { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+    { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+    { text: "The expert in anything was once a beginner.", author: "Helen Hayes" },
+    { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+    { text: "The secret of getting ahead is getting started.", author: "Mark Twain" }
+];
+
+// Initialize
+function initTimer() {
+    updateTimerDisplay();
+    loadStats();
+    loadWeeklyChart();
+    displayTip();
+}
+
+function updateTimerDisplay() {
+    const hours = Math.floor(timeLeft / 3600);
+    const minutes = Math.floor((timeLeft % 3600) / 60);
+    const seconds = timeLeft % 60;
+    
+    document.getElementById('timerHours').innerText = hours.toString().padStart(2, '0');
+    document.getElementById('timerMinutes').innerText = minutes.toString().padStart(2, '0');
+    document.getElementById('timerSeconds').innerText = seconds.toString().padStart(2, '0');
+    
+    // Update progress circle
+    const totalTime = sessionDuration;
+    const progress = ((totalTime - timeLeft) / totalTime) * 100;
+    const circumference = 816.8;
+    const offset = circumference - (progress / 100) * circumference;
+    document.querySelector('.timer-progress').style.strokeDashoffset = offset;
+}
+
+function setSession(type, minutes) {
+    currentSession = type;
+    sessionDuration = minutes * 60;
+    timeLeft = sessionDuration;
+    isRunning = false;
+    
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    
+    updateTimerDisplay();
+    
+    // Update UI
+    document.querySelectorAll('.session-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.session-btn[data-session="${type}"]`).classList.add('active');
+    document.getElementById('focusModeText').innerHTML = 
+        type === 'pomodoro' ? '🍅 Pomodoro Mode' : (type === 'short' ? '☕ Short Break' : '🌿 Long Break');
+    
+    document.getElementById('startBtn').style.display = 'inline-flex';
+    document.getElementById('pauseBtn').style.display = 'none';
+}
+
+function customSession() {
+    const minutes = prompt('Enter custom duration (minutes):', '30');
+    if (minutes && !isNaN(minutes)) {
+        setSession('custom', parseInt(minutes));
+    }
+}
+
+function startTimer() {
+    if (isRunning) return;
+    
+    isRunning = true;
+    document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('pauseBtn').style.display = 'inline-flex';
+    
+    timerInterval = setInterval(() => {
+        if (timeLeft <= 0) {
+            // Timer completed
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isRunning = false;
+            
+            if (currentSession === 'pomodoro') {
+                pomodoroCount++;
+                totalStudyMinutes += 25;
+                document.getElementById('pomodoroCount').innerText = pomodoroCount;
+                updatePomodoroProgress();
+                saveStudySession(25);
+                
+                // Play notification sound effect (optional)
+                showNotification('🎉 Pomodoro Complete!', 'Time for a break!');
+            } else {
+                showNotification('✨ Break Complete!', 'Ready to focus again?');
+            }
+            
+            // Auto-start next session based on current
+            if (currentSession === 'pomodoro') {
+                setSession('short', 5);
+            } else {
+                setSession('pomodoro', 25);
+            }
+            
+            document.getElementById('startBtn').style.display = 'inline-flex';
+            document.getElementById('pauseBtn').style.display = 'none';
+            
+            loadStats();
+        } else {
+            timeLeft--;
+            updateTimerDisplay();
+        }
+    }, 1000);
+}
+
+function pauseTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    isRunning = false;
+    document.getElementById('startBtn').style.display = 'inline-flex';
+    document.getElementById('pauseBtn').style.display = 'none';
+}
+
+function resetTimer() {
+    pauseTimer();
+    timeLeft = sessionDuration;
+    updateTimerDisplay();
+}
+
+function skipTimer() {
+    pauseTimer();
+    timeLeft = 0;
+    updateTimerDisplay();
+    
+    if (currentSession === 'pomodoro') {
+        pomodoroCount++;
+        totalStudyMinutes += 25;
+        document.getElementById('pomodoroCount').innerText = pomodoroCount;
+        updatePomodoroProgress();
+        saveStudySession(25);
+    }
+    
+    if (currentSession === 'pomodoro') {
+        setSession('short', 5);
+    } else {
+        setSession('pomodoro', 25);
+    }
+}
+
+function updatePomodoroProgress() {
+    const progress = (pomodoroCount / 8) * 100;
+    document.getElementById('pomodoroProgress').style.width = Math.min(progress, 100) + '%';
+}
+
+function showNotification(title, message) {
+    if (Notification.permission === 'granted') {
+        new Notification(title, { body: message, icon: '/static/favicon.ico' });
+    } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission();
+    }
+    
+    // Also show toast
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #00ff88; color: #000; padding: 12px 20px; border-radius: 10px; z-index: 10001; animation: fadeInOut 3s ease;';
+    toast.innerHTML = `<strong>${title}</strong><br>${message}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+async function saveStudySession(minutes) {
+    try {
+        await fetch('/api/study-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'end', minutes: minutes })
+        });
+    } catch(e) {
+        console.error('Error saving session:', e);
+    }
+}
+
+async function loadStats() {
+    try {
+        const response = await fetch('/api/study-streak');
+        const data = await response.json();
+        document.getElementById('streakDays').innerText = data.streak || 0;
+        document.getElementById('todayMinutes').innerText = data.today_minutes || 0;
+        document.getElementById('totalMinutes').innerText = data.total_minutes || 0;
+        document.getElementById('totalPomodoros').innerText = Math.floor((data.total_minutes || 0) / 25);
+    } catch(e) {
+        console.error('Error loading stats:', e);
+    }
+}
+
+function loadWeeklyChart() {
+    const ctx = document.getElementById('weeklyChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+                label: 'Study Minutes',
+                data: [45, 60, 30, 75, 50, 90, 40],
+                backgroundColor: 'rgba(0, 255, 136, 0.7)',
+                borderRadius: 10,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: { backgroundColor: '#000', titleColor: '#fff', bodyColor: '#fff' }
+            },
+            scales: {
+                y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                x: { ticks: { color: '#fff' } }
+            }
+        }
+    });
+}
+
+function displayTip() {
+    const tip = tips[currentTipIndex % tips.length];
+    document.getElementById('currentTip').innerHTML = `
+        <div class="tip-icon"><i class="fas ${tip.icon}"></i></div>
+        <div class="tip-text">${tip.text}</div>
+    `;
+}
+
+function nextTip() {
+    currentTipIndex++;
+    displayTip();
+}
+
+function refreshQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const quote = quotes[randomIndex];
+    document.getElementById('quoteText').innerHTML = `"${quote.text}"`;
+    document.getElementById('quoteAuthor').innerHTML = `- ${quote.author}`;
+}
+
+// Initialize on page load
+initTimer();
+setInterval(loadStats, 30000);
+</script>
+{% endblock %}

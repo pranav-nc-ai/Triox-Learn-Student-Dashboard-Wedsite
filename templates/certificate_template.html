@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate of Achievement</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        
+        .certificate {
+            max-width: 1000px;
+            width: 100%;
+            background: linear-gradient(135deg, #fff8e7, #fffef5);
+            border-radius: 20px;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3), 0 0 0 10px rgba(212, 175, 55, 0.2), 0 0 0 15px rgba(212, 175, 55, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .certificate-border {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 15px;
+            pointer-events: none;
+        }
+        
+        .certificate-content {
+            padding: 50px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Decorative corners */
+        .corner {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 3px solid #d4af37;
+        }
+        .corner-tl { top: 20px; left: 20px; border-right: none; border-bottom: none; }
+        .corner-tr { top: 20px; right: 20px; border-left: none; border-bottom: none; }
+        .corner-bl { bottom: 20px; left: 20px; border-right: none; border-top: none; }
+        .corner-br { bottom: 20px; right: 20px; border-left: none; border-top: none; }
+        
+        /* Header */
+        .certificate-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .seal {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        
+        .seal i {
+            font-size: 40px;
+            color: #1a1a2e;
+        }
+        
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: #1a1a2e;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #6b6b6b;
+            letter-spacing: 2px;
+            margin-top: 5px;
+        }
+        
+        /* Body */
+        .certificate-body {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .awarded-to {
+            font-size: 18px;
+            color: #6b6b6b;
+            margin-bottom: 10px;
+        }
+        
+        .student-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 10px 0;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .student-name::before,
+        .student-name::after {
+            content: '✦';
+            font-size: 24px;
+            color: #d4af37;
+            margin: 0 15px;
+        }
+        
+        .description {
+            font-size: 18px;
+            color: #333;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        
+        .achievement {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d4af37;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Details */
+        .certificate-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .detail-item {
+            text-align: center;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #6b6b6b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .detail-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a1a2e;
+            margin-top: 5px;
+        }
+        
+        /* Footer */
+        .certificate-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .signature {
+            text-align: center;
+        }
+        
+        .signature-line {
+            width: 150px;
+            height: 2px;
+            background: #1a1a2e;
+            margin: 10px 0;
+        }
+        
+        .signature-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .qr-code {
+            width: 80px;
+            height: 80px;
+            background: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 10px;
+            text-align: center;
+        }
+        
+        .verify-text {
+            font-size: 10px;
+            color: #6b6b6b;
+            margin-top: 5px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate">
+        <div class="certificate-border"></div>
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <div class="certificate-content">
+            <div class="certificate-header">
+                <div class="seal">
+                    <i class="fas fa-award"></i>
+                </div>
+                <h1 class="title">CERTIFICATE OF ACHIEVEMENT</h1>
+                <p class="subtitle">OFFICIAL RECOGNITION OF EXCELLENCE</p>
+            </div>
+            
+            <div class="certificate-body">
+                <p class="awarded-to">This certificate is proudly presented to</p>
+                <!-- DYNAMIC CONTENT - Student name from server -->
+                <h2 class="student-name">{{ student_name }}</h2>
+                <!-- DYNAMIC CONTENT - Certificate type from server -->
+                <div class="achievement">{{ cert_type }}</div>
+                <!-- DYNAMIC CONTENT - Description/reason from server -->
+                <p class="description">{{ reason if reason else 'In recognition of outstanding academic performance and dedication to excellence.' }}</p>
+            </div>
+            
+            <div class="certificate-details">
+                <div class="detail-item">
+                    <div class="detail-label">CERTIFICATE ID</div>
+                    <!-- DYNAMIC CONTENT - Certificate ID from server -->
+                    <div class="detail-value">{{ cert_id }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">ISSUE DATE</div>
+                    <!-- DYNAMIC CONTENT - Issue date from server -->
+                    <div class="detail-value">{{ issue_date }}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">VALID TILL</div>
+                    <div class="detail-value">LIFETIME VALIDITY</div>
+                </div>
+            </div>
+            
+            <div class="certificate-footer">
+                <div class="signature">
+                    <div class="signature-line"></div>
+                    <div class="signature-name">Dr. Administrator</div>
+                    <div class="verify-text">Authorized Signatory</div>
+                </div>
+                <div class="signature">
+                    <div class="signature-line"></div>
+                    <div class="signature-name">TrioxLearn</div>
+                    <div class="verify-text">Educational Institution</div>
+                </div>
+                <div class="qr-code">
+                    <!-- DYNAMIC CONTENT - Certificate code for verification -->
+                    <small>Verify at:<br>trioxlearn.com/verify/{{ cert_code }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="no-print" style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px;">
+        <button onclick="window.print()" style="background: linear-gradient(135deg,#00ff88,#00d4ff); border: none; border-radius: 30px; padding: 12px 24px; color: #000; font-weight: bold; cursor: pointer;">
+            <i class="fas fa-print"></i> Print Certificate
+        </button>
+        <button onclick="downloadCertificate()" style="background: linear-gradient(135deg,#ffd700,#ffaa00); border: none; border-radius: 30px; padding: 12px 24px; color: #000; font-weight: bold; cursor: pointer;">
+            <i class="fas fa-download"></i> Download PDF
+        </button>
+    </div>
+</body>
+</html>

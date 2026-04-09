@@ -1,0 +1,1308 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Hero Section with 3D Parallax -->
+    <div class="hero-wrapper">
+        <div class="hero-background">
+            <div class="glow-orb orb-1"></div>
+            <div class="glow-orb orb-2"></div>
+            <div class="glow-orb orb-3"></div>
+            <div class="grid-overlay"></div>
+        </div>
+        
+        <div class="row min-vh-100 align-items-center position-relative">
+            <div class="col-lg-6" data-aos="fade-right" data-aos-duration="1200" data-aos-offset="300">
+                <div class="hero-content">
+                    <div class="cyber-badge animate-pulse">
+                        <i class="fas fa-microchip me-2"></i> AI-POWERED PLATFORM v3.0
+                    </div>
+                    
+                    <h1 class="hero-title">
+                        <span class="gradient-text">TRIOX</span>
+                        <span class="text-white">LEARN</span>
+                    </h1>
+                    
+                    <p class="hero-description">
+                        Experience the future of education with <span class="text-success">AI-driven analytics</span>, 
+                        <span class="text-info">real-time insights</span>, and 
+                        <span class="text-warning">personalized learning paths</span>.
+                    </p>
+                    
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="stat-number" id="heroStudents">--</div>
+                            <div class="stat-label">Active Learners</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="stat-number" id="heroScore">--</div>
+                            <div class="stat-label">Avg Score</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="stat-number" id="heroBadges">--</div>
+                            <div class="stat-label">Badges Earned</div>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-buttons">
+                        <button class="btn-primary-glow" onclick="scrollToRoles()">
+                            <span>Get Started</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="btn-outline-cyber" onclick="showDemoModal()">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Watch Demo</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6" data-aos="fade-left" data-aos-duration="1200" data-aos-offset="300">
+                <!-- 3D Interactive Dashboard Preview -->
+                <div class="dashboard-3d-container">
+                    <div class="dashboard-glow"></div>
+                    
+                    <!-- Main Dashboard Card -->
+                    <div class="dashboard-card">
+                        <div class="card-header-futuristic">
+                            <div class="header-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                            <div class="header-title">
+                                <i class="fas fa-chart-line"></i> TRIOX ANALYTICS
+                            </div>
+                            <div class="header-status">
+                                <span class="live-dot"></span> LIVE
+                            </div>
+                        </div>
+                        
+                        <div class="card-body-futuristic">
+                            <!-- Real-time Stats Grid -->
+                            <div class="stats-grid-3d">
+                                <div class="stat-3d-card" data-stat="students">
+                                    <div class="stat-3d-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-3d-info">
+                                        <span class="stat-3d-label">Total Students</span>
+                                        <span class="stat-3d-value" id="dashStudents">--</span>
+                                    </div>
+                                    <div class="stat-3d-trend up">
+                                        <i class="fas fa-arrow-up"></i> +8%
+                                    </div>
+                                </div>
+                                <div class="stat-3d-card" data-stat="score">
+                                    <div class="stat-3d-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                    <div class="stat-3d-info">
+                                        <span class="stat-3d-label">Avg Score</span>
+                                        <span class="stat-3d-value" id="dashScore">--</span>
+                                    </div>
+                                    <div class="stat-3d-trend up">
+                                        <i class="fas fa-arrow-up"></i> +5%
+                                    </div>
+                                </div>
+                                <div class="stat-3d-card" data-stat="attendance">
+                                    <div class="stat-3d-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="stat-3d-info">
+                                        <span class="stat-3d-label">Attendance</span>
+                                        <span class="stat-3d-value" id="dashAttendance">--</span>
+                                    </div>
+                                    <div class="stat-3d-trend up">
+                                        <i class="fas fa-arrow-up"></i> +3%
+                                    </div>
+                                </div>
+                                <div class="stat-3d-card" data-stat="rooms">
+                                    <div class="stat-3d-icon">
+                                        <i class="fas fa-chalkboard"></i>
+                                    </div>
+                                    <div class="stat-3d-info">
+                                        <span class="stat-3d-label">Active Rooms</span>
+                                        <span class="stat-3d-value" id="dashRooms">--</span>
+                                    </div>
+                                    <div class="stat-3d-trend">
+                                        <i class="fas fa-chart-line"></i> +2
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Animated Chart -->
+                            <div class="chart-container-3d">
+                                <div class="chart-header-3d">
+                                    <span><i class="fas fa-chart-bar"></i> Grade Distribution</span>
+                                    <div class="chart-legend-3d">
+                                        <span><i class="fas fa-circle" style="color: #00ff88;"></i> Students</span>
+                                    </div>
+                                </div>
+                                <canvas id="dashboardChart" height="160" style="width:100%; height:160px;"></canvas>
+                            </div>
+                            
+                            <!-- Leaderboard Preview -->
+                            <div class="leaderboard-preview">
+                                <div class="leaderboard-header">
+                                    <span><i class="fas fa-trophy"></i> Top Performers</span>
+                                    <span class="view-all">View All →</span>
+                                </div>
+                                <div class="leaderboard-list" id="leaderboardPreview">
+                                    <div class="leaderboard-item">
+                                        <span class="rank">1</span>
+                                        <span class="name" id="top1">--</span>
+                                        <span class="score" id="top1Score">--</span>
+                                    </div>
+                                    <div class="leaderboard-item">
+                                        <span class="rank">2</span>
+                                        <span class="name" id="top2">--</span>
+                                        <span class="score" id="top2Score">--</span>
+                                    </div>
+                                    <div class="leaderboard-item">
+                                        <span class="rank">3</span>
+                                        <span class="name" id="top3">--</span>
+                                        <span class="score" id="top3Score">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer-futuristic">
+                            <div class="footer-update">
+                                <div class="pulse-dot"></div>
+                                <span>Real-time sync</span>
+                            </div>
+                            <div class="footer-security">
+                                <i class="fas fa-shield-alt"></i> Encrypted
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating Particles -->
+                    <div class="floating-particle p1"><i class="fas fa-chart-line"></i></div>
+                    <div class="floating-particle p2"><i class="fas fa-user-graduate"></i></div>
+                    <div class="floating-particle p3"><i class="fas fa-trophy"></i></div>
+                    <div class="floating-particle p4"><i class="fas fa-brain"></i></div>
+                    <div class="floating-particle p5"><i class="fas fa-rocket"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Role Selection Section with 3D Cards -->
+    <div id="role-section" class="role-section">
+        <div class="section-header" data-aos="fade-up" data-aos-offset="200">
+            <h2 class="section-title">Choose Your <span class="gradient-text">Portal</span></h2>
+            <p class="section-subtitle">Select your role to access the dashboard</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="flip-left" data-aos-delay="100" data-aos-offset="200">
+                <div class="role-card-3d role-admin" onclick="redirectToLogin('admin')">
+                    <div class="role-card-inner">
+                        <div class="role-icon-wrapper">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3>Admin Portal</h3>
+                        <p>Full access to manage students, teachers, and system settings</p>
+                        <div class="role-features-list">
+                            <span><i class="fas fa-check-circle"></i> Analytics Dashboard</span>
+                            <span><i class="fas fa-check-circle"></i> Student Management</span>
+                            <span><i class="fas fa-check-circle"></i> Report Generation</span>
+                        </div>
+                        <div class="role-arrow-btn">
+                            <span>Access Portal</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4" data-aos="flip-up" data-aos-delay="200" data-aos-offset="200">
+                <div class="role-card-3d role-student" onclick="redirectToLogin('student')">
+                    <div class="role-card-inner">
+                        <div class="role-icon-wrapper">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>Student Portal</h3>
+                        <p>Personalized dashboard to track your academic progress</p>
+                        <div class="role-features-list">
+                            <span><i class="fas fa-check-circle"></i> Performance Analytics</span>
+                            <span><i class="fas fa-check-circle"></i> Gamification Hub</span>
+                            <span><i class="fas fa-check-circle"></i> Study Rooms</span>
+                        </div>
+                        <div class="role-arrow-btn">
+                            <span>Access Portal</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4" data-aos="flip-right" data-aos-delay="300" data-aos-offset="200">
+                <div class="role-card-3d role-parent" onclick="redirectToLogin('parent')">
+                    <div class="role-card-inner">
+                        <div class="role-icon-wrapper">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Parent Portal</h3>
+                        <p>Monitor your child's academic performance and progress</p>
+                        <div class="role-features-list">
+                            <span><i class="fas fa-check-circle"></i> Child's Progress</span>
+                            <span><i class="fas fa-check-circle"></i> Meeting Scheduler</span>
+                            <span><i class="fas fa-check-circle"></i> Report Cards</span>
+                        </div>
+                        <div class="role-arrow-btn">
+                            <span>Access Portal</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Features Showcase with Scroll Animations -->
+    <div id="features-section" class="features-section">
+        <div class="section-header" data-aos="fade-up" data-aos-offset="200">
+            <h2 class="section-title">Powerful <span class="gradient-text">Features</span></h2>
+            <p class="section-subtitle">Everything you need for academic success</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100" data-aos-offset="200">
+                <div class="feature-card-3d">
+                    <div class="feature-icon-3d">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h4>AI-Powered Insights</h4>
+                    <p>Get personalized recommendations and predictive analytics to improve your performance</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200" data-aos-offset="200">
+                <div class="feature-card-3d">
+                    <div class="feature-icon-3d">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h4>Virtual Study Rooms</h4>
+                    <p>Collaborate with peers in real-time with chat, whiteboard, and file sharing</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300" data-aos-offset="200">
+                <div class="feature-card-3d">
+                    <div class="feature-icon-3d">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h4>Gamification System</h4>
+                    <p>Earn points, unlock badges, and climb the leaderboard as you learn</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400" data-aos-offset="200">
+                <div class="feature-card-3d">
+                    <div class="feature-icon-3d">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h4>Quiz System</h4>
+                    <p>Take quizzes and get instant feedback on your knowledge</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500" data-aos-offset="200">
+                <div class="feature-card-3d">
+                    <div class="feature-icon-3d">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h4>Digital Certificates</h4>
+                    <p>Earn and download certificates for your achievements</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600" data-aos-offset="200">
+                <div class="feature-card-3d">
+                    <div class="feature-icon-3d">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4>Discussion Forum</h4>
+                    <p>Connect with peers, ask questions, and share knowledge</p>
+                    <div class="feature-hover-effect"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats Counter Section -->
+    <div class="stats-counter-section" data-aos="zoom-in" data-aos-offset="200">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="counter-card">
+                    <i class="fas fa-users"></i>
+                    <div class="counter-number" id="counterStudents">0</div>
+                    <span>Total Students</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="counter-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="counter-number" id="counterScore">0</div>
+                    <span>Avg Score</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="counter-card">
+                    <i class="fas fa-trophy"></i>
+                    <div class="counter-number" id="counterBadges">0</div>
+                    <span>Badges Earned</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="counter-card">
+                    <i class="fas fa-clock"></i>
+                    <div class="counter-number" id="counterHours">0</div>
+                    <span>Study Hours</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Global Styles for Index Page */
+.hero-wrapper {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: floatOrb 10s ease-in-out infinite;
+}
+
+.orb-1 {
+    width: 300px;
+    height: 300px;
+    background: #00ff88;
+    top: 10%;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.orb-2 {
+    width: 400px;
+    height: 400px;
+    background: #00d4ff;
+    bottom: 0;
+    right: -150px;
+    animation-delay: 3s;
+}
+
+.orb-3 {
+    width: 200px;
+    height: 200px;
+    background: #8b5cf6;
+    top: 50%;
+    left: 30%;
+    animation-delay: 6s;
+}
+
+@keyframes floatOrb {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-50px) translateX(50px); }
+}
+
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(rgba(0, 255, 136, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+}
+
+/* Hero Content */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+.cyber-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 212, 255, 0.05));
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.hero-title {
+    font-size: 5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    color: #a0a0a0;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.hero-stat {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #6b6b6b;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-primary-glow {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 40px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+    gap: 15px;
+}
+
+.btn-outline-cyber {
+    background: transparent;
+    border: 2px solid #00ff88;
+    padding: 14px 32px;
+    border-radius: 40px;
+    color: #00ff88;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-cyber:hover {
+    background: #00ff88;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+/* 3D Dashboard Container */
+.dashboard-3d-container {
+    position: relative;
+    perspective: 1000px;
+}
+
+.dashboard-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.15), transparent);
+    filter: blur(40px);
+    z-index: 0;
+}
+
+.dashboard-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+    z-index: 1;
+}
+
+.dashboard-card:hover {
+    transform: rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
+}
+
+.card-header-futuristic {
+    padding: 18px 24px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.header-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff5f56;
+}
+
+.header-dots span:nth-child(2) { background: #ffbd2e; }
+.header-dots span:nth-child(3) { background: #27c93f; }
+
+.header-title {
+    flex: 1;
+    font-size: 0.85rem;
+    font-family: monospace;
+    color: #00ff88;
+    letter-spacing: 1px;
+}
+
+.header-status {
+    font-size: 0.7rem;
+    color: #00ff88;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Stats Grid 3D */
+.stats-grid-3d {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 20px;
+}
+
+.stat-3d-card {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.15);
+    border-radius: 16px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.stat-3d-card:hover {
+    border-color: #00ff88;
+    transform: translateY(-3px);
+}
+
+.stat-3d-icon {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.1));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-3d-icon i {
+    font-size: 1.3rem;
+    color: #00ff88;
+}
+
+.stat-3d-info {
+    flex: 1;
+}
+
+.stat-3d-label {
+    display: block;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.stat-3d-value {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.stat-3d-trend {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 20px;
+}
+
+.stat-3d-trend.up {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+/* Chart Container */
+.chart-container-3d {
+    padding: 0 20px 20px 20px;
+}
+
+.chart-header-3d {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.8rem;
+    color: #a0a0a0;
+}
+
+.chart-legend-3d span {
+    margin-left: 10px;
+}
+
+/* Leaderboard Preview */
+.leaderboard-preview {
+    padding: 0 20px 20px 20px;
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.8rem;
+    color: #00ff88;
+}
+
+.view-all {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+    cursor: pointer;
+}
+
+.leaderboard-list {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.leaderboard-item .rank {
+    width: 35px;
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.leaderboard-item .name {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #e0e0e0;
+}
+
+.leaderboard-item .score {
+    font-size: 0.85rem;
+    color: #00ff88;
+    font-weight: bold;
+}
+
+/* Card Footer */
+.card-footer-futuristic {
+    padding: 12px 20px;
+    border-top: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+}
+
+.footer-update {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #6b6b6b;
+}
+
+.footer-security {
+    color: #6b6b6b;
+}
+
+/* Floating Particles */
+.floating-particle {
+    position: absolute;
+    background: rgba(0, 255, 136, 0.15);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    animation: floatParticle 6s ease-in-out infinite;
+}
+
+.p1 { top: -20px; left: -20px; animation-delay: 0s; }
+.p2 { top: 30%; right: -25px; animation-delay: 1s; }
+.p3 { bottom: -20px; left: 20%; animation-delay: 2s; }
+.p4 { top: 50%; left: -25px; animation-delay: 3s; }
+.p5 { bottom: 30%; right: -15px; animation-delay: 4s; }
+
+@keyframes floatParticle {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-20px) translateX(15px); }
+}
+
+/* Role Section */
+.role-section {
+    padding: 80px 0;
+    position: relative;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.section-subtitle {
+    color: #a0a0a0;
+}
+
+/* Role Cards 3D */
+.role-card-3d {
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.role-card-inner {
+    background: rgba(26, 26, 46, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.4s ease;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    transform-style: preserve-3d;
+}
+
+.role-card-3d:hover .role-card-inner {
+    transform: translateY(-10px) rotateX(5deg);
+    border-color: #00ff88;
+    box-shadow: 0 30px 40px rgba(0, 0, 0, 0.3);
+}
+
+.role-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.1));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+}
+
+.role-admin .role-icon-wrapper i { color: #00ff88; }
+.role-student .role-icon-wrapper i { color: #00d4ff; }
+.role-parent .role-icon-wrapper i { color: #ffc107; }
+
+.role-card-inner h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.role-card-inner p {
+    color: #a0a0a0;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+.role-features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+.role-features-list span {
+    font-size: 0.75rem;
+    color: #6b6b6b;
+}
+
+.role-features-list i {
+    margin-right: 8px;
+}
+
+.role-arrow-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #00ff88;
+    font-size: 0.9rem;
+    transition: gap 0.3s ease;
+}
+
+.role-card-3d:hover .role-arrow-btn {
+    gap: 15px;
+}
+
+/* Feature Cards 3D */
+.features-section {
+    padding: 80px 0;
+}
+
+.feature-card-3d {
+    background: rgba(26, 26, 46, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.4s ease;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.feature-card-3d:hover {
+    transform: translateY(-8px);
+    border-color: #00ff88;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feature-icon-3d {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+    color: #000;
+    transition: all 0.3s ease;
+}
+
+.feature-card-3d:hover .feature-icon-3d {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.feature-card-3d h4 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.feature-card-3d p {
+    color: #a0a0a0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.feature-hover-effect {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.feature-card-3d:hover .feature-hover-effect {
+    left: 100%;
+}
+
+/* Stats Counter Section */
+.stats-counter-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 40px;
+    margin: 40px 0;
+}
+
+.counter-card {
+    text-align: center;
+    padding: 20px;
+}
+
+.counter-card i {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 15px;
+}
+
+.counter-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.counter-card span:last-child {
+    display: block;
+    font-size: 0.85rem;
+    color: #6b6b6b;
+    margin-top: 5px;
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    .hero-stats {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .stats-grid-3d {
+        grid-template-columns: 1fr;
+    }
+    .floating-particle {
+        display: none;
+    }
+    .section-title {
+        font-size: 1.8rem;
+    }
+}
+</style>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+AOS.init({ duration: 800, once: false, offset: 100 });
+
+// Load all dynamic data from public API
+async function loadDashboardData() {
+    try {
+        console.log('Loading dashboard data from public API...');
+        
+        // Fetch statistics from public API (no login required)
+        const response = await fetch('/api/public-statistics');
+        if (!response.ok) {
+            throw new Error('API response not ok');
+        }
+        const data = await response.json();
+        console.log('Public statistics data:', data);
+        
+        // Update hero stats
+        const totalStudents = data.total_students || 500;
+        const avgScore = data.avg_final_score || 68.5;
+        
+        document.getElementById('heroStudents').innerHTML = totalStudents;
+        document.getElementById('heroScore').innerHTML = avgScore.toFixed(1) + '%';
+        document.getElementById('heroBadges').innerHTML = Math.floor(totalStudents * 0.35) || 175;
+        
+        // Update dashboard stats
+        document.getElementById('dashStudents').innerHTML = totalStudents;
+        document.getElementById('dashScore').innerHTML = avgScore.toFixed(1) + '%';
+        document.getElementById('dashAttendance').innerHTML = (data.avg_attendance || 82.3).toFixed(1) + '%';
+        document.getElementById('dashRooms').innerHTML = '12';
+        
+        // Update top performers
+        if (data.top_performers && data.top_performers.length) {
+            document.getElementById('top1').innerHTML = data.top_performers[0].name.split(' ')[0];
+            document.getElementById('top1Score').innerHTML = data.top_performers[0].score + '%';
+            if (data.top_performers[1]) {
+                document.getElementById('top2').innerHTML = data.top_performers[1].name.split(' ')[0];
+                document.getElementById('top2Score').innerHTML = data.top_performers[1].score + '%';
+            }
+            if (data.top_performers[2]) {
+                document.getElementById('top3').innerHTML = data.top_performers[2].name.split(' ')[0];
+                document.getElementById('top3Score').innerHTML = data.top_performers[2].score + '%';
+            }
+        } else {
+            document.getElementById('top1').innerHTML = 'John';
+            document.getElementById('top1Score').innerHTML = '89.5%';
+            document.getElementById('top2').innerHTML = 'Emma';
+            document.getElementById('top2Score').innerHTML = '87.2%';
+            document.getElementById('top3').innerHTML = 'Michael';
+            document.getElementById('top3Score').innerHTML = '85.8%';
+        }
+        
+        // Create chart
+        if (data.grade_distribution && data.grade_distribution.length) {
+            const ctx = document.getElementById('dashboardChart').getContext('2d');
+            if (window.dashboardChartInstance) {
+                window.dashboardChartInstance.destroy();
+            }
+            window.dashboardChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.grade_distribution.map(g => g.grade),
+                    datasets: [{
+                        label: 'Number of Students',
+                        data: data.grade_distribution.map(g => g.count),
+                        backgroundColor: 'rgba(0, 255, 136, 0.7)',
+                        borderColor: '#00ff88',
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { 
+                            labels: { color: '#ffffff', font: { size: 10 } } 
+                        },
+                        tooltip: { 
+                            backgroundColor: '#000000', 
+                            titleColor: '#ffffff', 
+                            bodyColor: '#ffffff' 
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            ticks: { color: '#ffffff', stepSize: 50 }, 
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: { display: true, text: 'Number of Students', color: '#00ff88' }
+                        },
+                        x: { 
+                            ticks: { color: '#ffffff' },
+                            title: { display: true, text: 'Grade', color: '#00ff88' }
+                        }
+                    }
+                }
+            });
+        } else {
+            // Fallback chart
+            const ctx = document.getElementById('dashboardChart').getContext('2d');
+            if (window.dashboardChartInstance) {
+                window.dashboardChartInstance.destroy();
+            }
+            window.dashboardChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['A+', 'A', 'B', 'C', 'D', 'F'],
+                    datasets: [{
+                        label: 'Number of Students',
+                        data: [25, 85, 150, 140, 60, 30],
+                        backgroundColor: 'rgba(0, 255, 136, 0.7)',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { labels: { color: '#ffffff' } },
+                        tooltip: { backgroundColor: '#000000', titleColor: '#ffffff', bodyColor: '#ffffff' }
+                    },
+                    scales: {
+                        y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                        x: { ticks: { color: '#ffffff' } }
+                    }
+                }
+            });
+        }
+        
+        // Update counter animation
+        animateCounter('counterStudents', totalStudents);
+        animateCounter('counterScore', Math.round(avgScore));
+        animateCounter('counterBadges', Math.floor(totalStudents * 0.35) || 175);
+        animateCounter('counterHours', Math.floor(totalStudents * 12) || 6000);
+        
+        console.log('Dashboard data loaded successfully with', totalStudents, 'students');
+        
+    } catch(err) {
+        console.error('Error loading dashboard data:', err);
+        setFallbackData();
+    }
+}
+
+function setFallbackData() {
+    console.log('Using fallback data');
+    document.getElementById('heroStudents').innerHTML = '500';
+    document.getElementById('heroScore').innerHTML = '68.5%';
+    document.getElementById('heroBadges').innerHTML = '175';
+    
+    document.getElementById('dashStudents').innerHTML = '500';
+    document.getElementById('dashScore').innerHTML = '68.5%';
+    document.getElementById('dashAttendance').innerHTML = '82.3%';
+    document.getElementById('dashRooms').innerHTML = '12';
+    
+    document.getElementById('top1').innerHTML = 'John';
+    document.getElementById('top1Score').innerHTML = '89.5%';
+    document.getElementById('top2').innerHTML = 'Emma';
+    document.getElementById('top2Score').innerHTML = '87.2%';
+    document.getElementById('top3').innerHTML = 'Michael';
+    document.getElementById('top3Score').innerHTML = '85.8%';
+    
+    const ctx = document.getElementById('dashboardChart').getContext('2d');
+    if (window.dashboardChartInstance) {
+        window.dashboardChartInstance.destroy();
+    }
+    window.dashboardChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['A+', 'A', 'B', 'C', 'D', 'F'],
+            datasets: [{
+                label: 'Number of Students',
+                data: [25, 85, 150, 140, 60, 30],
+                backgroundColor: 'rgba(0, 255, 136, 0.7)',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { labels: { color: '#ffffff' } },
+                tooltip: { backgroundColor: '#000000', titleColor: '#ffffff', bodyColor: '#ffffff' }
+            },
+            scales: {
+                y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                x: { ticks: { color: '#ffffff' } }
+            }
+        }
+    });
+    
+    animateCounter('counterStudents', 500);
+    animateCounter('counterScore', 68);
+    animateCounter('counterBadges', 175);
+    animateCounter('counterHours', 6000);
+}
+
+function animateCounter(elementId, target) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    let current = 0;
+    const increment = target / 50;
+    const update = () => {
+        current += increment;
+        if (current < target) {
+            element.innerHTML = Math.floor(current);
+            requestAnimationFrame(update);
+        } else {
+            element.innerHTML = target;
+        }
+    };
+    update();
+}
+
+function redirectToLogin(role) {
+    if (role === 'admin') {
+        window.location.href = "{{ url_for('login') }}";
+    } else if (role === 'student') {
+        window.location.href = "{{ url_for('student_login') }}";
+    } else if (role === 'parent') {
+        window.location.href = "{{ url_for('parent_login') }}";
+    }
+}
+
+function scrollToRoles() {
+    const roleSection = document.getElementById('role-section');
+    if (roleSection) {
+        roleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function showDemoModal() {
+    Swal.fire({
+        title: '✨ NexusLearn Platform Demo',
+        html: `
+            <div class="text-start">
+                <p><strong>🎓 Student Portal:</strong> S0001 / john123</p>
+                <p><strong>👨‍💼 Admin Portal:</strong> admin / admin123</p>
+                <p><strong>👪 Parent Portal:</strong> parent1@example.com / john123</p>
+                <hr>
+                <p class="text-success">🚀 Features: AI Analytics, Gamification, Study Rooms, Quizzes, Certificates, Real-time Chat, Whiteboard & more!</p>
+            </div>
+        `,
+        icon: 'info',
+        confirmButtonColor: '#00ff88',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+}
+
+// Load data when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, fetching data from public API...');
+    loadDashboardData();
+});
+
+// Refresh data every 30 seconds
+setInterval(loadDashboardData, 30000);
+</script>
+{% endblock %}

@@ -1,0 +1,993 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> INTERACTIVE QUIZ ARENA
+                <span class="live-badge">ACTIVE</span>
+            </div>
+            <div class="quiz-icon">
+                <i class="fas fa-question-circle"></i>
+                <div class="quiz-ring"></div>
+                <div class="quiz-ring delay-1"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">QUIZ</span>
+                <span class="neon-text">ARENA</span>
+            </h1>
+            <p class="cyber-subtitle">Test your knowledge • Earn points • Review your answers</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Available Quizzes Section -->
+        <div class="col-lg-8 mb-4" data-aos="fade-right" data-aos-delay="100">
+            <div class="glass-card">
+                <div class="card-header-cyber">
+                    <i class="fas fa-list"></i> AVAILABLE CHALLENGES
+                    <div class="header-glow"></div>
+                    <span class="quiz-count" id="quizCount">0</span>
+                </div>
+                <div class="card-body-cyber">
+                    <div class="quizzes-grid" id="quizzesList">
+                        <div class="loading-container">
+                            <div class="cyber-spinner"></div>
+                            <span>Loading quizzes...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Results & Create Quiz Section -->
+        <div class="col-lg-4 mb-4" data-aos="fade-left" data-aos-delay="200">
+            <!-- My Results Card -->
+            <div class="glass-card mb-4">
+                <div class="card-header-cyber">
+                    <i class="fas fa-chart-line"></i> MY PERFORMANCE
+                    <div class="header-glow"></div>
+                </div>
+                <div class="card-body-cyber p-0">
+                    <div class="results-list" id="resultsList">
+                        <div class="loading-container">
+                            <div class="cyber-spinner"></div>
+                            <span>Loading results...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="stats-card">
+                <div class="stats-header">
+                    <i class="fas fa-chart-simple"></i> QUIZ STATISTICS
+                </div>
+                <div class="stats-body">
+                    <div class="stat-row">
+                        <span>Total Attempts</span>
+                        <strong id="totalAttempts">0</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>Average Score</span>
+                        <strong id="avgScore">0%</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>Best Performance</span>
+                        <strong id="bestScore">0%</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>Points Earned</span>
+                        <strong id="pointsEarned">0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Quiz Button (Admin/Teacher only) -->
+            {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+            <div class="glass-card mt-4">
+                <div class="card-header-cyber">
+                    <i class="fas fa-plus-circle"></i> CREATE QUIZ
+                    <div class="header-glow"></div>
+                </div>
+                <div class="card-body-cyber text-center">
+                    <a href="/create-quiz" class="cyber-create-btn">
+                        <i class="fas fa-magic"></i> CREATE NEW QUIZ
+                        <div class="btn-glow"></div>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Quiz Review Modal -->
+<div class="modal fade cyber-modal" id="quizReviewModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-clipboard-list"></i> QUIZ REVIEW</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="reviewContainer">
+                Loading...
+            </div>
+            <div class="modal-footer">
+                <button class="cyber-cancel-btn" data-bs-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Quizzes Page Styles */
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.quiz-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.quiz-icon i {
+    font-size: 3rem;
+    color: #ffd700;
+}
+
+.quiz-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+.quiz-ring.delay-1 {
+    animation-delay: 1s;
+}
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Glass Card */
+.glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-cyber {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    font-size: 0.85rem;
+    color: #00ff88;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.quiz-count {
+    margin-left: auto;
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+/* Quizzes Grid */
+.quizzes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.quiz-card {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.quiz-card:hover {
+    transform: translateY(-5px);
+    border-color: #00ff88;
+    box-shadow: 0 10px 30px rgba(0, 255, 136, 0.15);
+}
+
+.quiz-card.completed {
+    border-color: rgba(0, 255, 136, 0.5);
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+}
+
+.quiz-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.quiz-icon-small {
+    width: 45px;
+    height: 45px;
+    background: rgba(0, 255, 136, 0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quiz-icon-small i {
+    font-size: 1.3rem;
+    color: #00ff88;
+}
+
+.quiz-status {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.quiz-status.completed {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.quiz-status.pending {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+}
+
+.quiz-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.quiz-description {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.quiz-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.quiz-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.proctored-quiz-btn {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: #fff;
+}
+
+.proctored-quiz-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.review-quiz-btn {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #00d4ff;
+}
+
+.delete-quiz-btn {
+    background: rgba(255, 68, 68, 0.15);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    color: #ff4444;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.delete-quiz-btn:hover {
+    background: rgba(255, 68, 68, 0.3);
+    transform: translateY(-2px);
+}
+
+.proctored-quiz-btn:hover, .review-quiz-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Results List */
+.results-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.result-item {
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.result-item:hover {
+    background: rgba(0, 255, 136, 0.05);
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.result-title {
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.result-score {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.result-score.high { color: #00ff88; }
+.result-score.medium { color: #ffd700; }
+.result-score.low { color: #ff4444; }
+
+.result-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: #6b6b6b;
+}
+
+/* Stats Card */
+.stats-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+}
+
+.stats-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.05));
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    font-size: 0.85rem;
+    color: #00d4ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats-body {
+    padding: 20px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.stat-row:last-child {
+    border-bottom: none;
+}
+
+.stat-row span {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+}
+
+.stat-row strong {
+    font-size: 1.1rem;
+    color: #00d4ff;
+}
+
+/* Create Quiz Button */
+.cyber-create-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.cyber-create-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.cyber-create-btn:hover .btn-glow {
+    left: 100%;
+}
+
+/* Review Modal */
+.cyber-modal .modal-content {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 24px;
+}
+
+.cyber-modal .modal-header {
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    color: #00ff88;
+}
+
+.review-question {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.review-question.correct {
+    border-color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.review-question.incorrect {
+    border-color: #ff4444;
+    background: rgba(255, 68, 68, 0.05);
+}
+
+.review-question-text {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.review-options {
+    margin-bottom: 15px;
+}
+
+.review-option {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 10px;
+}
+
+.review-option.correct {
+    background: rgba(0, 255, 136, 0.15);
+    border-left: 3px solid #00ff88;
+}
+
+.review-option.student {
+    background: rgba(255, 68, 68, 0.15);
+    border-left: 3px solid #ff4444;
+}
+
+.review-option.student.correct {
+    background: rgba(0, 255, 136, 0.15);
+    border-left: 3px solid #00ff88;
+}
+
+.review-feedback {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+.review-feedback.correct {
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
+}
+
+.review-feedback.incorrect {
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff4444;
+}
+
+/* Loading */
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 60px;
+    color: #a0a0a0;
+}
+
+.cyber-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Scrollbar */
+.results-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.results-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.results-list::-webkit-scrollbar-thumb {
+    background: #00ff88;
+    border-radius: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .quizzes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+let attemptedQuizzes = new Set();
+
+async function loadQuizzes() {
+    try {
+        const resultsRes = await fetch('/api/quiz-results');
+        const results = await resultsRes.json();
+        attemptedQuizzes.clear();
+        results.forEach(r => {
+            attemptedQuizzes.add(r.quiz_id);
+        });
+        
+        const response = await fetch('/api/quizzes');
+        const quizzes = await response.json();
+        
+        const container = document.getElementById('quizzesList');
+        document.getElementById('quizCount').innerText = quizzes.length;
+        
+        if (quizzes.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-question-circle"></i>
+                    <p>No quizzes available yet</p>
+                    <small>Check back later for new challenges</small>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        for (const quiz of quizzes) {
+            const isAttempted = attemptedQuizzes.has(quiz.quiz_id);
+            let statusHtml = '';
+            let actionHtml = '';
+            
+            if (isAttempted) {
+                statusHtml = '<div class="quiz-status completed"><i class="fas fa-check-circle"></i> COMPLETED</div>';
+                actionHtml = `
+                    <button class="review-quiz-btn" onclick="reviewQuiz(${quiz.quiz_id})">
+                        <i class="fas fa-clipboard-list"></i> REVIEW
+                    </button>
+                `;
+            } else {
+                statusHtml = '<div class="quiz-status pending"><i class="fas fa-hourglass-half"></i> NOT ATTEMPTED</div>';
+                actionHtml = `
+                    <button class="proctored-quiz-btn" onclick="startProctoredExam(${quiz.quiz_id})">
+                        <i class="fas fa-shield-alt"></i> START PROCTORED EXAM
+                    </button>
+                `;
+            }
+            
+            {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+            actionHtml += `
+                <button class="delete-quiz-btn" onclick="deleteQuiz(${quiz.quiz_id}, '${escapeHtml(quiz.title)}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            {% endif %}
+            
+            html += `
+                <div class="quiz-card ${isAttempted ? 'completed' : ''}" data-aos="fade-up">
+                    <div class="quiz-card-header">
+                        <div class="quiz-icon-small">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        ${statusHtml}
+                    </div>
+                    <div class="quiz-title">${escapeHtml(quiz.title)}</div>
+                    <div class="quiz-description">${escapeHtml(quiz.description || 'Test your knowledge with this quiz')}</div>
+                    <div class="quiz-meta">
+                        <span><i class="fas fa-question-circle"></i> ${quiz.question_count} Questions</span>
+                        <span><i class="fas fa-users"></i> ${quiz.attempts} Attempts</span>
+                    </div>
+                    <div class="quiz-actions">
+                        ${actionHtml}
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+        
+    } catch(err) {
+        console.error('Error loading quizzes:', err);
+    }
+}
+
+async function loadResults() {
+    try {
+        const response = await fetch('/api/quiz-results');
+        const results = await response.json();
+        
+        const container = document.getElementById('resultsList');
+        
+        let totalAttempts = results.length;
+        let totalScore = 0;
+        let bestScore = 0;
+        let totalPoints = 0;
+        
+        results.forEach(r => {
+            totalScore += r.percentage;
+            if (r.percentage > bestScore) bestScore = r.percentage;
+            totalPoints += Math.floor(r.percentage / 10) * 5;
+        });
+        
+        document.getElementById('totalAttempts').innerText = totalAttempts;
+        document.getElementById('avgScore').innerText = totalAttempts > 0 ? (totalScore / totalAttempts).toFixed(1) + '%' : '0%';
+        document.getElementById('bestScore').innerText = bestScore.toFixed(1) + '%';
+        document.getElementById('pointsEarned').innerText = totalPoints;
+        
+        if (results.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-chart-line"></i>
+                    <p>No quiz attempts yet</p>
+                    <small>Take a quiz to see your results here</small>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        results.forEach(r => {
+            let scoreClass = '';
+            if (r.percentage >= 80) scoreClass = 'high';
+            else if (r.percentage >= 60) scoreClass = 'medium';
+            else scoreClass = 'low';
+            
+            html += `
+                <div class="result-item" onclick="reviewQuizResult(${r.result_id})">
+                    <div class="result-header">
+                        <span class="result-title">${escapeHtml(r.title)}</span>
+                        <span class="result-score ${scoreClass}">${r.percentage}%</span>
+                    </div>
+                    <div class="result-meta">
+                        <span>Score: ${r.score}/${r.total_possible}</span>
+                        <span>${new Date(r.submitted_at).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        
+    } catch(err) {
+        console.error('Error loading results:', err);
+    }
+}
+
+function startProctoredExam(quizId) {
+    Swal.fire({
+        title: '🔒 Proctored Exam Mode',
+        html: '<strong>This exam will be monitored!</strong><br><br>• Fullscreen mode required<br>• Tab switching is prohibited<br>• Copy/Paste is disabled<br>• Right-click is disabled<br><br>Violations will be logged and may invalidate your exam.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'I Understand, Start Exam',
+        cancelButtonText: 'Cancel',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = `/proctored-exam/${quizId}`;
+        }
+    });
+}
+
+async function deleteQuiz(quizId, quizTitle) {
+    const result = await Swal.fire({
+        title: 'Delete Quiz?',
+        html: `Are you sure you want to delete "<strong>${escapeHtml(quizTitle)}</strong>"?<br>This action cannot be undone!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+    
+    if (result.isConfirmed) {
+        const response = await fetch(`/api/delete-quiz/${quizId}`, { method: 'DELETE' });
+        const data = await response.json();
+        if (data.success) {
+            Swal.fire('Deleted!', 'Quiz has been deleted.', 'success');
+            loadQuizzes();
+            loadResults();
+        } else {
+            Swal.fire('Error!', data.error || 'Could not delete quiz', 'error');
+        }
+    }
+}
+
+async function reviewQuizResult(resultId) {
+    try {
+        const response = await fetch(`/api/quiz-review/${resultId}`);
+        const data = await response.json();
+        
+        let questionsHtml = '';
+        data.questions.forEach((q, idx) => {
+            const isCorrect = q.is_correct;
+            const questionClass = isCorrect ? 'correct' : 'incorrect';
+            
+            let optionsHtml = '';
+            q.options.forEach((opt, optIdx) => {
+                const letter = String.fromCharCode(65 + optIdx);
+                if (!opt) return;
+                
+                let optionClass = '';
+                if (letter === q.correct_answer) {
+                    optionClass = 'correct';
+                }
+                if (letter === q.student_answer) {
+                    optionClass = 'student';
+                    if (letter === q.correct_answer) optionClass = 'student correct';
+                }
+                
+                optionsHtml += `
+                    <div class="review-option ${optionClass}">
+                        <strong>${letter}.</strong> ${escapeHtml(opt)}
+                        ${letter === q.correct_answer ? ' <span style="color:#00ff88;">✓ Correct Answer</span>' : ''}
+                        ${letter === q.student_answer && letter !== q.correct_answer ? ' <span style="color:#ff4444;">✗ Your Answer</span>' : ''}
+                    </div>
+                `;
+            });
+            
+            questionsHtml += `
+                <div class="review-question ${questionClass}">
+                    <div class="review-question-text">${idx + 1}. ${escapeHtml(q.question_text)}</div>
+                    <div class="review-options">
+                        ${optionsHtml}
+                    </div>
+                    <div class="review-feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                        <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                        ${isCorrect ? 'Correct! You earned ' + q.points_earned + ' points.' : 'Incorrect. The correct answer is ' + q.correct_answer + '.'}
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('reviewContainer').innerHTML = `
+            <div class="review-summary">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="stats-card-sm">
+                            <span>Your Score</span>
+                            <strong>${data.score}/${data.total_possible}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card-sm">
+                            <span>Percentage</span>
+                            <strong>${data.percentage}%</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card-sm">
+                            <span>Completed</span>
+                            <strong>${new Date(data.completed_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}</strong>
+                        </div>
+                    </div>
+                </div>
+                <h5 class="text-success mb-3"><i class="fas fa-clipboard-list"></i> Question Review</h5>
+                ${questionsHtml}
+            </div>
+        `;
+        
+        new bootstrap.Modal(document.getElementById('quizReviewModal')).show();
+        
+    } catch(err) {
+        console.error('Error loading review:', err);
+        Swal.fire('Error', 'Could not load quiz review', 'error');
+    }
+}
+
+async function reviewQuiz(quizId) {
+    const response = await fetch('/api/quiz-results');
+    const results = await response.json();
+    const latestResult = results.find(r => r.quiz_id === quizId);
+    if (latestResult) {
+        reviewQuizResult(latestResult.result_id);
+    } else {
+        Swal.fire('Error', 'No attempt found for this quiz', 'error');
+    }
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Load data
+loadQuizzes();
+loadResults();
+
+// Refresh every 30 seconds
+setInterval(() => {
+    loadQuizzes();
+    loadResults();
+}, 30000);
+</script>
+{% endblock %}

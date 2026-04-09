@@ -1,0 +1,720 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> QUIZ ANALYTICS DASHBOARD
+                <span class="live-badge">ADMIN</span>
+            </div>
+            <div class="analytics-icon">
+                <i class="fas fa-chart-bar"></i>
+                <div class="analytics-ring"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">QUIZ</span>
+                <span class="neon-text">ANALYTICS</span>
+            </h1>
+            <p class="cyber-subtitle">Track student performance • Detailed answer analysis • Export reports</p>
+        </div>
+    </div>
+
+    <!-- Summary Stats Cards -->
+    <div class="row mb-4 g-4">
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="stats-card">
+                <div class="stats-icon"><i class="fas fa-question-circle"></i></div>
+                <div class="stats-info">
+                    <span>Total Quizzes</span>
+                    <strong id="totalQuizzes">0</strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+            <div class="stats-card">
+                <div class="stats-icon"><i class="fas fa-users"></i></div>
+                <div class="stats-info">
+                    <span>Total Attempts</span>
+                    <strong id="totalAttempts">0</strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+            <div class="stats-card">
+                <div class="stats-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stats-info">
+                    <span>Average Score</span>
+                    <strong id="avgScore">0%</strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+            <div class="stats-card">
+                <div class="stats-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="stats-info">
+                    <span>Active Students</span>
+                    <strong id="activeStudents">0</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Performance Table -->
+    <div class="glass-card mb-4" data-aos="fade-up" data-aos-delay="500">
+        <div class="card-header-cyber">
+            <i class="fas fa-chart-simple"></i> QUIZ PERFORMANCE OVERVIEW
+            <div class="header-glow"></div>
+        </div>
+        <div class="card-body-cyber p-0">
+            <div class="table-responsive">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>Quiz Title</th>
+                            <th>Attempts</th>
+                            <th>Avg Score</th>
+                            <th>Best Score</th>
+                            <th>Worst Score</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="quizStatsTable">
+                        <tr><td colspan="6" class="text-center">
+                            <div class="cyber-spinner"></div> Loading...
+                        <\/td><\/tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Attempts Table -->
+    <div class="glass-card" data-aos="fade-up" data-aos-delay="600">
+        <div class="card-header-cyber">
+            <i class="fas fa-list"></i> STUDENT ATTEMPTS
+            <div class="header-glow"></div>
+        </div>
+        <div class="card-body-cyber p-0">
+            <div class="table-responsive">
+                <table class="analytics-table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Quiz</th>
+                            <th>Score</th>
+                            <th>Percentage</th>
+                            <th>Submitted</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attemptsTable">
+                        <tr><td colspan="6" class="text-center">
+                            <div class="cyber-spinner"></div> Loading...
+                        <\/td><\/tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Answer Modal -->
+<div class="modal fade cyber-modal" id="answerModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-clipboard-list"></i> DETAILED ANSWER ANALYSIS</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="answerModalBody">
+                Loading...
+            </div>
+            <div class="modal-footer">
+                <button class="cyber-cancel-btn" data-bs-dismiss="modal">CLOSE</button>
+                <button class="cyber-export-btn" onclick="exportStudentReport()">EXPORT REPORT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.analytics-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.analytics-icon i {
+    font-size: 3rem;
+    color: #00d4ff;
+}
+
+.analytics-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00d4ff, #00ff88);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Stats Cards */
+.stats-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.stats-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 255, 136, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stats-icon i {
+    font-size: 1.5rem;
+    color: #00ff88;
+}
+
+.stats-info span {
+    display: block;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.stats-info strong {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+/* Glass Card */
+.glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-cyber {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    font-size: 0.85rem;
+    color: #00ff88;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Analytics Table */
+.analytics-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.analytics-table thead th {
+    padding: 12px 15px;
+    text-align: left;
+    background: rgba(0, 255, 136, 0.05);
+    color: #00ff88;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.analytics-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    color: #e0e0e0;
+}
+
+.analytics-table tbody tr:hover {
+    background: rgba(0, 255, 136, 0.05);
+}
+
+.score-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.score-high {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.score-medium {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+}
+
+.score-low {
+    background: rgba(255, 68, 68, 0.15);
+    color: #ff4444;
+}
+
+.view-details-btn {
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    padding: 5px 12px;
+    color: #00d4ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-details-btn:hover {
+    background: rgba(0, 212, 255, 0.3);
+}
+
+/* Answer Review Styles */
+.review-summary {
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+}
+
+.summary-card span {
+    display: block;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.summary-card strong {
+    display: block;
+    font-size: 1.3rem;
+    color: #00ff88;
+}
+
+.review-question {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.review-question.correct {
+    border-color: #00ff88;
+}
+
+.review-question.incorrect {
+    border-color: #ff4444;
+}
+
+.review-question-text {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.review-option {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 10px;
+}
+
+.review-option.correct {
+    background: rgba(0, 255, 136, 0.15);
+    border-left: 3px solid #00ff88;
+}
+
+.review-option.student {
+    background: rgba(255, 68, 68, 0.15);
+    border-left: 3px solid #ff4444;
+}
+
+.review-option.student.correct {
+    background: rgba(0, 255, 136, 0.15);
+    border-left: 3px solid #00ff88;
+}
+
+.review-feedback {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+.review-feedback.correct {
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
+}
+
+.review-feedback.incorrect {
+    background: rgba(255, 68, 68, 0.1);
+    color: #ff4444;
+}
+
+.cyber-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.cyber-cancel-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 8px 20px;
+    color: #fff;
+}
+
+.cyber-export-btn {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 12px;
+    padding: 8px 20px;
+    color: #00ff88;
+    cursor: pointer;
+}
+
+.cyber-export-btn:hover, .cyber-cancel-btn:hover {
+    transform: translateY(-2px);
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+let currentStudentReport = null;
+
+async function loadSummary() {
+    try {
+        const response = await fetch('/api/quiz-summary');
+        const data = await response.json();
+        
+        document.getElementById('totalQuizzes').innerText = data.total_quizzes;
+        document.getElementById('totalAttempts').innerText = data.total_attempts;
+        document.getElementById('avgScore').innerText = data.avg_score + '%';
+        document.getElementById('activeStudents').innerText = data.active_students;
+        
+        // Populate quiz stats table
+        const quizTable = document.getElementById('quizStatsTable');
+        if (data.quiz_stats.length === 0) {
+            quizTable.innerHTML = '<tr><td colspan="6" class="text-center">No quizzes available</td><\/tr>';
+        } else {
+            let html = '';
+            data.quiz_stats.forEach(quiz => {
+                html += `
+                    <tr>
+                        <td><strong>${escapeHtml(quiz.title)}</strong></td>
+                        <td>${quiz.attempts}</td>
+                        <td><span class="score-badge ${quiz.avg_score >= 70 ? 'score-high' : (quiz.avg_score >= 50 ? 'score-medium' : 'score-low')}">${quiz.avg_score}%</span></td>
+                        <td><span class="score-badge score-high">${quiz.best_score}%</span></td>
+                        <td><span class="score-badge score-low">${quiz.worst_score}%</span></td>
+                        <td><button class="view-details-btn" onclick="filterByQuiz(${quiz.quiz_id})">View Attempts</button></td>
+                    </tr>
+                `;
+            });
+            quizTable.innerHTML = html;
+        }
+        
+    } catch(err) {
+        console.error('Error loading summary:', err);
+    }
+}
+
+async function loadAttempts() {
+    try {
+        const response = await fetch('/api/quiz-analytics');
+        const attempts = await response.json();
+        
+        const tableBody = document.getElementById('attemptsTable');
+        if (attempts.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No attempts yet</td><\/tr>';
+            return;
+        }
+        
+        let html = '';
+        attempts.forEach(attempt => {
+            let scoreClass = attempt.percentage >= 70 ? 'score-high' : (attempt.percentage >= 50 ? 'score-medium' : 'score-low');
+            html += `
+                <tr>
+                    <td><strong>${escapeHtml(attempt.student_name)}</strong><br><small class="text-muted">${attempt.student_id}</small></td>
+                    <td>${escapeHtml(attempt.quiz_title)}</td>
+                    <td>${attempt.score}/${attempt.total_possible}</td>
+                    <td><span class="score-badge ${scoreClass}">${attempt.percentage}%</span></td>
+                    <td>${new Date(attempt.submitted_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}</td>
+                    <td><button class="view-details-btn" onclick="viewDetailedAnswers(${attempt.result_id}, '${escapeHtml(attempt.student_name)}', '${escapeHtml(attempt.quiz_title)}')">View Details</button></td>
+                </tr>
+            `;
+        });
+        tableBody.innerHTML = html;
+        
+    } catch(err) {
+        console.error('Error loading attempts:', err);
+    }
+}
+
+async function viewDetailedAnswers(resultId, studentName, quizTitle) {
+    try {
+        const response = await fetch(`/api/quiz-analytics/${resultId}`);
+        const data = await response.json();
+        
+        currentStudentReport = data;
+        
+        let questionsHtml = '';
+        data.questions.forEach((q, idx) => {
+            const isCorrect = q.is_correct;
+            const questionClass = isCorrect ? 'correct' : 'incorrect';
+            
+            let optionsHtml = '';
+            q.options.forEach((opt, optIdx) => {
+                if (!opt) return;
+                const letter = String.fromCharCode(65 + optIdx);
+                let optionClass = '';
+                if (letter === q.correct_answer) {
+                    optionClass = 'correct';
+                }
+                if (letter === q.student_answer) {
+                    optionClass = 'student';
+                    if (letter === q.correct_answer) optionClass = 'student correct';
+                }
+                
+                optionsHtml += `
+                    <div class="review-option ${optionClass}">
+                        <strong>${letter}.</strong> ${escapeHtml(opt)}
+                        ${letter === q.correct_answer ? ' <span style="color:#00ff88;">✓ Correct Answer</span>' : ''}
+                        ${letter === q.student_answer && letter !== q.correct_answer ? ' <span style="color:#ff4444;">✗ Student Answer</span>' : ''}
+                    </div>
+                `;
+            });
+            
+            questionsHtml += `
+                <div class="review-question ${questionClass}">
+                    <div class="review-question-text">${idx + 1}. ${escapeHtml(q.question_text)}</div>
+                    <div class="review-options">
+                        ${optionsHtml}
+                    </div>
+                    <div class="review-feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                        <i class="fas ${isCorrect ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                        ${isCorrect ? `Correct! Student earned ${q.points_earned}/${q.total_points} points.` : `Incorrect. Student answered "${q.student_answer_text}" but correct answer is "${q.correct_answer_text}".`}
+                    </div>
+                </div>
+            `;
+        });
+        
+        document.getElementById('answerModalBody').innerHTML = `
+            <div class="review-summary">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="summary-card">
+                            <span>Student</span>
+                            <strong>${escapeHtml(data.student_name)}</strong>
+                            <small>${data.student_id}</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="summary-card">
+                            <span>Quiz</span>
+                            <strong>${escapeHtml(data.quiz_title)}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="summary-card">
+                            <span>Score</span>
+                            <strong>${data.score}/${data.total_possible}</strong>
+                            <small>${data.percentage}%</small>
+                        </div>
+                    </div>
+                </div>
+                <h5 class="text-success mb-3"><i class="fas fa-clipboard-list"></i> Question-wise Analysis</h5>
+                ${questionsHtml}
+            </div>
+        `;
+        
+        new bootstrap.Modal(document.getElementById('answerModal')).show();
+        
+    } catch(err) {
+        console.error('Error loading details:', err);
+        Swal.fire('Error', 'Could not load detailed answers', 'error');
+    }
+}
+
+function filterByQuiz(quizId) {
+    // Filter the attempts table by quiz
+    const rows = document.querySelectorAll('#attemptsTable tr');
+    rows.forEach(row => {
+        if (row.cells && row.cells[1]) {
+            const quizTitle = row.cells[1].innerText;
+            // This is a simple filter - you can enhance it
+        }
+    });
+    Swal.fire('Filter Applied', `Showing attempts for quiz ID: ${quizId}`, 'info');
+}
+
+function exportStudentReport() {
+    if (!currentStudentReport) return;
+    
+    let csv = `Student Quiz Report\n\n`;
+    csv += `Student: ${currentStudentReport.student_name}\n`;
+    csv += `Student ID: ${currentStudentReport.student_id}\n`;
+    csv += `Quiz: ${currentStudentReport.quiz_title}\n`;
+    csv += `Score: ${currentStudentReport.score}/${currentStudentReport.total_possible} (${currentStudentReport.percentage}%)\n`;
+    csv += `Submitted: ${new Date(currentStudentReport.submitted_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}\n\n`;
+    csv += `Question,Student Answer,Correct Answer,Status,Points\n`;
+    
+    currentStudentReport.questions.forEach((q, idx) => {
+        csv += `"${q.question_text.replace(/"/g, '""')}",`;
+        csv += `"${q.student_answer_text}",`;
+        csv += `"${q.correct_answer_text}",`;
+        csv += `${q.is_correct ? 'Correct' : 'Incorrect'},`;
+        csv += `${q.points_earned}/${q.total_points}\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${currentStudentReport.student_name}_${currentStudentReport.quiz_title}_report.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    Swal.fire('Exported!', 'Student report downloaded as CSV', 'success');
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+loadSummary();
+loadAttempts();
+setInterval(() => {
+    loadSummary();
+    loadAttempts();
+}, 60000);
+</script>
+{% endblock %}

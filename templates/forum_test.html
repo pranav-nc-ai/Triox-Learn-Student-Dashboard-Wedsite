@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card bg-dark text-white p-4">
+        <h2>Forum Test Page</h2>
+        
+        <h3>Existing Topics</h3>
+        <div id="topicsList" class="mb-4"></div>
+        
+        <hr>
+        
+        <h3>Create New Topic</h3>
+        <input type="text" id="topicTitle" class="form-control mb-2" placeholder="Title">
+        <textarea id="topicContent" class="form-control mb-2" rows="3" placeholder="Content"></textarea>
+        <button class="btn btn-success" onclick="createTopic()">Create Topic</button>
+    </div>
+</div>
+
+<script>
+async function loadTopics() {
+    try {
+        const response = await fetch('/api/forum-topics');
+        const data = await response.json();
+        
+        let html = '<ul class="list-group">';
+        if (data.topics && data.topics.length > 0) {
+            data.topics.forEach(topic => {
+                html += `<li class="list-group-item bg-dark text-white border-secondary">
+                    <strong>${escapeHtml(topic.title)}</strong><br>
+                    <small>By ${escapeHtml(topic.author)} | ${topic.reply_count} replies | ${topic.views} views</small>
+                </li>`;
+            });
+        } else {
+            html += '<li class="list-group-item bg-dark text-white">No topics yet</li>';
+        }
+        html += '</ul>';
+        document.getElementById('topicsList').innerHTML = html;
+        
+    } catch(e) {
+        document.getElementById('topicsList').innerHTML = '<div class="alert alert-danger">Error loading topics</div>';
+        console.error(e);
+    }
+}
+
+async function createTopic() {
+    const title = document.getElementById('topicTitle').value;
+    const content = document.getElementById('topicContent').value;
+    
+    if (!title || !content) {
+        alert('Please fill both fields');
+        return;
+    }
+    
+    const response = await fetch('/api/create-topic', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: title, content: content })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        alert('Topic created successfully!');
+        document.getElementById('topicTitle').value = '';
+        document.getElementById('topicContent').value = '';
+        loadTopics();
+    } else {
+        alert('Error: ' + result.error);
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+loadTopics();
+</script>
+{% endblock %}

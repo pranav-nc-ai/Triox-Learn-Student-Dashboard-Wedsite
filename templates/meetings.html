@@ -1,0 +1,714 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content text-center">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> PARENT-TEACHER COLLABORATION HUB
+                <span class="live-badge">LIVE</span>
+            </div>
+            <div class="meeting-icon">
+                <i class="fas fa-handshake"></i>
+                <div class="icon-ring"></div>
+                <div class="icon-ring delay-1"></div>
+                <div class="icon-ring delay-2"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">MEETING</span>
+                <span class="neon-text">COMMAND CENTER</span>
+            </h1>
+            <p class="cyber-subtitle">Schedule • Join • Track • Collaborate for student success</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row -->
+    <div class="stats-row mb-5">
+        <div class="row g-4">
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-card-glass">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-calendar-alt"></i>
+                        <div class="stat-glow"></div>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">TOTAL MEETINGS</span>
+                        <strong class="stat-value" id="totalMeetings">0</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-card-glass">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-hourglass-half"></i>
+                        <div class="stat-glow"></div>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">SCHEDULED</span>
+                        <strong class="stat-value" id="scheduledCount">0</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-card-glass">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-glow"></div>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">COMPLETED</span>
+                        <strong class="stat-value" id="completedCount">0</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-card-glass">
+                    <div class="stat-icon-wrapper">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-glow"></div>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">ACTIVE PARENTS</span>
+                        <strong class="stat-value" id="activeParents">0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Schedule Meeting Section (Teacher/Admin only) -->
+        {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+        <div class="col-lg-4 mb-4" data-aos="fade-right" data-aos-delay="500">
+            <div class="schedule-card-neon">
+                <div class="card-header-neon">
+                    <div class="header-left">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>CREATE NEW MEETING</span>
+                    </div>
+                    <div class="header-right">
+                        <span class="ai-badge">SCHEDULER</span>
+                    </div>
+                </div>
+                <div class="card-body-neon">
+                    <form id="scheduleForm">
+                        <div class="input-group-neon">
+                            <i class="fas fa-user-graduate"></i>
+                            <select id="studentId" class="neon-select" required>
+                                <option value="">-- Select Student --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group-neon mt-3">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="parentEmail" placeholder="Parent Email Address" required>
+                        </div>
+                        
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <div class="input-group-neon">
+                                    <i class="fas fa-calendar"></i>
+                                    <input type="date" id="meetingDate" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group-neon">
+                                    <i class="fas fa-clock"></i>
+                                    <input type="time" id="meetingTime" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group-neon mt-3">
+                            <i class="fas fa-video"></i>
+                            <select id="meetingType" class="neon-select">
+                                <option value="video">📹 Video Call (Google Meet)</option>
+                                <option value="audio">🎙️ Audio Call (Jitsi)</option>
+                                <option value="inperson">🏢 In-Person Meeting</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group-neon mt-3">
+                            <i class="fas fa-sticky-note"></i>
+                            <textarea id="notes" rows="3" placeholder="Meeting Agenda / Notes (optional)"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="neon-submit-btn w-100 mt-4" id="scheduleBtn">
+                            <i class="fas fa-calendar-plus"></i>
+                            <span>SCHEDULE MEETING</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="tips-card-neon mt-4" data-aos="fade-up" data-aos-delay="600">
+                <div class="tips-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>PRO TIPS</span>
+                </div>
+                <div class="tips-body">
+                    <div class="tip-item"><i class="fas fa-clock"></i><span>Keep meetings within 30 minutes</span></div>
+                    <div class="tip-item"><i class="fas fa-list-check"></i><span>Prepare agenda beforehand</span></div>
+                    <div class="tip-item"><i class="fas fa-file-alt"></i><span>Share student progress report</span></div>
+                    <div class="tip-item"><i class="fas fa-microphone"></i><span>Test audio/video before meeting</span></div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Meetings List Section -->
+        <div class="col-lg-8 mb-4" data-aos="fade-left" data-aos-delay="500">
+            <div class="meetings-card-neon">
+                <div class="card-header-neon">
+                    <div class="header-left">
+                        <i class="fas fa-list-ul"></i>
+                        <span>MEETINGS SCHEDULE</span>
+                        <span class="meeting-badge" id="meetingCount">0 meetings</span>
+                    </div>
+                    <div class="header-right">
+                        <div class="filter-group">
+                            <button class="filter-chip active" onclick="filterMeetings('all')">All</button>
+                            <button class="filter-chip" onclick="filterMeetings('scheduled')">Scheduled</button>
+                            <button class="filter-chip" onclick="filterMeetings('completed')">Completed</button>
+                            <button class="filter-chip" onclick="filterMeetings('cancelled')">Cancelled</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body-neon p-0" id="meetingsList">
+                    <div class="loading-container">
+                        <div class="cyber-spinner"></div>
+                        <span>Loading meetings...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Join Meeting Modal -->
+<div class="modal fade cyber-modal" id="joinModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-video"></i> JOIN MEETING</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="join-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                <h4 class="mt-3">Ready to Connect?</h4>
+                <p>Click the button below to join your meeting</p>
+                <button class="join-btn" onclick="openMeetingLink()"><i class="fas fa-external-link-alt"></i> Launch Meeting</button>
+            </div>
+            <div class="modal-footer">
+                <button class="cyber-cancel-btn" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ============ FUTURISTIC MEETINGS PAGE STYLES ============ */
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    animation: livePulse 1s ease-in-out infinite;
+}
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+.meeting-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.meeting-icon i { font-size: 3rem; color: #00ff88; }
+.icon-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+.icon-ring.delay-1 { animation-delay: 0.7s; }
+.icon-ring.delay-2 { animation-delay: 1.4s; }
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+.cyber-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+.gradient-text { background: linear-gradient(135deg, #00ff88, #00d4ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.neon-text { text-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+.cyber-subtitle { color: #a0a0a0; font-size: 1rem; }
+
+/* Stat Cards */
+.stat-card-glass {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    transition: all 0.3s ease;
+}
+.stat-card-glass:hover { transform: translateY(-5px); border-color: #00ff88; }
+.stat-icon-wrapper {
+    width: 55px;
+    height: 55px;
+    background: rgba(0, 255, 136, 0.1);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.stat-icon-wrapper i { font-size: 1.5rem; color: #00ff88; }
+.stat-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 15px;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.3), transparent);
+    animation: iconGlow 2s ease-in-out infinite;
+}
+@keyframes iconGlow { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+.stat-info { flex: 1; }
+.stat-label { display: block; font-size: 0.65rem; color: #6b6b6b; letter-spacing: 1px; margin-bottom: 5px; }
+.stat-value { display: block; font-size: 1.8rem; font-weight: bold; color: #00ff88; }
+
+/* Schedule Card */
+.schedule-card-neon, .meetings-card-neon {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+.card-header-neon {
+    padding: 18px 24px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-left { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #00ff88; }
+.card-body-neon { padding: 24px; }
+
+/* Input Groups */
+.input-group-neon { position: relative; margin-bottom: 5px; }
+.input-group-neon i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #00ff88; z-index: 1; }
+.input-group-neon input, .input-group-neon select, .input-group-neon textarea {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 0.9rem;
+}
+.input-group-neon textarea { resize: vertical; min-height: 80px; padding-top: 12px; }
+.input-group-neon input:focus, .input-group-neon select:focus, .input-group-neon textarea:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+.neon-select { cursor: pointer; }
+
+/* Submit Button */
+.neon-submit-btn {
+    padding: 14px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+.neon-submit-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+/* Tips Card */
+.tips-card-neon {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    border-radius: 20px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+}
+.tips-header { padding: 15px 20px; background: rgba(0, 212, 255, 0.1); display: flex; align-items: center; gap: 10px; color: #00d4ff; }
+.tips-body { padding: 15px 20px; }
+.tip-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(0, 212, 255, 0.1); }
+.tip-item:last-child { border-bottom: none; }
+.tip-item i { width: 25px; color: #00d4ff; }
+.tip-item span { font-size: 0.75rem; color: #a0a0a0; }
+
+.meeting-badge { background: rgba(0, 255, 136, 0.15); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; margin-left: 10px; }
+.filter-group { display: flex; gap: 8px; }
+.filter-chip {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 20px;
+    padding: 5px 15px;
+    color: #a0a0a0;
+    cursor: pointer;
+    font-size: 0.7rem;
+}
+.filter-chip:hover, .filter-chip.active { background: #00ff88; color: #000; }
+
+/* Meeting Items */
+.meeting-item { padding: 20px 24px; border-bottom: 1px solid rgba(0, 255, 136, 0.1); transition: all 0.3s ease; }
+.meeting-item:hover { background: rgba(0, 255, 136, 0.05); }
+.meeting-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+.meeting-title { font-size: 1rem; font-weight: bold; color: #00ff88; }
+.meeting-status { padding: 4px 12px; border-radius: 20px; font-size: 0.65rem; }
+.status-scheduled { background: rgba(255, 215, 0, 0.15); color: #ffd700; }
+.status-completed { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
+.status-cancelled { background: rgba(255, 68, 68, 0.15); color: #ff4444; }
+.meeting-details { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 12px; }
+.detail-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #a0a0a0; }
+.detail-item i { width: 20px; color: #00d4ff; }
+.meeting-notes { background: rgba(0, 212, 255, 0.05); border-radius: 12px; padding: 10px; margin-top: 10px; font-size: 0.75rem; color: #a0a0a0; }
+.meeting-actions { display: flex; gap: 10px; margin-top: 12px; }
+.join-meeting-btn, .cancel-meeting-btn, .delete-meeting-btn {
+    padding: 6px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+}
+.join-meeting-btn { background: rgba(0, 255, 136, 0.15); border: 1px solid rgba(0, 255, 136, 0.3); color: #00ff88; }
+.cancel-meeting-btn { background: rgba(255, 68, 68, 0.15); border: 1px solid rgba(255, 68, 68, 0.3); color: #ff4444; }
+.delete-meeting-btn { background: rgba(255, 68, 68, 0.15); border: 1px solid rgba(255, 68, 68, 0.3); color: #ff4444; }
+.join-meeting-btn:hover, .cancel-meeting-btn:hover, .delete-meeting-btn:hover { transform: translateY(-2px); }
+
+.loading-container { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 60px; color: #a0a0a0; }
+.cyber-spinner { width: 30px; height: 30px; border: 2px solid rgba(0, 255, 136, 0.2); border-top-color: #00ff88; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.join-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #00ff88, #00d4ff); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+.join-icon i { font-size: 2.5rem; color: #000; }
+.join-btn { background: linear-gradient(135deg, #00ff88, #00d4ff); border: none; border-radius: 30px; padding: 12px 30px; color: #000; font-weight: bold; cursor: pointer; margin-top: 15px; }
+.cyber-cancel-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 8px 20px; color: #fff; }
+
+@media (max-width: 768px) {
+    .cyber-title { font-size: 1.5rem; }
+    .meeting-header { flex-direction: column; align-items: flex-start; }
+    .meeting-details { flex-direction: column; gap: 8px; }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once: true });
+
+let currentFilter = 'all';
+let meetingsData = [];
+let userRole = '{{ current_user.role }}';
+let userId = '{{ current_user.id }}';
+
+console.log("User role:", userRole);
+console.log("User ID:", userId);
+
+// Load students for dropdown
+async function loadStudents() {
+    if (userRole === 'admin' || userRole === 'teacher') {
+        try {
+            const response = await fetch('/api/all-students');
+            const students = await response.json();
+            const select = document.getElementById('studentId');
+            if (select) {
+                select.innerHTML = '<option value="">-- Select Student --</option>' + 
+                    students.map(s => `<option value="${s.student_id}">${s.name} (${s.student_id})</option>`).join('');
+            }
+        } catch(e) {
+            console.error('Error loading students:', e);
+        }
+    }
+}
+
+// Load meetings
+async function loadMeetings() {
+    try {
+        console.log("Loading meetings...");
+        const response = await fetch('/api/meetings');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        meetingsData = await response.json();
+        console.log("Meetings found:", meetingsData.length);
+        
+        updateStats();
+        displayMeetings();
+        
+    } catch(err) {
+        console.error('Error loading meetings:', err);
+        document.getElementById('meetingsList').innerHTML = '<div class="text-center text-danger p-4">Error loading meetings: ' + err.message + '</div>';
+    }
+}
+
+function updateStats() {
+    const total = meetingsData.length;
+    const scheduled = meetingsData.filter(m => m.status === 'scheduled').length;
+    const completed = meetingsData.filter(m => m.status === 'completed').length;
+    
+    document.getElementById('totalMeetings').innerText = total;
+    document.getElementById('scheduledCount').innerText = scheduled;
+    document.getElementById('completedCount').innerText = completed;
+    document.getElementById('activeParents').innerText = Math.ceil(total / 2) || 0;
+    document.getElementById('meetingCount').innerText = `${total} meetings`;
+}
+
+function displayMeetings() {
+    let filtered = meetingsData;
+    if (currentFilter !== 'all') {
+        filtered = meetingsData.filter(m => m.status === currentFilter);
+    }
+    
+    const container = document.getElementById('meetingsList');
+    
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                <p>No meetings found</p>
+                <small>${currentFilter === 'all' ? 'Schedule your first meeting!' : 'No meetings in this category'}</small>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    filtered.forEach(meeting => {
+        const statusClass = meeting.status === 'scheduled' ? 'scheduled' : (meeting.status === 'completed' ? 'completed' : 'cancelled');
+        const statusText = meeting.status === 'scheduled' ? '⏳ SCHEDULED' : (meeting.status === 'completed' ? '✓ COMPLETED' : '✗ CANCELLED');
+        const canJoin = meeting.status === 'scheduled' && meeting.link;
+        const canCancel = meeting.status === 'scheduled' && (userRole === 'admin' || userRole === 'teacher');
+        const canDelete = (userRole === 'admin' || userRole === 'teacher');
+        
+        html += `
+            <div class="meeting-item">
+                <div class="meeting-header">
+                    <div class="meeting-title">${escapeHtml(meeting.student_name)}</div>
+                    <div class="meeting-status status-${statusClass}">${statusText}</div>
+                </div>
+                <div class="meeting-details">
+                    <div class="detail-item"><i class="fas fa-calendar"></i> ${meeting.date}</div>
+                    <div class="detail-item"><i class="fas fa-clock"></i> ${meeting.time}</div>
+                    ${meeting.parent_email ? `<div class="detail-item"><i class="fas fa-envelope"></i> ${escapeHtml(meeting.parent_email)}</div>` : ''}
+                </div>
+                ${meeting.notes ? `<div class="meeting-notes"><i class="fas fa-sticky-note"></i> ${escapeHtml(meeting.notes)}</div>` : ''}
+                <div class="meeting-actions">
+                    ${canJoin ? `<button class="join-meeting-btn" onclick="openJoinModal('${meeting.link}')"><i class="fas fa-video"></i> Join Meeting</button>` : ''}
+                    ${canCancel ? `<button class="cancel-meeting-btn" onclick="cancelMeeting(${meeting.meeting_id})"><i class="fas fa-times"></i> Cancel</button>` : ''}
+                    ${canDelete ? `<button class="delete-meeting-btn" onclick="deleteMeeting(${meeting.meeting_id}, '${escapeHtml(meeting.student_name)}')"><i class="fas fa-trash"></i> Delete</button>` : ''}
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function filterMeetings(filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+    if (event && event.target) event.target.classList.add('active');
+    displayMeetings();
+}
+
+// Schedule meeting
+const scheduleForm = document.getElementById('scheduleForm');
+if (scheduleForm) {
+    scheduleForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const meetingData = {
+            student_id: document.getElementById('studentId').value,
+            parent_email: document.getElementById('parentEmail').value,
+            date: document.getElementById('meetingDate').value,
+            time: document.getElementById('meetingTime').value,
+            meeting_type: document.getElementById('meetingType').value,
+            notes: document.getElementById('notes').value
+        };
+        
+        if (!meetingData.student_id || !meetingData.parent_email || !meetingData.date || !meetingData.time) {
+            Swal.fire('Error', 'Please fill all required fields', 'error');
+            return;
+        }
+        
+        const scheduleBtn = document.getElementById('scheduleBtn');
+        scheduleBtn.disabled = true;
+        scheduleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SCHEDULING...';
+        
+        try {
+            const response = await fetch('/api/schedule-meeting', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(meetingData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Meeting scheduled successfully!',
+                    icon: 'success',
+                    confirmButtonColor: '#00ff88',
+                    background: '#1a1a2e',
+                    color: '#ffffff'
+                });
+                scheduleForm.reset();
+                loadMeetings();
+            } else {
+                Swal.fire('Error!', result.error, 'error');
+            }
+        } catch(error) {
+            console.error('Error:', error);
+            Swal.fire('Error!', 'Network error. Please try again.', 'error');
+        } finally {
+            scheduleBtn.disabled = false;
+            scheduleBtn.innerHTML = '<i class="fas fa-calendar-plus"></i><span>SCHEDULE MEETING</span>';
+        }
+    });
+}
+
+// Cancel meeting
+async function cancelMeeting(meetingId) {
+    const result = await Swal.fire({
+        title: 'Cancel Meeting?',
+        text: 'This will notify the parent and student.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        confirmButtonText: 'Yes, cancel it',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+    
+    if (result.isConfirmed) {
+        const response = await fetch(`/api/cancel-meeting/${meetingId}`, { method: 'DELETE' });
+        const data = await response.json();
+        if (data.success) {
+            Swal.fire('Cancelled!', 'Meeting has been cancelled.', 'success');
+            loadMeetings();
+        } else {
+            Swal.fire('Error!', data.error, 'error');
+        }
+    }
+}
+
+// Delete meeting
+async function deleteMeeting(meetingId, studentName) {
+    const result = await Swal.fire({
+        title: 'Delete Meeting?',
+        html: `Are you sure you want to permanently delete the meeting for <strong>${studentName}</strong>?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        confirmButtonText: 'Yes, delete permanently',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+    
+    if (result.isConfirmed) {
+        const response = await fetch(`/api/delete-meeting/${meetingId}`, { method: 'DELETE' });
+        const data = await response.json();
+        if (data.success) {
+            Swal.fire('Deleted!', 'Meeting has been permanently deleted.', 'success');
+            loadMeetings();
+        } else {
+            Swal.fire('Error!', data.error, 'error');
+        }
+    }
+}
+
+// Join meeting
+let currentMeetingLink = '';
+
+function openJoinModal(link) {
+    currentMeetingLink = link;
+    new bootstrap.Modal(document.getElementById('joinModal')).show();
+}
+
+function openMeetingLink() {
+    window.open(currentMeetingLink, '_blank');
+}
+
+// Format meeting times
+function formatMeetingTime(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Initialize
+loadStudents();
+loadMeetings();
+
+// Auto-refresh every 30 seconds
+setInterval(loadMeetings, 30000);
+</script>
+{% endblock %}

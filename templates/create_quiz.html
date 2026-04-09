@@ -1,0 +1,670 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> QUIZ CREATOR STUDIO
+                <span class="live-badge">DRAFT MODE</span>
+            </div>
+            <div class="create-icon">
+                <i class="fas fa-magic"></i>
+                <div class="create-ring"></div>
+                <div class="create-ring delay-1"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">CREATE</span>
+                <span class="neon-text">QUIZ</span>
+            </h1>
+            <p class="cyber-subtitle">Design engaging quizzes • Add questions • Set time limits</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="glass-card">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-edit"></i> QUIZ DETAILS
+                    </div>
+                    <div class="header-right">
+                        <span class="step-badge">STEP 1 OF 2</span>
+                    </div>
+                </div>
+                <div class="card-body-cyber">
+                    <form id="createQuizForm">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="input-group-cyber">
+                                    <i class="fas fa-heading"></i>
+                                    <input type="text" id="quizTitle" placeholder="Quiz Title" required>
+                                    <div class="input-focus-glow"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group-cyber">
+                                    <i class="fas fa-clock"></i>
+                                    <input type="number" id="timeLimit" value="30" placeholder="Time (minutes)" required>
+                                    <div class="input-focus-glow"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group-cyber mt-3">
+                            <i class="fas fa-align-left"></i>
+                            <textarea id="quizDescription" rows="2" placeholder="Quiz Description (optional)"></textarea>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Questions Section -->
+            <div class="glass-card mt-4">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-question-circle"></i> QUESTIONS
+                    </div>
+                    <div class="header-right">
+                        <button type="button" class="add-question-btn" onclick="addQuestion()">
+                            <i class="fas fa-plus"></i> ADD QUESTION
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body-cyber" id="questionsContainer">
+                    <div class="empty-questions" id="emptyQuestions">
+                        <i class="fas fa-question-circle"></i>
+                        <p>No questions added yet</p>
+                        <small>Click "Add Question" to start building your quiz</small>
+                    </div>
+                </div>
+                <div class="card-footer-cyber">
+                    <button type="button" class="create-quiz-btn" onclick="submitQuiz()">
+                        <i class="fas fa-save"></i> CREATE QUIZ
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Create Quiz Page Styles */
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.create-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.create-icon i {
+    font-size: 3rem;
+    color: #ffd700;
+}
+
+.create-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+.create-ring.delay-1 {
+    animation-delay: 1s;
+}
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Glass Card */
+.glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-cyber {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #00ff88;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.step-badge {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.card-body-cyber {
+    padding: 24px;
+}
+
+.card-footer-cyber {
+    padding: 15px 20px;
+    border-top: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+/* Input Groups */
+.input-group-cyber {
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.input-group-cyber i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff88;
+    z-index: 1;
+}
+
+.input-group-cyber input, .input-group-cyber textarea, .input-group-cyber select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.input-group-cyber textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.input-group-cyber input:focus, .input-group-cyber textarea:focus, .input-group-cyber select:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.input-focus-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-group-cyber input:focus + .input-focus-glow,
+.input-group-cyber textarea:focus + .input-focus-glow {
+    opacity: 1;
+}
+
+/* Add Question Button */
+.add-question-btn {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 25px;
+    padding: 8px 20px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.add-question-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Question Cards */
+.question-card {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.question-card:hover {
+    border-color: #00ff88;
+}
+
+.question-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.question-number {
+    font-weight: bold;
+    color: #00ff88;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.remove-question {
+    background: rgba(255, 68, 68, 0.15);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 20px;
+    padding: 5px 12px;
+    color: #ff4444;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.remove-question:hover {
+    background: rgba(255, 68, 68, 0.3);
+}
+
+.question-body {
+    padding: 20px;
+}
+
+.option-row {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.option-letter {
+    width: 35px;
+    height: 35px;
+    background: rgba(0, 255, 136, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.option-input {
+    flex: 1;
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 12px;
+    color: #fff;
+}
+
+.option-input:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.correct-answer {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.correct-answer label {
+    color: #00ff88;
+    font-size: 0.85rem;
+}
+
+.correct-select {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 10px;
+    padding: 8px 15px;
+    color: #fff;
+}
+
+.points-input {
+    width: 80px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 10px;
+    padding: 8px 12px;
+    color: #fff;
+}
+
+/* Empty Questions */
+.empty-questions {
+    text-align: center;
+    padding: 60px;
+    color: #6b6b6b;
+}
+
+.empty-questions i {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    color: #00ff88;
+}
+
+/* Create Quiz Button */
+.create-quiz-btn {
+    position: relative;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.create-quiz-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.create-quiz-btn:hover .btn-glow {
+    left: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .option-row {
+        flex-wrap: wrap;
+    }
+    .correct-answer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+let questionCount = 0;
+
+function addQuestion() {
+    questionCount++;
+    const container = document.getElementById('questionsContainer');
+    const emptyDiv = document.getElementById('emptyQuestions');
+    if (emptyDiv) emptyDiv.style.display = 'none';
+    
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'question-card';
+    questionDiv.id = `question_${questionCount}`;
+    questionDiv.innerHTML = `
+        <div class="question-header">
+            <div class="question-number">
+                <i class="fas fa-question-circle"></i>
+                Question ${questionCount}
+            </div>
+            <button type="button" class="remove-question" onclick="removeQuestion(${questionCount})">
+                <i class="fas fa-trash"></i> Remove
+            </button>
+        </div>
+        <div class="question-body">
+            <div class="mb-3">
+                <input type="text" class="option-input" id="q_text_${questionCount}" placeholder="Enter your question here..." style="width: 100%;">
+            </div>
+            <div class="option-row">
+                <div class="option-letter">A</div>
+                <input type="text" class="option-input" id="q_opt_a_${questionCount}" placeholder="Option A">
+            </div>
+            <div class="option-row">
+                <div class="option-letter">B</div>
+                <input type="text" class="option-input" id="q_opt_b_${questionCount}" placeholder="Option B">
+            </div>
+            <div class="option-row">
+                <div class="option-letter">C</div>
+                <input type="text" class="option-input" id="q_opt_c_${questionCount}" placeholder="Option C (Optional)">
+            </div>
+            <div class="option-row">
+                <div class="option-letter">D</div>
+                <input type="text" class="option-input" id="q_opt_d_${questionCount}" placeholder="Option D (Optional)">
+            </div>
+            <div class="correct-answer">
+                <label><i class="fas fa-check-circle"></i> Correct Answer:</label>
+                <select class="correct-select" id="q_correct_${questionCount}">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                </select>
+                <label><i class="fas fa-star"></i> Points:</label>
+                <input type="number" class="points-input" id="q_points_${questionCount}" value="1" min="1" max="10">
+            </div>
+        </div>
+    `;
+    container.appendChild(questionDiv);
+    questionDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function removeQuestion(id) {
+    const div = document.getElementById(`question_${id}`);
+    if (div) {
+        div.remove();
+        renumberQuestions();
+    }
+}
+
+function renumberQuestions() {
+    const questions = document.querySelectorAll('.question-card');
+    questionCount = questions.length;
+    questions.forEach((q, idx) => {
+        const newNum = idx + 1;
+        const header = q.querySelector('.question-number');
+        if (header) {
+            header.innerHTML = `<i class="fas fa-question-circle"></i> Question ${newNum}`;
+        }
+        q.id = `question_${newNum}`;
+    });
+    if (questionCount === 0) {
+        document.getElementById('emptyQuestions').style.display = 'block';
+    }
+}
+
+async function submitQuiz() {
+    const title = document.getElementById('quizTitle').value.trim();
+    if (!title) {
+        Swal.fire('Error', 'Please enter a quiz title', 'error');
+        return;
+    }
+    
+    const questions = [];
+    const totalQuestions = document.querySelectorAll('.question-card').length;
+    
+    if (totalQuestions === 0) {
+        Swal.fire('Error', 'Please add at least one question', 'error');
+        return;
+    }
+    
+    for (let i = 1; i <= totalQuestions; i++) {
+        const textInput = document.getElementById(`q_text_${i}`);
+        if (!textInput) continue;
+        
+        const optA = document.getElementById(`q_opt_a_${i}`).value;
+        const optB = document.getElementById(`q_opt_b_${i}`).value;
+        const optC = document.getElementById(`q_opt_c_${i}`).value || '';
+        const optD = document.getElementById(`q_opt_d_${i}`).value || '';
+        
+        if (!textInput.value.trim()) {
+            Swal.fire('Error', `Please enter question text for Question ${i}`, 'error');
+            textInput.focus();
+            return;
+        }
+        if (!optA || !optB) {
+            Swal.fire('Error', `Please fill at least options A and B for Question ${i}`, 'error');
+            return;
+        }
+        
+        questions.push({
+            text: textInput.value,
+            opt_a: optA,
+            opt_b: optB,
+            opt_c: optC,
+            opt_d: optD,
+            correct: document.getElementById(`q_correct_${i}`).value,
+            points: parseInt(document.getElementById(`q_points_${i}`).value) || 1
+        });
+    }
+    
+    const quizData = {
+        title: title,
+        description: document.getElementById('quizDescription').value,
+        time_limit: parseInt(document.getElementById('timeLimit').value),
+        questions: questions
+    };
+    
+    const submitBtn = document.querySelector('.create-quiz-btn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Quiz...';
+    submitBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/create-quiz', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quizData)
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Quiz created successfully!',
+                icon: 'success',
+                confirmButtonColor: '#00ff88',
+                background: '#1a1a2e',
+                color: '#ffffff'
+            }).then(() => {
+                window.location.href = '/quizzes';
+            });
+        } else {
+            Swal.fire('Error!', result.error || 'Failed to create quiz', 'error');
+        }
+    } catch (error) {
+        Swal.fire('Error!', 'Failed to create quiz. Please try again.', 'error');
+    } finally {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }
+}
+</script>
+{% endblock %}

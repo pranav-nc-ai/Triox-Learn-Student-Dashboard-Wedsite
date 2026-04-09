@@ -1,0 +1,403 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content text-center">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> DIGITAL CERTIFICATE VAULT
+                <span class="live-badge">SECURE</span>
+            </div>
+            <div class="cert-icon">
+                <i class="fas fa-certificate"></i>
+                <div class="cert-ring"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">CERTIFICATE</span>
+                <span class="neon-text">GALLERY</span>
+            </h1>
+            <p class="cyber-subtitle">View, download, and share your achievement certificates</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Panel - Certificate List -->
+        <div class="col-lg-8 mb-4" data-aos="fade-right">
+            <div class="glass-card">
+                <div class="card-header-cyber">
+                    <i class="fas fa-list"></i> MY CERTIFICATES
+                    <span class="cert-count" id="certCount">0 certificates</span>
+                </div>
+                <div class="card-body-cyber" id="certificatesList">
+                    <div class="loading-container">
+                        <div class="cyber-spinner"></div>
+                        <span>Loading certificates...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Generate Certificate (Admin/Teacher only) -->
+        <div class="col-lg-4 mb-4" data-aos="fade-left">
+            {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+            <div class="glass-card">
+                <div class="card-header-cyber">
+                    <i class="fas fa-plus-circle"></i> GENERATE CERTIFICATE
+                </div>
+                <div class="card-body-cyber">
+                    <form id="generateCertForm">
+                        <div class="input-group-cyber">
+                            <i class="fas fa-user-graduate"></i>
+                            <select id="studentId" class="cyber-select" required>
+                                <option value="">Select Student</option>
+                            </select>
+                        </div>
+                        <div class="input-group-cyber mt-3">
+                            <i class="fas fa-medal"></i>
+                            <select id="certType" class="cyber-select" required>
+                                <option value="achievement">🏆 Achievement Certificate</option>
+                                <option value="topper">⭐ Top Performer</option>
+                                <option value="improvement">📈 Improvement Award</option>
+                                <option value="attendance">📅 Perfect Attendance</option>
+                                <option value="quiz_master">🎯 Quiz Master</option>
+                                <option value="project_excellence">📊 Project Excellence</option>
+                            </select>
+                        </div>
+                        <div class="input-group-cyber mt-3">
+                            <i class="fas fa-pen"></i>
+                            <textarea id="customMessage" rows="3" placeholder="Custom message (optional)"></textarea>
+                        </div>
+                        <button type="submit" class="generate-cert-btn w-100 mt-3">
+                            <i class="fas fa-magic"></i> GENERATE CERTIFICATE
+                            <div class="btn-glow"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Stats Card -->
+            <div class="stats-card mt-4">
+                <div class="stats-header">
+                    <i class="fas fa-chart-simple"></i> CERTIFICATE STATS
+                </div>
+                <div class="stats-body">
+                    <div class="stat-row">
+                        <span>Total Earned</span>
+                        <strong id="totalEarned">0</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>This Month</span>
+                        <strong id="monthEarned">0</strong>
+                    </div>
+                    <div class="stat-row">
+                        <span>Last Certificate</span>
+                        <strong id="lastCert">--</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Certificate Preview Modal -->
+<div class="modal fade cyber-modal" id="certificateModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-certificate"></i> Certificate Preview</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0" id="certificatePreview">
+                <iframe id="certificateFrame" style="width:100%; height:600px; border:none;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button class="cyber-cancel-btn" data-bs-dismiss="modal">CLOSE</button>
+                <button class="cyber-export-btn" onclick="downloadCertificate()">DOWNLOAD PDF</button>
+                <button class="cyber-export-btn" onclick="shareCertificate()">📧 SHARE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0,255,136,0.05), rgba(0,212,255,0.02));
+    border-radius: 50px;
+}
+.cert-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.cert-icon i { font-size: 3rem; color: #ffd700; }
+.cert-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(255,215,0,0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+.cyber-title { font-size: 2.5rem; font-weight: 800; }
+.gradient-text { background: linear-gradient(135deg, #ffd700, #ffaa00); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.neon-text { text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+
+.glass-card {
+    background: linear-gradient(135deg, rgba(15,15,26,0.95), rgba(26,26,46,0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0,255,136,0.3);
+    overflow: hidden;
+}
+.card-header-cyber {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0,255,136,0.1), rgba(0,212,255,0.05));
+    border-bottom: 1px solid rgba(0,255,136,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #00ff88;
+}
+.cert-count {
+    background: rgba(0,255,136,0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+/* Certificate Cards */
+.certificate-card {
+    background: rgba(0,255,136,0.05);
+    border: 1px solid rgba(0,255,136,0.2);
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.certificate-card:hover {
+    border-color: #ffd700;
+    transform: translateX(5px);
+}
+.cert-icon-sm {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cert-icon-sm i { font-size: 1.5rem; color: #ffd700; }
+.cert-info { flex: 1; }
+.cert-title { font-weight: bold; color: #ffd700; margin-bottom: 5px; }
+.cert-date { font-size: 0.7rem; color: #6b6b6b; }
+.cert-code { font-size: 0.65rem; font-family: monospace; color: #00ff88; }
+.view-cert-btn {
+    background: rgba(0,255,136,0.15);
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    color: #00ff88;
+    cursor: pointer;
+}
+
+/* Input Groups */
+.input-group-cyber {
+    position: relative;
+}
+.input-group-cyber i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff88;
+    z-index: 1;
+}
+.cyber-select, .input-group-cyber textarea {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 15px;
+    color: #fff;
+}
+.generate-cert-btn {
+    position: relative;
+    padding: 12px;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    overflow: hidden;
+}
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+.generate-cert-btn:hover .btn-glow { left: 100%; }
+
+.stats-card {
+    background: linear-gradient(135deg, rgba(15,15,26,0.95), rgba(26,26,46,0.95));
+    border-radius: 24px;
+    border: 1px solid rgba(0,212,255,0.3);
+    overflow: hidden;
+}
+.stats-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0,212,255,0.1), rgba(0,255,136,0.05));
+    color: #00d4ff;
+}
+.stats-body { padding: 20px; }
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,212,255,0.1);
+}
+.cyber-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0,255,136,0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    margin-right: 10px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+let currentCertificateId = null;
+
+async function loadStudents() {
+    // Only load students for admin/teacher
+    {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+    const response = await fetch('/api/all-students');
+    const students = await response.json();
+    const select = document.getElementById('studentId');
+    if (select) {
+        select.innerHTML = '<option value="">Select Student</option>' + 
+            students.map(s => `<option value="${s.student_id}">${s.name} (${s.student_id})</option>`).join('');
+    }
+    {% endif %}
+}
+
+async function loadCertificates() {
+    try {
+        const response = await fetch('/api/certificates');
+        const certs = await response.json();
+        const container = document.getElementById('certificatesList');
+        document.getElementById('certCount').innerText = `${certs.length} certificates`;
+        
+        let totalEarned = certs.length;
+        let monthEarned = certs.filter(c => new Date(c.issue_date).getMonth() === new Date().getMonth()).length;
+        let lastCert = certs.length > 0 ? new Date(certs[0].issue_date).toLocaleDateString() : '--';
+        document.getElementById('totalEarned').innerText = totalEarned;
+        document.getElementById('monthEarned').innerText = monthEarned;
+        document.getElementById('lastCert').innerText = lastCert;
+        
+        if (certs.length === 0) {
+            container.innerHTML = '<div class="text-center py-4"><i class="fas fa-certificate fa-3x text-muted mb-2"></i><p>No certificates yet</p></div>';
+            return;
+        }
+        
+        let html = '';
+        for (const cert of certs) {
+            let typeIcon = '';
+            if (cert.type === 'topper') typeIcon = '⭐';
+            else if (cert.type === 'improvement') typeIcon = '📈';
+            else if (cert.type === 'attendance') typeIcon = '📅';
+            else if (cert.type === 'quiz_master') typeIcon = '🎯';
+            else if (cert.type === 'project_excellence') typeIcon = '📊';
+            else typeIcon = '🏆';
+            
+            let displayName = cert.student_name ? cert.student_name : 'My Certificate';
+            let certIdDisplay = cert.code ? cert.code : `CERT-${cert.id.toString().padStart(6,'0')}`;
+            
+            html += `
+                <div class="certificate-card" onclick="viewCertificate(${cert.id})">
+                    <div class="cert-icon-sm">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="cert-info">
+                        <div class="cert-title">${typeIcon} ${cert.type.toUpperCase()} Certificate</div>
+                        <div class="cert-date">Issued: ${new Date(cert.issue_date).toLocaleDateString()}</div>
+                        <div class="cert-code">ID: ${certIdDisplay}</div>
+                    </div>
+                    <button class="view-cert-btn">View</button>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    } catch(e) { console.error(e); }
+}
+
+async function generateCertificate() {
+    const studentId = document.getElementById('studentId')?.value;
+    const certType = document.getElementById('certType')?.value;
+    const customMessage = document.getElementById('customMessage')?.value;
+    
+    if (!studentId) {
+        Swal.fire('Error', 'Please select a student', 'error');
+        return;
+    }
+    
+    const response = await fetch('/api/generate-certificate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_id: studentId, type: certType, message: customMessage })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        Swal.fire('Success!', `Certificate generated for ${result.student_name}! Notification sent.`, 'success');
+        loadCertificates();
+        document.getElementById('generateCertForm')?.reset();
+    } else {
+        Swal.fire('Error!', result.error, 'error');
+    }
+}
+
+function viewCertificate(certId) {
+    window.open(`/certificate-view/${certId}`, '_blank');
+}
+
+document.getElementById('generateCertForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    generateCertificate();
+});
+
+if (document.getElementById('studentId')) loadStudents();
+loadCertificates();
+
+// Auto-refresh every 30 seconds
+setInterval(loadCertificates, 30000);
+</script>
+{% endblock %}

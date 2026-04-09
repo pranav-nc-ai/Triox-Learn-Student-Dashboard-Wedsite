@@ -1,0 +1,796 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content text-center">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> AUDIT TRAIL SYSTEM
+                <span class="live-badge">MONITORING</span>
+            </div>
+            <div class="audit-icon">
+                <i class="fas fa-history"></i>
+                <div class="icon-ring"></div>
+                <div class="icon-ring delay-1"></div>
+                <div class="icon-ring delay-2"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">ACTIVITY</span>
+                <span class="neon-text">LOGS</span>
+            </h1>
+            <p class="cyber-subtitle">Track user actions • Security monitoring • Audit trail</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="stat-card-neon">
+                <div class="stat-icon"><i class="fas fa-database"></i></div>
+                <div class="stat-info">
+                    <span>Total Activities</span>
+                    <strong id="totalActivities">0</strong>
+                </div>
+                <div class="stat-trend up"><i class="fas fa-chart-line"></i> All time</div>
+            </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-card-neon">
+                <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                <div class="stat-info">
+                    <span>Today's Activities</span>
+                    <strong id="todayActivities">0</strong>
+                </div>
+                <div class="stat-trend up"><i class="fas fa-calendar"></i> Last 24h</div>
+            </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+            <div class="stat-card-neon">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-info">
+                    <span>Active Users</span>
+                    <strong id="activeUsers">0</strong>
+                </div>
+                <div class="stat-trend neutral"><i class="fas fa-user-check"></i> Unique</div>
+            </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-card-neon">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-info">
+                    <span>Avg Daily</span>
+                    <strong id="avgDaily">0</strong>
+                </div>
+                <div class="stat-trend up"><i class="fas fa-chart-simple"></i> Per day</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-glass-card mb-4" data-aos="fade-up" data-aos-delay="500">
+        <div class="filter-header">
+            <i class="fas fa-sliders-h"></i> FILTER LOGS
+            <div class="header-glow"></div>
+        </div>
+        <div class="filter-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group-neon">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search by user or action..." onkeyup="filterLogs()">
+                        <div class="input-glow"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group-neon">
+                        <i class="fas fa-filter"></i>
+                        <select id="roleFilter" class="neon-select" onchange="filterLogs()">
+                            <option value="">All Roles</option>
+                            <option value="admin">👑 Admin</option>
+                            <option value="teacher">📚 Teacher</option>
+                            <option value="student">🎓 Student</option>
+                            <option value="parent">👪 Parent</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group-neon">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="dateFilter" onchange="filterLogs()">
+                        <div class="input-glow"></div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="refresh-btn" onclick="loadActivityLogs()">
+                        <i class="fas fa-sync-alt"></i> REFRESH
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logs Table -->
+    <div class="logs-glass-card" data-aos="fade-up" data-aos-delay="600">
+        <div class="card-header-neon">
+            <div class="header-left">
+                <i class="fas fa-list"></i> ACTIVITY LOGS
+                <span class="log-count" id="logCount">0 records</span>
+            </div>
+            <div class="header-right">
+                <button class="export-btn" onclick="exportLogs()">
+                    <i class="fas fa-download"></i> EXPORT CSV
+                </button>
+            </div>
+            <div class="header-glow-line"></div>
+        </div>
+        <div class="card-body-neon p-0">
+            <div class="table-responsive">
+                <table class="cyber-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-clock"></i> TIMESTAMP</th>
+                            <th><i class="fas fa-user"></i> USER</th>
+                            <th><i class="fas fa-tag"></i> ROLE</th>
+                            <th><i class="fas fa-bolt"></i> ACTION</th>
+                            <th><i class="fas fa-info-circle"></i> DETAILS</th>
+                            <th><i class="fas fa-network-wired"></i> IP ADDRESS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <div class="cyber-spinner"></div>
+                                Loading logs...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="pagination-container" id="pagination"></div>
+    </div>
+</div>
+
+<style>
+/* ============ ACTIVITY LOGS FUTURISTIC STYLES ============ */
+
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.audit-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.audit-icon i {
+    font-size: 3rem;
+    color: #00ff88;
+}
+
+.icon-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+.icon-ring.delay-1 { animation-delay: 0.7s; }
+.icon-ring.delay-2 { animation-delay: 1.4s; }
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Stats Cards */
+.stat-card-neon {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    transition: all 0.3s ease;
+}
+
+.stat-card-neon:hover {
+    transform: translateY(-3px);
+    border-color: #00ff88;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 255, 136, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon i {
+    font-size: 1.5rem;
+    color: #00ff88;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-info span {
+    display: block;
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.stat-info strong {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.stat-trend {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.stat-trend.up {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.stat-trend.neutral {
+    background: rgba(0, 212, 255, 0.15);
+    color: #00d4ff;
+}
+
+/* Filter Glass Card */
+.filter-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.filter-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    font-size: 0.85rem;
+    color: #00ff88;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+.filter-body {
+    padding: 20px;
+}
+
+/* Input Groups */
+.input-group-neon {
+    position: relative;
+}
+
+.input-group-neon i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff88;
+    z-index: 1;
+}
+
+.input-group-neon input, .input-group-neon select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.input-group-neon input:focus, .input-group-neon select:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.input-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-group-neon input:focus + .input-glow,
+.input-group-neon select:focus + .input-glow {
+    opacity: 1;
+}
+
+.neon-select {
+    cursor: pointer;
+}
+
+.refresh-btn {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 30px;
+    padding: 10px 20px;
+    color: #00ff88;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.refresh-btn:hover {
+    background: rgba(0, 255, 136, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Logs Glass Card */
+.logs-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-neon {
+    padding: 18px 24px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: #00ff88;
+}
+
+.log-count {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.export-btn {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 20px;
+    padding: 6px 15px;
+    color: #00ff88;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+    background: rgba(0, 255, 136, 0.3);
+    transform: translateY(-2px);
+}
+
+.header-glow-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+/* Cyber Table */
+.cyber-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cyber-table thead th {
+    padding: 15px;
+    text-align: left;
+    background: rgba(0, 255, 136, 0.05);
+    color: #00ff88;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.cyber-table tbody td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+    color: #e0e0e0;
+    font-size: 0.85rem;
+}
+
+.cyber-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.cyber-table tbody tr:hover {
+    background: rgba(0, 255, 136, 0.05);
+}
+
+/* Action Badges */
+.action-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.action-login { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
+.action-logout { background: rgba(0, 212, 255, 0.15); color: #00d4ff; }
+.action-create { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.action-update { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.action-delete { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.action-view { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+
+/* Role Badges */
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+}
+
+.role-admin { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.role-teacher { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.role-student { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+.role-parent { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+
+/* Pagination */
+.pagination-container {
+    padding: 20px;
+    border-top: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+}
+
+.page-item {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 10px;
+    padding: 8px 14px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-item:hover, .page-item.active {
+    background: #00ff88;
+    color: #000;
+    border-color: #00ff88;
+}
+
+/* Loading */
+.cyber-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .cyber-table {
+        font-size: 0.7rem;
+    }
+    .cyber-table td, .cyber-table th {
+        padding: 8px;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once: true });
+
+let allLogs = [];
+let currentPage = 1;
+const itemsPerPage = 20;
+
+async function loadActivityLogs() {
+    try {
+        const response = await fetch('/api/activity-logs?limit=500');
+        if (!response.ok) {
+            throw new Error('Failed to fetch logs');
+        }
+        allLogs = await response.json();
+        console.log("Logs loaded:", allLogs.length);
+        displayLogs();
+        loadStats();
+    } catch(err) {
+        console.error('Error loading logs:', err);
+        document.getElementById('logsTableBody').innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error loading logs</td></tr>';
+    }
+}
+
+async function loadStats() {
+    try {
+        const response = await fetch('/api/activity-stats');
+        const stats = await response.json();
+        document.getElementById('totalActivities').innerText = stats.total || 0;
+        document.getElementById('todayActivities').innerText = stats.today || 0;
+        
+        // Calculate active users (unique users from logs)
+        const uniqueUsers = new Set(allLogs.map(log => log.user_id)).size;
+        document.getElementById('activeUsers').innerText = uniqueUsers || 0;
+        
+        // Calculate avg daily
+        const avgDaily = Math.round((stats.total || 0) / 30);
+        document.getElementById('avgDaily').innerText = avgDaily || 0;
+    } catch(err) {
+        console.error('Error loading stats:', err);
+    }
+}
+
+// Replace existing time display
+function formatLogTime(timestamp) {
+    return new Date(timestamp).toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+}
+
+function displayLogs() {
+    let filtered = [...allLogs];
+    
+    // Apply search filter
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    if (searchTerm) {
+        filtered = filtered.filter(log => 
+            log.user_name.toLowerCase().includes(searchTerm) ||
+            log.action.toLowerCase().includes(searchTerm) ||
+            (log.details && log.details.toLowerCase().includes(searchTerm))
+        );
+    }
+    
+    // Apply role filter
+    const roleFilter = document.getElementById('roleFilter').value;
+    if (roleFilter) {
+        filtered = filtered.filter(log => log.user_role === roleFilter);
+    }
+    
+    // Apply date filter
+    const dateFilter = document.getElementById('dateFilter').value;
+    if (dateFilter) {
+        filtered = filtered.filter(log => log.created_at && log.created_at.startsWith(dateFilter));
+    }
+    
+    document.getElementById('logCount').innerText = `${filtered.length} records`;
+    
+    // Pagination
+    const start = (currentPage - 1) * itemsPerPage;
+    const paginated = filtered.slice(start, start + itemsPerPage);
+    const totalPages = Math.ceil(filtered.length / itemsPerPage);
+    
+    const tbody = document.getElementById('logsTableBody');
+    if (paginated.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No logs found</td></tr>';
+        updatePagination(1);
+        return;
+    }
+    
+    let html = '';
+    paginated.forEach(log => {
+        let actionClass = '';
+        if (log.action.includes('login')) actionClass = 'action-login';
+        else if (log.action.includes('logout')) actionClass = 'action-logout';
+        else if (log.action.includes('create') || log.action.includes('add')) actionClass = 'action-create';
+        else if (log.action.includes('update') || log.action.includes('edit')) actionClass = 'action-update';
+        else if (log.action.includes('delete') || log.action.includes('remove')) actionClass = 'action-delete';
+        else if (log.action.includes('view')) actionClass = 'action-view';
+        else actionClass = 'action-view';
+        
+        let roleClass = '';
+        if (log.user_role === 'admin') roleClass = 'role-admin';
+        else if (log.user_role === 'teacher') roleClass = 'role-teacher';
+        else if (log.user_role === 'student') roleClass = 'role-student';
+        else if (log.user_role === 'parent') roleClass = 'role-parent';
+        
+        html += `
+            <tr>
+                <td><small>${new Date(log.created_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}</small></td>
+                <td><strong>${escapeHtml(log.user_name)}</strong><br><small class="text-muted">${log.user_id}</small></td>
+                <td><span class="role-badge ${roleClass}">${log.user_role}</span></td>
+                <td><span class="action-badge ${actionClass}">${log.action}</span></td>
+                <td>${escapeHtml(log.details || '-')}</td>
+                <td><code>${log.ip_address}</code></td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+    updatePagination(totalPages);
+}
+
+function updatePagination(totalPages) {
+    const pagination = document.getElementById('pagination');
+    if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+    }
+    
+    let html = '<div class="pagination">';
+    for (let i = 1; i <= Math.min(totalPages, 7); i++) {
+        html += `<div class="page-item ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</div>`;
+    }
+    html += '</div>';
+    pagination.innerHTML = html;
+}
+
+function changePage(page) {
+    currentPage = page;
+    displayLogs();
+}
+
+function filterLogs() {
+    currentPage = 1;
+    displayLogs();
+}
+
+function exportLogs() {
+    if (allLogs.length === 0) {
+        Swal.fire('No Data', 'No logs to export', 'warning');
+        return;
+    }
+    
+    let csv = 'Timestamp,User ID,User Name,Role,Action,Details,IP Address\n';
+    allLogs.forEach(log => {
+        csv += `"${log.created_at}","${log.user_id}","${log.user_name}","${log.user_role}","${log.action}","${log.details || ''}","${log.ip_address}"\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `activity_logs_${new Date().toISOString().slice(0,19)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    Swal.fire('Exported!', 'Logs exported to CSV', 'success');
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Load on page load
+loadActivityLogs();
+setInterval(loadActivityLogs, 60000);
+</script>
+{% endblock %}

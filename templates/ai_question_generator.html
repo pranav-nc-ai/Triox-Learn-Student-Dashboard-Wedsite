@@ -1,0 +1,793 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> AI POWERED QUESTION GENERATOR
+                <span class="live-badge">AI ACTIVE</span>
+            </div>
+            <div class="ai-icon">
+                <i class="fas fa-brain"></i>
+                <div class="ai-ring"></div>
+                <div class="ai-ring delay-1"></div>
+                <div class="ai-ring delay-2"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">AI</span>
+                <span class="neon-text">QUESTION</span>
+                <span class="gradient-text">GENERATOR</span>
+            </h1>
+            <p class="cyber-subtitle">Powered by Groq AI • Generate questions instantly • Smart quiz creation</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Panel - Input Form -->
+        <div class="col-lg-5 mb-4" data-aos="fade-right" data-aos-delay="100">
+            <div class="glass-card">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-cogs"></i> GENERATION SETTINGS
+                    </div>
+                    <div class="header-right">
+                        <span class="ai-badge">AI READY</span>
+                    </div>
+                </div>
+                <div class="card-body-cyber">
+                    <form id="generateForm">
+                        <div class="input-group-cyber">
+                            <i class="fas fa-tag"></i>
+                            <input type="text" id="topic" placeholder="Enter topic (e.g., Algebra, Photosynthesis, World War II)" required>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                        
+                        <div class="input-group-cyber mt-3">
+                            <i class="fas fa-list-ol"></i>
+                            <select id="numQuestions" class="cyber-select">
+                                <option value="3">3 Questions</option>
+                                <option value="5" selected>5 Questions</option>
+                                <option value="10">10 Questions</option>
+                                <option value="15">15 Questions</option>
+                            </select>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                        
+                        <div class="input-group-cyber mt-3">
+                            <i class="fas fa-signal"></i>
+                            <select id="difficulty" class="cyber-select">
+                                <option value="easy">Easy - Basic concepts</option>
+                                <option value="medium" selected>Medium - Standard difficulty</option>
+                                <option value="hard">Hard - Advanced topics</option>
+                            </select>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                        
+                        <button type="submit" class="generate-btn w-100 mt-4" id="generateBtn">
+                            <i class="fas fa-magic"></i>
+                            <span>GENERATE QUESTIONS</span>
+                            <div class="btn-glow"></div>
+                        </button>
+                    </form>
+                    
+                    <!-- AI Info Card -->
+                    <div class="ai-info-card mt-4">
+                        <div class="ai-info-header">
+                            <i class="fas fa-robot"></i> AI ENGINE INFO
+                        </div>
+                        <div class="ai-info-body">
+                            <div class="ai-stat">
+                                <span>Model</span>
+                                <strong>Llama 3.1 8B</strong>
+                            </div>
+                            <div class="ai-stat">
+                                <span>Provider</span>
+                                <strong>Groq</strong>
+                            </div>
+                            <div class="ai-stat">
+                                <span>Response Time</span>
+                                <strong>&lt; 2 seconds</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Generated Questions -->
+        <div class="col-lg-7 mb-4" data-aos="fade-left" data-aos-delay="200">
+            <div class="glass-card">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-list-check"></i> GENERATED QUESTIONS
+                    </div>
+                    <div class="header-right">
+                        <span class="question-count" id="questionCount">0 questions</span>
+                    </div>
+                </div>
+                <div class="card-body-cyber" id="questionsContainer">
+                    <div class="empty-questions">
+                        <div class="empty-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h4>Ready to Generate</h4>
+                        <p>Enter a topic and click "Generate Questions"</p>
+                        <small>AI will create multiple-choice questions automatically</small>
+                    </div>
+                </div>
+                <div class="card-footer-cyber" id="quizActions" style="display: none;">
+                    <button class="create-quiz-from-ai" onclick="createQuizFromQuestions()">
+                        <i class="fas fa-save"></i> CREATE QUIZ FROM THESE QUESTIONS
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" style="display: none;">
+    <div class="loading-content">
+        <div class="cyber-spinner-large"></div>
+        <h3>AI is thinking...</h3>
+        <p>Generating smart questions for you</p>
+        <div class="loading-dots">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</div>
+
+<style>
+/* AI Generator Page Styles */
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.ai-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.ai-icon i {
+    font-size: 3rem;
+    color: #00d4ff;
+}
+
+.ai-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+.ai-ring.delay-1 { animation-delay: 0.7s; }
+.ai-ring.delay-2 { animation-delay: 1.4s; }
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00d4ff, #00ff88);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Glass Card */
+.glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-cyber {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #00ff88;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ai-badge {
+    background: rgba(0, 212, 255, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: #00d4ff;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.question-count {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.card-body-cyber {
+    padding: 24px;
+    min-height: 500px;
+}
+
+.card-footer-cyber {
+    padding: 15px 20px;
+    border-top: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+/* Input Groups */
+.input-group-cyber {
+    position: relative;
+}
+
+.input-group-cyber i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff88;
+    z-index: 1;
+}
+
+.input-group-cyber input, .cyber-select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.cyber-select {
+    cursor: pointer;
+}
+
+.input-group-cyber input:focus, .cyber-select:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.input-focus-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-group-cyber input:focus + .input-focus-glow,
+.cyber-select:focus + .input-focus-glow {
+    opacity: 1;
+}
+
+/* Generate Button */
+.generate-btn {
+    position: relative;
+    padding: 14px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.generate-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.generate-btn:hover .btn-glow {
+    left: 100%;
+}
+
+/* AI Info Card */
+.ai-info-card {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.ai-info-header {
+    padding: 12px 15px;
+    background: rgba(0, 212, 255, 0.1);
+    font-size: 0.8rem;
+    color: #00d4ff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ai-info-body {
+    padding: 15px;
+    display: flex;
+    gap: 15px;
+}
+
+.ai-stat {
+    flex: 1;
+    text-align: center;
+}
+
+.ai-stat span {
+    display: block;
+    font-size: 0.65rem;
+    color: #6b6b6b;
+}
+
+.ai-stat strong {
+    display: block;
+    font-size: 0.85rem;
+    color: #00d4ff;
+    margin-top: 5px;
+}
+
+/* Empty Questions */
+.empty-questions {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b6b6b;
+}
+
+.empty-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.empty-icon i {
+    font-size: 2.5rem;
+    color: #00ff88;
+}
+
+.empty-questions h4 {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.empty-questions p {
+    margin-bottom: 5px;
+}
+
+/* Question Cards */
+.question-preview-card {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.question-preview-card:hover {
+    border-color: #00ff88;
+    transform: translateX(5px);
+}
+
+.question-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.question-preview-number {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: #00ff88;
+}
+
+.question-preview-text {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.options-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.option-preview {
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.option-preview.correct {
+    background: rgba(0, 255, 136, 0.1);
+    border-left: 3px solid #00ff88;
+}
+
+.option-letter {
+    width: 28px;
+    height: 28px;
+    background: rgba(0, 255, 136, 0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+    color: #00ff88;
+}
+
+.option-text {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #e0e0e0;
+}
+
+.correct-badge {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: #00ff88;
+}
+
+/* Create Quiz Button */
+.create-quiz-from-ai {
+    position: relative;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.create-quiz-from-ai:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Loading Overlay */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.cyber-spinner-large {
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-right-color: #00d4ff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.loading-content h3 {
+    color: #00ff88;
+    margin-bottom: 10px;
+}
+
+.loading-content p {
+    color: #a0a0a0;
+}
+
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.loading-dots span {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-15px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .ai-info-body {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+let generatedQuestions = [];
+
+document.getElementById('generateForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const topic = document.getElementById('topic').value;
+    const numQuestions = document.getElementById('numQuestions').value;
+    const difficulty = document.getElementById('difficulty').value;
+    
+    if (!topic) {
+        Swal.fire('Error', 'Please enter a topic', 'error');
+        return;
+    }
+    
+    // Show loading overlay
+    document.getElementById('loadingOverlay').style.display = 'flex';
+    
+    const generateBtn = document.getElementById('generateBtn');
+    generateBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/generate-questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                topic: topic, 
+                num_questions: parseInt(numQuestions),
+                difficulty: difficulty
+            })
+        });
+        
+        const result = await response.json();
+        
+        // Hide loading overlay
+        document.getElementById('loadingOverlay').style.display = 'none';
+        
+        if (result.success && result.questions) {
+            generatedQuestions = result.questions;
+            displayQuestions(generatedQuestions);
+            document.getElementById('quizActions').style.display = 'block';
+            document.getElementById('questionCount').innerText = `${generatedQuestions.length} questions`;
+        } else {
+            Swal.fire('Error', 'Failed to generate questions. Please try again.', 'error');
+        }
+    } catch (error) {
+        document.getElementById('loadingOverlay').style.display = 'none';
+        Swal.fire('Error', 'Network error. Please try again.', 'error');
+    } finally {
+        generateBtn.disabled = false;
+    }
+});
+
+function displayQuestions(questions) {
+    const container = document.getElementById('questionsContainer');
+    let html = '';
+    
+    questions.forEach((q, idx) => {
+        const options = q.options || [q.opt_a, q.opt_b, q.opt_c, q.opt_d];
+        const correctLetter = q.correct || 'A';
+        const correctIndex = correctLetter.charCodeAt(0) - 65;
+        
+        html += `
+            <div class="question-preview-card">
+                <div class="question-preview-header">
+                    <span class="question-preview-number">Question ${idx + 1}</span>
+                    <span class="correct-badge"><i class="fas fa-check-circle"></i> Answer: ${correctLetter}</span>
+                </div>
+                <div class="question-preview-text">${escapeHtml(q.text)}</div>
+                <div class="options-preview">
+                    ${options.map((opt, optIdx) => {
+                        const letter = String.fromCharCode(65 + optIdx);
+                        const isCorrect = letter === correctLetter;
+                        return `
+                            <div class="option-preview ${isCorrect ? 'correct' : ''}">
+                                <div class="option-letter">${letter}</div>
+                                <div class="option-text">${escapeHtml(opt || '')}</div>
+                                ${isCorrect ? '<i class="fas fa-check-circle" style="color:#00ff88;"></i>' : ''}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+async function createQuizFromQuestions() {
+    const topic = document.getElementById('topic').value;
+    const quizTitle = prompt("Enter quiz title:", `Quiz on ${topic}`);
+    
+    if (!quizTitle) return;
+    
+    const quizData = {
+        title: quizTitle,
+        description: `AI-generated quiz on ${topic}`,
+        time_limit: 30,
+        questions: generatedQuestions.map(q => ({
+            text: q.text,
+            opt_a: q.options ? q.options[0] : q.opt_a,
+            opt_b: q.options ? q.options[1] : q.opt_b,
+            opt_c: q.options ? q.options[2] : q.opt_c || '',
+            opt_d: q.options ? q.options[3] : q.opt_d || '',
+            correct: q.correct || 'A',
+            points: 1
+        }))
+    };
+    
+    const response = await fetch('/api/create-quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(quizData)
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        Swal.fire({
+            title: 'Success!',
+            text: 'Quiz created successfully!',
+            icon: 'success',
+            confirmButtonColor: '#00ff88',
+            background: '#1a1a2e',
+            color: '#ffffff'
+        }).then(() => {
+            window.location.href = '/quizzes';
+        });
+    } else {
+        Swal.fire('Error!', result.error, 'error');
+    }
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+</script>
+{% endblock %}

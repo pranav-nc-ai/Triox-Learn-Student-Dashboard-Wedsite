@@ -1,0 +1,3 @@
+name,gender,age,study_hours,previous_score,attendance_percentage,parent_education_level,parent_income,internet_access_at_home,sleep_hours,extracurricular_activities,tuition_classes,library_access,transport_facility,midterm_score,assignment_score,quiz_score,project_score
+John Doe,Male,17,6,82,88,Bachelor's,75000,Yes,7,Yes,Yes,Yes,No,80,85,78,88
+Jane Smith,Female,18,7,88,92,Master's,95000,Yes,6,Yes,Yes,Yes,Yes,88,90,85,92

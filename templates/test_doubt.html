@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Test Doubt System</h1>
+    <button onclick="testFunction()">Test Button</button>
+    <div id="result"></div>
+</div>
+
+<script>
+function testFunction() {
+    document.getElementById('result').innerHTML = 'Button clicked!';
+    alert('Test working!');
+}
+</script>
+{% endblock %}

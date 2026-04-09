@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrioxLearn | Futuristic Student Performance Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        /* Additional Navbar Styles */
+        .navbar-nav .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-toggle::after {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .dropdown.show .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+        
+        /* Animated Nav Links */
+        .nav-link-animated {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link-animated::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link-animated:hover::before,
+        .nav-link-animated.active::before {
+            width: 80%;
+        }
+        
+        .nav-link-animated:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        
+        /* Login dropdown specific styles */
+        .login-dropdown .dropdown-menu {
+            min-width: 200px;
+        }
+        
+        .login-dropdown .dropdown-item i {
+            width: 25px;
+        }
+        
+        /* Make sure text is visible */
+        body {
+            color: #ffffff;
+        }
+        
+        .text-muted {
+            color: #a0a0a0 !important;
+        }
+        
+        /* Fix for table text visibility */
+        .table td, .table th {
+            color: #e0e0e0;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 255, 136, 0.1);
+        }
+        
+        /* Card text visibility */
+        .card-title, .card-header {
+            color: #00ff88;
+        }
+        
+        .card-text, .card-body {
+            color: #e0e0e0;
+        }
+        
+        /* Scrollable dropdown for many items */
+        .dropdown-menu-scroll {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        /* Mega menu style for admin */
+        .mega-dropdown {
+            position: static;
+        }
+        
+        .mega-dropdown .dropdown-menu {
+            width: 100%;
+            left: 0;
+            right: 0;
+            transform: translate(0, 0);
+            padding: 20px;
+        }
+        
+        .mega-dropdown .dropdown-menu .row {
+            margin: 0;
+        }
+        
+        .mega-dropdown .dropdown-menu a {
+            padding: 8px 0;
+            display: block;
+        }
+
+        /* Ensure footer has no white background */
+        .footer {
+            background: rgba(10, 10, 15, 0.95) !important;
+            border-top: 1px solid rgba(0, 255, 136, 0.2) !important;
+            margin-top: 2rem;
+        }
+
+        /* Remove any white backgrounds from main content */
+        main {
+            background: transparent !important;
+        }
+
+        .container-fluid {
+            background: transparent !important;
+        }
+
+        /* Ensure all cards have dark backgrounds */
+        .card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e) !important;
+            border: 1px solid rgba(0, 255, 136, 0.2) !important;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05)) !important;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2) !important;
+        }
+
+        .card-header h5, .card-header h4, .card-header h3 {
+            color: #00ff88 !important;
+        }
+
+        /* Canvas backgrounds */
+        canvas {
+            background: transparent !important;
+        }
+
+        /* Chart tooltips */
+        .chartjs-tooltip {
+            background: rgba(0, 0, 0, 0.9) !important;
+            color: white !important;
+            border: 1px solid #00ff88 !important;
+        }
+
+        /* Progress bars */
+        .progress {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #00ff88, #00d4ff) !important;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 20px;
+            min-width: 18px;
+            text-align: center;
+            animation: badgePulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Navbar Scroll Effect */
+        .navbar.scrolled {
+            padding: 0.3rem 0;
+            background: rgba(5, 5, 15, 0.98);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Dropdown Animation */
+        .dropdown-menu {
+            animation: dropdownFade 0.3s ease;
+        }
+        
+        @keyframes dropdownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+                <i class="fas fa-brain me-2"></i>
+                <span class="gradient-text">TRIOX LEARN</span>
+                <span class="badge bg-success ms-2" style="font-size: 0.6rem;">v3.0</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                        <!-- ============ ADMIN/TEACHER FULL MENU ============ -->
+                        {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('dashboard') }}">
+                                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('predictions') }}">
+                                    <i class="fas fa-robot me-1"></i> Predictions
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('reports') }}">
+                                    <i class="fas fa-file-alt me-1"></i> Reports
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('trends') }}">
+                                    <i class="fas fa-chart-line me-1"></i> Trends
+                                </a>
+                            </li>
+                            
+                            <!-- Learning Tools Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle nav-link-animated" href="#" data-bs-toggle="dropdown">
+                                    <i class="fas fa-graduation-cap me-1"></i> Learning
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ url_for('quizzes') }}">
+                                        <i class="fas fa-question-circle me-2"></i> Quizzes
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('create_quiz') }}">
+                                        <i class="fas fa-plus-circle me-2"></i> Create Quiz
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('quiz_analytics') }}">
+                                        <i class="fas fa-chart-bar me-2"></i> Quiz Analytics
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('proctoring_reports') }}">
+                                        <i class="fas fa-shield-alt me-2"></i> Proctoring Reports
+                                    </a></li>
+                                    
+                                    <li><a class="dropdown-item" href="{{ url_for('ai_question_generator') }}">
+                                        <i class="fas fa-magic me-2"></i> AI Quiz Generator
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('study_room') }}">
+                                        <i class="fas fa-chalkboard-teacher me-2"></i> Study Room
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('goals') }}">
+                                        <i class="fas fa-bullseye me-2"></i> Goals
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('learning_path') }}">
+                                        <i class="fas fa-road me-2"></i> Learning Path
+                                    </a></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- Engagement Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle nav-link-animated" href="#" data-bs-toggle="dropdown">
+                                    <i class="fas fa-gamepad me-1"></i> Engagement
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ url_for('gamification') }}">
+                                        <i class="fas fa-gamepad me-2"></i> Gamification Hub
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('certificates') }}">
+                                        <i class="fas fa-certificate me-2"></i> Certificates
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('forum') }}">
+                                        <i class="fas fa-comments me-2"></i> Discussion Forum
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('study_buddy') }}">
+                                        <i class="fas fa-user-friends me-2"></i> Study Buddy
+                                    </a></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- Communication Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle nav-link-animated" href="#" data-bs-toggle="dropdown">
+                                    <i class="fas fa-comments me-1"></i> Communication
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ url_for('chatbot') }}">
+                                        <i class="fas fa-robot me-2"></i> AI Assistant
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('doubts') }}">
+                                        <i class="fas fa-question-circle me-2"></i> Doubt Resolution
+                                    </a></li>
+                                    
+                                    <li><a class="dropdown-item" href="{{ url_for('admin_messages') }}">
+                                        <i class="fas fa-envelope me-2"></i> Parent Messages
+                                        <span class="badge bg-danger ms-2" id="adminMsgBadge" style="display: none;">New</span>
+                                    </a></li>
+
+                                    <li><a class="dropdown-item" href="{{ url_for('meetings') }}">
+                                        <i class="fas fa-calendar-alt me-2"></i> Parent Meetings
+                                    </a></li>
+                                </ul>
+                            </li>
+                            
+                            <!-- Management Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle nav-link-animated" href="#" data-bs-toggle="dropdown">
+                                    <i class="fas fa-users-cog me-1"></i> Management
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ url_for('students') }}">
+                                        <i class="fas fa-users me-2"></i> All Students
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="{{ url_for('add_student_page') }}">
+                                        <i class="fas fa-user-plus me-2"></i> Add Student
+                                    </a></li>
+                                </ul>
+                            </li>
+                            
+                        <!-- ============ STUDENT MENU ============ -->
+                        {% elif current_user.role == 'student' %}
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('student_dashboard') }}">
+                                    <i class="fas fa-tachometer-alt me-1"></i> My Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('predictions') }}">
+                                    <i class="fas fa-robot me-1"></i> Predict My Grade
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('quizzes') }}">
+                                    <i class="fas fa-question-circle me-1"></i> Take Quiz
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('study_room') }}">
+                                    <i class="fas fa-chalkboard-teacher me-1"></i> Study Room
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('goals') }}">
+                                    <i class="fas fa-bullseye me-1"></i> My Goals
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('learning_path') }}">
+                                    <i class="fas fa-road me-1"></i> Learning Path
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('gamification') }}">
+                                    <i class="fas fa-gamepad me-1"></i> Rewards
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('certificates') }}">
+                                    <i class="fas fa-certificate me-1"></i> My Certificates
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('forum') }}">
+                                    <i class="fas fa-comments me-1"></i> Forum
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('study_buddy') }}">
+                                    <i class="fas fa-user-friends me-1"></i> Study Buddy
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('chatbot') }}">
+                                    <i class="fas fa-robot me-1"></i> AI Help
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('doubts') }}">
+                                    <i class="fas fa-question-circle me-1"></i> Ask Doubt
+                                </a>
+                            </li>
+                            
+                        <!-- ============ PARENT MENU ============ -->
+                        {% elif current_user.role == 'parent' %}
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('parent_dashboard') }}">
+                                    <i class="fas fa-tachometer-alt me-1"></i> Child's Progress
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('reports') }}">
+                                    <i class="fas fa-file-alt me-1"></i> Reports
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('certificates') }}">
+                                    <i class="fas fa-certificate me-1"></i> Certificates
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('meetings') }}">
+                                    <i class="fas fa-calendar-alt me-1"></i> Schedule Meeting
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('parent_communication') }}">
+                                    <i class="fas fa-envelope me-1"></i> Contact School
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('parent_messages') }}">
+                                    <i class="fas fa-inbox me-1"></i> Messages
+                                    <span id="parentMsgBadge" class="notification-badge" style="display: none;">0</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-animated" href="{{ url_for('chatbot') }}">
+                                    <i class="fas fa-robot me-1"></i> AI Assistant
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        <!-- Theme Toggle -->
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-animated" href="#" onclick="toggleTheme()">
+                                <i class="fas fa-moon" id="themeIcon"></i>
+                            </a>
+                        </li>
+                        
+                        <!-- SINGLE NOTIFICATION BELL -->
+                        <li class="nav-item position-relative">
+                            <a class="nav-link nav-link-animated" href="#" onclick="toggleNotificationPanel(event)">
+                                <i class="fas fa-bell"></i>
+                                <span id="unifiedNotifBadge" class="notification-badge" style="display: none;">0</span>
+                            </a>
+                        </li>
+                        
+                        {% if current_user.role == 'admin' %}
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-animated" href="{{ url_for('activity_logs') }}">
+                                <i class="fas fa-history me-1"></i> Audit
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        <!-- User Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-link-animated" href="#" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-1"></i> {{ current_user.name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><span class="dropdown-item-text">
+                                    <i class="fas fa-tag me-2"></i> Role: <span class="badge bg-primary">{{ current_user.role }}</span>
+                                </span></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </a></li>
+                            </ul>
+                        </li>
+                        
+                    {% else %}
+                        <!-- Login Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style="background: linear-gradient(135deg, #00ff88, #00d4ff); color: #000 !important; border-radius: 25px; padding: 8px 20px !important;">
+                                <i class="fas fa-sign-in-alt me-2"></i> Login
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('login') }}">
+                                    <i class="fas fa-user-shield me-2"></i> Admin / Teacher
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('student_login') }}">
+                                    <i class="fas fa-user-graduate me-2"></i> Student Login
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('parent_login') }}">
+                                    <i class="fas fa-users me-2"></i> Parent Login
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Panel -->
+    <div id="unifiedNotificationPanel" style="display: none; position: fixed; top: 70px; right: 20px; width: 380px; max-height: 500px; background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1px solid #00ff88; border-radius: 15px; z-index: 10000; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+        <div style="padding: 15px; background: linear-gradient(90deg, rgba(0,255,136,0.1), rgba(0,212,255,0.05)); border-bottom: 1px solid #00ff88; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #00ff88; font-weight: bold;">
+                <i class="fas fa-bell"></i> Notifications
+            </span>
+            <button onclick="markAllNotificationsRead()" style="background: none; border: none; color: #00d4ff; cursor: pointer; font-size: 0.7rem;">
+                Mark all read
+            </button>
+        </div>
+        <div id="notificationList" style="max-height: 400px; overflow-y: auto; padding: 10px;">
+            <div style="text-align: center; padding: 20px; color: #888;">
+                <div class="spinner-border spinner-border-sm text-success"></div> Loading...
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container-fluid mt-4 pt-2">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-12">
+                    <i class="fas fa-brain me-2"></i>
+                    <span class="gradient-text">TRIOX LEARN - AI Powered Learning Platform</span>
+                    <br>
+                    <small class="text-muted">
+                        Real-time Analytics | Machine Learning | Gamified Learning | AI Chatbot
+                        <br>
+                        <span id="lastUpdated"></span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ url_for('static', filename='js/timeutils.js') }}"></script>
+
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        // Last Updated
+        document.getElementById('lastUpdated').innerHTML = 'Last updated: ' + new Date().toLocaleString("en-IN", {timeZone: "Asia/Kolkata"});
+        
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const icon = document.getElementById('themeIcon');
+            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+        
+        // Scroll effect for navbar
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // ============ UNIFIED NOTIFICATION SYSTEM ============
+        
+        async function loadNotifications() {
+            try {
+                const response = await fetch('/api/unified-notifications');
+                const data = await response.json();
+                
+                // Update badge
+                const badge = document.getElementById('unifiedNotifBadge');
+                if (badge) {
+                    if (data.unread_count > 0) {
+                        badge.style.display = 'inline-block';
+                        badge.innerText = data.unread_count > 99 ? '99+' : data.unread_count;
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+                
+                // Update panel content
+                const container = document.getElementById('notificationList');
+                if (!container) return;
+                
+                if (data.notifications.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #888;"><i class="fas fa-bell-slash"></i><p>No notifications yet</p></div>';
+                    return;
+                }
+                
+                let html = '';
+                data.notifications.forEach(notif => {
+                    const timeAgo = getTimeAgo(new Date(notif.created_at));
+                    const icon = notif.icon || 'fa-bell';
+                    
+                    html += `
+                        <div onclick="markNotificationRead(${notif.id}, '${notif.link || ''}')" 
+                             style="padding: 12px; border-bottom: 1px solid rgba(0,255,136,0.1); cursor: pointer; background: ${notif.is_read ? 'transparent' : 'rgba(0,255,136,0.05)'}; transition: all 0.3s ease;">
+                            <div style="display: flex; gap: 12px;">
+                                <div style="width: 35px; height: 35px; background: rgba(0,255,136,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas ${icon}" style="color: #00ff88; font-size: 1rem;"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: bold; color: #00ff88; font-size: 0.85rem;">${escapeHtml(notif.title)}</div>
+                                    <div style="font-size: 0.75rem; color: #aaa; margin-top: 3px;">${escapeHtml(notif.message)}</div>
+                                    <div style="font-size: 0.65rem; color: #666; margin-top: 5px;">
+                                        <i class="fas fa-clock"></i> ${timeAgo}
+                                    </div>
+                                </div>
+                                ${!notif.is_read ? `<div style="width: 8px; height: 8px; background: #00ff88; border-radius: 50%;"></div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch(e) {
+                console.error('Error loading notifications:', e);
+            }
+        }
+        
+        function toggleNotificationPanel(event) {
+            if (event) event.stopPropagation();
+            const panel = document.getElementById('unifiedNotificationPanel');
+            if (panel) {
+                if (panel.style.display === 'none' || panel.style.display === '') {
+                    panel.style.display = 'block';
+                    loadNotifications();
+                } else {
+                    panel.style.display = 'none';
+                }
+            }
+        }
+        
+        // Correct IST Time Display (UTC+5:30)
+        function updateLastUpdated() {
+            // Create date object for current UTC time
+            const now = new Date();
+            
+            // IST is UTC+5:30 (5 hours 30 minutes ahead)
+            // Calculate IST time correctly
+            const istOffsetMs = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+            const istTime = new Date(now.getTime() + istOffsetMs);
+            
+            // Format the date
+            const year = istTime.getUTCFullYear();
+            const month = String(istTime.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(istTime.getUTCDate()).padStart(2, '0');
+            const hours = String(istTime.getUTCHours()).padStart(2, '0');
+            const minutes = String(istTime.getUTCMinutes()).padStart(2, '0');
+            const seconds = String(istTime.getUTCSeconds()).padStart(2, '0');
+            
+            const formattedDate = `${day}/${month}/${year}, ${hours}:${minutes}:${seconds}`;
+            document.getElementById('lastUpdated').innerHTML = 'Last updated: ' + formattedDate;
+        }
+        updateLastUpdated();
+        setInterval(updateLastUpdated, 1000);
+        
+
+
+        // Update admin message badge
+        async function updateAdminMessageBadge() {
+            if (currentUserRole === 'admin' || currentUserRole === 'teacher') {
+                try {
+                    const response = await fetch('/api/admin-messages');
+                    const messages = await response.json();
+                    const unread = messages.filter(m => m.status === 'unread').length;
+                    const badge = document.getElementById('adminMsgBadge');
+                    if (badge && unread > 0) {
+                        badge.style.display = 'inline-block';
+                        badge.innerText = unread;
+                    } else if (badge) {
+                        badge.style.display = 'none';
+                    }
+                } catch(e) {
+                    console.error('Error:', e);
+                }
+            }
+        }
+
+        // Call on page load
+        updateAdminMessageBadge();
+        setInterval(updateAdminMessageBadge, 30000);
+
+
+        async function markNotificationRead(notifId, link) {
+            try {
+                await fetch('/api/unified-notifications/mark-read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ notification_id: notifId })
+                });
+                
+                if (link) {
+                    window.location.href = link;
+                } else {
+                    loadNotifications();
+                    const badge = document.getElementById('unifiedNotifBadge');
+                    if (badge) {
+                        const currentCount = parseInt(badge.innerText);
+                        if (currentCount > 1) {
+                            badge.innerText = currentCount - 1;
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        }
+        
+        async function markAllNotificationsRead() {
+            try {
+                await fetch('/api/unified-notifications/mark-all-read', { method: 'POST' });
+                loadNotifications();
+                const badge = document.getElementById('unifiedNotifBadge');
+                if (badge) badge.style.display = 'none';
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        // Update parent message badge
+        async function updateParentMessageBadge() {
+            if (currentUserRole === 'parent') {
+                try {
+                    const response = await fetch('/api/parent-unread-count');
+                    const data = await response.json();
+                    const badge = document.getElementById('parentMsgBadge');
+                    if (badge) {
+                        if (data.count > 0) {
+                            badge.style.display = 'inline-block';
+                            badge.innerText = data.count > 99 ? '99+' : data.count;
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                } catch(e) {
+                    console.error('Error:', e);
+                }
+            }
+        }
+
+        // Call on page load
+        updateParentMessageBadge();
+        setInterval(updateParentMessageBadge, 30000);
+        
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return 'just now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+            const days = Math.floor(hours / 24);
+            return `${days} day${days === 1 ? '' : 's'} ago`;
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Close panel when clicking outside
+        document.addEventListener('click', function(event) {
+            const panel = document.getElementById('unifiedNotificationPanel');
+            const bell = document.querySelector('.fa-bell')?.closest('a');
+            if (panel && panel.style.display === 'block') {
+                if (!panel.contains(event.target) && !bell?.contains(event.target)) {
+                    panel.style.display = 'none';
+                }
+            }
+        });
+        
+        // Initial load
+        loadNotifications();
+        setInterval(loadNotifications, 30000);
+        
+        // Share Functions
+        window.shareOnTwitter = function() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://twitter.com/intent/tweet?text=Check%20out%20NexusLearn!&url=${url}`, '_blank');
+        };
+        
+        window.shareOnLinkedIn = function() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+        };
+        
+        window.downloadPDFReport = function() {
+            window.location.href = '/api/export-pdf';
+            showToast('Generating PDF report...', 'info');
+        };
+        
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            toast.style.cssText = 'bottom: 20px; right: 20px; z-index: 9999; min-width: 280px; backdrop-filter: blur(10px); z-index: 99999;';
+            toast.innerHTML = `<i class="fas fa-bell me-2"></i> ${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

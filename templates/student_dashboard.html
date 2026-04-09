@@ -1,0 +1,963 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header with Personal Avatar -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> PERSONAL PERFORMANCE COMMAND CENTER
+                <span class="live-badge">LIVE</span>
+            </div>
+            <div class="avatar-container">
+                <div class="avatar-ring">
+                    <div class="avatar-glow"></div>
+                    <i class="fas fa-user-astronaut"></i>
+                </div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">WELCOME BACK,</span>
+                <span class="neon-text" id="studentName">STUDENT</span>
+            </h1>
+            <p class="cyber-subtitle">Your AI-powered learning companion | Real-time analytics | Personalized insights</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row with 3D Flip Effect -->
+    <div class="stats-grid mb-5">
+        <div class="stat-card-3d" data-aos="flip-left" data-aos-delay="100">
+            <div class="stat-card-front">
+                <div class="stat-icon-wrapper">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-icon-glow"></div>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">MY SCORE</span>
+                    <div class="stat-value-wrapper">
+                        <span class="stat-value" id="myScore">--</span>
+                        <span class="stat-trend up" id="scoreTrend">+5%</span>
+                    </div>
+                    <div class="stat-progress">
+                        <div class="progress-bar-futuristic" id="scoreProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card-back">
+                <i class="fas fa-chart-line"></i>
+                <span>Top 10%</span>
+                <small>of class</small>
+            </div>
+        </div>
+
+        <div class="stat-card-3d" data-aos="flip-left" data-aos-delay="200">
+            <div class="stat-card-front">
+                <div class="stat-icon-wrapper">
+                    <i class="fas fa-medal"></i>
+                    <div class="stat-icon-glow"></div>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">MY GRADE</span>
+                    <div class="stat-value-wrapper">
+                        <span class="stat-value" id="myGrade">--</span>
+                        <span class="stat-trend" id="gradeMessage">Excellent!</span>
+                    </div>
+                    <div class="stat-progress">
+                        <div class="progress-bar-futuristic" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card-back">
+                <i class="fas fa-star"></i>
+                <span>Keep Going!</span>
+                <small>You're doing great</small>
+            </div>
+        </div>
+
+        <div class="stat-card-3d" data-aos="flip-left" data-aos-delay="300">
+            <div class="stat-card-front">
+                <div class="stat-icon-wrapper">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-icon-glow"></div>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">CLASS AVERAGE</span>
+                    <div class="stat-value-wrapper">
+                        <span class="stat-value" id="classAvg">--</span>
+                        <span class="stat-trend up">vs peers</span>
+                    </div>
+                    <div class="stat-progress">
+                        <div class="progress-bar-futuristic" id="classProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card-back">
+                <i class="fas fa-users"></i>
+                <span>Class Rank</span>
+                <small id="classRank">#--</small>
+            </div>
+        </div>
+
+        <div class="stat-card-3d" data-aos="flip-left" data-aos-delay="400">
+            <div class="stat-card-front">
+                <div class="stat-icon-wrapper">
+                    <i class="fas fa-trophy"></i>
+                    <div class="stat-icon-glow"></div>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">MY RANK</span>
+                    <div class="stat-value-wrapper">
+                        <span class="stat-value" id="myRank">--</span>
+                        <span class="stat-trend">out of 500</span>
+                    </div>
+                    <div class="stat-progress">
+                        <div class="progress-bar-futuristic" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card-back">
+                <i class="fas fa-crown"></i>
+                <span>Top Performer</span>
+                <small>Keep climbing!</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Row -->
+    <div class="row mb-5">
+        <!-- Left Column - Charts -->
+        <div class="col-lg-7" data-aos="fade-right" data-aos-delay="500">
+            <div class="chart-card-3d">
+                <div class="card-header-futuristic">
+                    <div class="header-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="header-title">
+                        <i class="fas fa-chart-line"></i> PERFORMANCE ANALYTICS
+                    </div>
+                    <div class="header-status">
+                        <span class="ai-badge">AI ANALYZED</span>
+                    </div>
+                </div>
+                <div class="card-body-futuristic">
+                    <div class="row">
+                        <div class="col-12 mb-4">
+                            <canvas id="comparisonChart" height="220"></canvas>
+                        </div>
+                        <div class="col-12">
+                            <canvas id="scoresChart" height="220"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - AI Recommendations -->
+        <div class="col-lg-5" data-aos="fade-left" data-aos-delay="600">
+            <div class="ai-card">
+                <div class="card-header-futuristic">
+                    <div class="header-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="header-title">
+                        <i class="fas fa-robot"></i> AI RECOMMENDATIONS
+                    </div>
+                    <div class="header-status">
+                        <div class="ai-pulse"></div>
+                        <span>ACTIVE</span>
+                    </div>
+                </div>
+                <div class="card-body-futuristic" id="suggestionsList">
+                    <div class="insight-loading">
+                        <div class="cyber-spinner"></div>
+                        <span>AI analyzing your performance...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Study Habits Card -->
+            <div class="habits-card mt-4">
+                <div class="card-header-futuristic">
+                    <div class="header-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="header-title">
+                        <i class="fas fa-clock"></i> STUDY HABITS ANALYSIS
+                    </div>
+                </div>
+                <div class="card-body-futuristic">
+                    <canvas id="habitsChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Next Steps & Weekly Progress Row -->
+    <div class="row mb-5">
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="700">
+            <div class="next-steps-card">
+                <div class="card-header-futuristic">
+                    <div class="header-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="header-title">
+                        <i class="fas fa-bullseye"></i> NEXT STEPS
+                    </div>
+                </div>
+                <div class="card-body-futuristic" id="nextStepsList">
+                    <div class="step-item">
+                        <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="step-content">
+                            <h6>Improve Your Score</h6>
+                            <p>Focus on project work - it carries 40% weight</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-icon"><i class="fas fa-clock"></i></div>
+                        <div class="step-content">
+                            <h6>Increase Study Hours</h6>
+                            <p>Target 7+ hours daily for better results</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-icon"><i class="fas fa-users"></i></div>
+                        <div class="step-content">
+                            <h6>Join Study Groups</h6>
+                            <p>Collaborate with peers in study rooms</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="800">
+            <div class="weekly-card">
+                <div class="card-header-futuristic">
+                    <div class="header-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="header-title">
+                        <i class="fas fa-calendar-week"></i> WEEKLY PROGRESS
+                    </div>
+                </div>
+                <div class="card-body-futuristic">
+                    <canvas id="weeklyProgress" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Motivational Quote -->
+    <div class="motivation-card" data-aos="zoom-in" data-aos-delay="900">
+        <div class="motivation-content">
+            <i class="fas fa-quote-left"></i>
+            <p id="motivationalQuote">"The future belongs to those who believe in the beauty of their dreams."</p>
+            <span>- Eleanor Roosevelt</span>
+        </div>
+        <div class="motivation-glow"></div>
+    </div>
+</div>
+
+<style>
+/* ============ STUDENT DASHBOARD FUTURISTIC STYLES ============ */
+
+/* Cyber Header */
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.avatar-container {
+    margin-bottom: 20px;
+}
+
+.avatar-ring {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: avatarRotate 4s linear infinite;
+}
+
+@keyframes avatarRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.avatar-ring i {
+    font-size: 2.5rem;
+    color: #000;
+    background: #1a1a2e;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    animation: avatarRotateReverse 4s linear infinite;
+}
+
+@keyframes avatarRotateReverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.avatar-glow {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.3), transparent);
+    border-radius: 50%;
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* 3D Stats Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card-3d {
+    position: relative;
+    height: 140px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+
+.stat-card-3d:hover {
+    transform: rotateY(180deg);
+}
+
+.stat-card-front, .stat-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-card-front {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.stat-card-back {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: #000;
+}
+
+.stat-card-back i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.stat-card-back span {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.stat-card-back small {
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.stat-icon-wrapper {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.1));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon-wrapper i {
+    font-size: 1.5rem;
+    color: #00ff88;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.65rem;
+    color: #6b6b6b;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.stat-value-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.stat-trend {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.stat-trend.up {
+    background: rgba(0, 255, 136, 0.15);
+    color: #00ff88;
+}
+
+.stat-progress {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar-futuristic {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    border-radius: 3px;
+}
+
+/* Chart Cards */
+.chart-card-3d, .ai-card, .habits-card, .next-steps-card, .weekly-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.chart-card-3d:hover, .ai-card:hover {
+    border-color: #00ff88;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
+}
+
+.card-header-futuristic {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.header-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff5f56;
+}
+
+.header-dots span:nth-child(2) { background: #ffbd2e; }
+.header-dots span:nth-child(3) { background: #27c93f; }
+
+.header-title {
+    flex: 1;
+    font-size: 0.8rem;
+    font-family: monospace;
+    color: #00ff88;
+    letter-spacing: 1px;
+}
+
+.ai-badge {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.6rem;
+    color: #00ff88;
+}
+
+.ai-pulse {
+    width: 6px;
+    height: 6px;
+    background: #00ff88;
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+    margin-right: 5px;
+}
+
+.card-body-futuristic {
+    padding: 20px;
+}
+
+/* Step Items */
+.step-item {
+    display: flex;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 255, 136, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-icon i {
+    font-size: 1.2rem;
+    color: #00ff88;
+}
+
+.step-content h6 {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    color: #00ff88;
+}
+
+.step-content p {
+    font-size: 0.75rem;
+    color: #a0a0a0;
+    margin: 0;
+}
+
+/* Motivation Card */
+.motivation-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-radius: 30px;
+    padding: 30px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.motivation-content {
+    position: relative;
+    z-index: 2;
+}
+
+.motivation-content i {
+    font-size: 2rem;
+    color: #00ff88;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.motivation-content p {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.motivation-content span {
+    font-size: 0.8rem;
+    color: #6b6b6b;
+}
+
+.motivation-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(0, 255, 136, 0.15), transparent);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    animation: glowRotate 10s linear infinite;
+}
+
+@keyframes glowRotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Loading */
+.insight-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 40px;
+}
+
+.cyber-spinner {
+    width: 25px;
+    height: 25px;
+    border: 2px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* List Group */
+.list-group-item {
+    background: rgba(0, 255, 136, 0.05) !important;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1) !important;
+    color: #e0e0e0 !important;
+}
+
+.list-group-item:hover {
+    background: rgba(0, 255, 136, 0.15) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stat-card-3d {
+        height: 120px;
+    }
+    .stat-value {
+        font-size: 1.2rem;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+const studentId = '{{ student_id }}';
+let comparisonChart, scoresChart, habitsChart, weeklyChart;
+
+// Fetch student name
+async function fetchStudentName() {
+    try {
+        const response = await fetch(`/api/student/${studentId}`);
+        const data = await response.json();
+        document.getElementById('studentName').innerText = data.name.split(' ')[0];
+    } catch(e) { console.error(e); }
+}
+
+async function loadStudentData() {
+    try {
+        const response = await fetch(`/api/student-data/${studentId}`);
+        const data = await response.json();
+        
+        // Update stats
+        document.getElementById('myScore').innerHTML = data.student.final_score + '%';
+        document.getElementById('myGrade').innerHTML = data.student.grade;
+        document.getElementById('classAvg').innerHTML = data.class_average + '%';
+        document.getElementById('myRank').innerHTML = `#${data.rank}`;
+        document.getElementById('classRank').innerHTML = `#${data.rank} / ${data.total_students}`;
+        
+        // Update progress bars
+        const scorePercent = (data.student.final_score / 100) * 100;
+        document.getElementById('scoreProgress').style.width = scorePercent + '%';
+        
+        const classPercent = (data.class_average / 100) * 100;
+        document.getElementById('classProgress').style.width = classPercent + '%';
+        
+        // Grade message
+        const gradeMsg = document.getElementById('gradeMessage');
+        if (data.student.grade === 'A+' || data.student.grade === 'A') {
+            gradeMsg.innerHTML = '🏆 Outstanding!';
+            gradeMsg.className = 'stat-trend up';
+        } else if (data.student.grade === 'B') {
+            gradeMsg.innerHTML = '📈 Good! Aim higher!';
+            gradeMsg.className = 'stat-trend up';
+        } else {
+            gradeMsg.innerHTML = '💪 Keep improving!';
+            gradeMsg.className = 'stat-trend';
+        }
+        
+        // Score trend
+        const scoreTrend = document.getElementById('scoreTrend');
+        if (data.student.final_score > data.class_average) {
+            scoreTrend.innerHTML = '+5% above avg';
+        } else if (data.student.final_score < data.class_average) {
+            scoreTrend.innerHTML = `${(data.class_average - data.student.final_score).toFixed(1)}% below`;
+        } else {
+            scoreTrend.innerHTML = 'at average';
+        }
+        
+        // Comparison Chart
+        if (comparisonChart) comparisonChart.destroy();
+        comparisonChart = new Chart(document.getElementById('comparisonChart'), {
+            type: 'bar',
+            data: {
+                labels: ['My Score', 'Class Average'],
+                datasets: [{
+                    label: 'Score (%)',
+                    data: [data.student.final_score, data.class_average],
+                    backgroundColor: ['rgba(0, 255, 136, 0.8)', 'rgba(0, 212, 255, 0.8)'],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { labels: { color: '#fff', font: { size: 10 } } },
+                    tooltip: { backgroundColor: '#000', titleColor: '#fff', bodyColor: '#fff' }
+                },
+                scales: {
+                    y: { min: 0, max: 100, ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#fff' } }
+                }
+            }
+        });
+        
+        // Component Scores Chart
+        if (scoresChart) scoresChart.destroy();
+        scoresChart = new Chart(document.getElementById('scoresChart'), {
+            type: 'radar',
+            data: {
+                labels: ['Midterm', 'Assignment', 'Quiz', 'Project'],
+                datasets: [{
+                    label: 'Your Scores',
+                    data: [data.student.midterm_score, data.student.assignment_score, data.student.quiz_score, data.student.project_score],
+                    backgroundColor: 'rgba(0, 255, 136, 0.2)',
+                    borderColor: '#00ff88',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#00ff88',
+                    pointBorderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: { backgroundColor: '#000', titleColor: '#fff', bodyColor: '#fff' }
+                },
+                scales: { r: { ticks: { color: '#fff', stepSize: 20 }, grid: { color: 'rgba(255,255,255,0.2)' } } }
+            }
+        });
+        
+        // Habits Chart
+        if (habitsChart) habitsChart.destroy();
+        habitsChart = new Chart(document.getElementById('habitsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Study Hours', 'Attendance', 'Sleep Hours'],
+                datasets: [{
+                    label: 'Current Value',
+                    data: [data.student.study_hours, data.student.attendance_percentage, data.student.sleep_hours * 10],
+                    backgroundColor: ['rgba(0, 255, 136, 0.8)', 'rgba(0, 212, 255, 0.8)', 'rgba(255, 215, 0, 0.8)'],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: { backgroundColor: '#000', titleColor: '#fff', bodyColor: '#fff' }
+                },
+                scales: {
+                    y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#fff' } }
+                }
+            }
+        });
+        
+        // Weekly Progress Chart
+        if (weeklyChart) weeklyChart.destroy();
+        weeklyChart = new Chart(document.getElementById('weeklyProgress'), {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Study Hours',
+                    data: [2, 3, 4, 3, 5, 6, 4],
+                    borderColor: '#00ff88',
+                    backgroundColor: 'rgba(0, 255, 136, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointBackgroundColor: '#00ff88',
+                    pointBorderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: { backgroundColor: '#000', titleColor: '#fff', bodyColor: '#fff' }
+                },
+                scales: {
+                    y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                    x: { ticks: { color: '#fff' } }
+                }
+            }
+        });
+        
+    } catch(err) { console.error('Error:', err); }
+}
+
+async function loadSuggestions() {
+    try {
+        const response = await fetch(`/api/improvement-suggestions/${studentId}`);
+        const suggestions = await response.json();
+        
+        const container = document.getElementById('suggestionsList');
+        let html = '<div class="list-group list-group-flush">';
+        suggestions.suggestions.forEach(s => {
+            html += `<div class="list-group-item"><i class="fas fa-robot text-success me-2"></i> ${s}</div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        
+        // Update next steps based on performance
+        const nextSteps = document.getElementById('nextStepsList');
+        const response2 = await fetch(`/api/student-data/${studentId}`);
+        const data = await response2.json();
+        
+        let stepsHtml = '';
+        if (data.student.final_score < 70) {
+            stepsHtml = `
+                <div class="step-item"><div class="step-icon"><i class="fas fa-chart-line"></i></div><div class="step-content"><h6>Improve Your Score</h6><p>Focus on project work - it carries 40% weight</p></div></div>
+                <div class="step-item"><div class="step-icon"><i class="fas fa-clock"></i></div><div class="step-content"><h6>Increase Study Hours</h6><p>Target 7+ hours daily for better results</p></div></div>
+                <div class="step-item"><div class="step-icon"><i class="fas fa-users"></i></div><div class="step-content"><h6>Join Study Groups</h6><p>Collaborate with peers in study rooms</p></div></div>
+            `;
+        } else if (data.student.final_score < 85) {
+            stepsHtml = `
+                <div class="step-item"><div class="step-icon"><i class="fas fa-trophy"></i></div><div class="step-content"><h6>Aim for A Grade</h6><p>Focus on weak areas to boost your score</p></div></div>
+                <div class="step-item"><div class="step-icon"><i class="fas fa-project-diagram"></i></div><div class="step-content"><h6>Perfect Your Project</h6><p>Project has 40% weight - aim for 95%+</p></div></div>
+                <div class="step-item"><div class="step-icon"><i class="fas fa-chalkboard"></i></div><div class="step-content"><h6>Help Peers</h6><p>Teaching others reinforces your learning</p></div></div>
+            `;
+        } else {
+            stepsHtml = `
+                <div class="step-item"><div class="step-icon"><i class="fas fa-crown"></i></div><div class="step-content"><h6>Maintain Top Performance</h6><p>Consistency is key to staying at the top</p></div></div>
+                <div class="step-item"><div class="step-icon"><i class="fas fa-users"></i></div><div class="step-content"><h6>Mentor Others</h6><p>Share your knowledge with classmates</p></div></div>
+                <div class="step-item"><div class="step-icon"><i class="fas fa-trophy"></i></div><div class="step-content"><h6>Compete in Quizzes</h6><p>Test your knowledge and earn badges</p></div></div>
+            `;
+        }
+        nextSteps.innerHTML = stepsHtml;
+        
+    } catch(err) { console.error('Error:', err); }
+}
+
+// Motivational quotes
+const quotes = [
+    { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+    { text: "Education is the most powerful weapon which you can use to change the world.", author: "Nelson Mandela" },
+    { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+    { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+    { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" }
+];
+
+function updateQuote() {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const quote = quotes[randomIndex];
+    document.querySelector('.motivation-content p').innerHTML = `"${quote.text}"`;
+    document.querySelector('.motivation-content span').innerHTML = `- ${quote.author}`;
+}
+
+fetchStudentName();
+loadStudentData();
+loadSuggestions();
+updateQuote();
+setInterval(() => { loadStudentData(); loadSuggestions(); }, 30000);
+setInterval(updateQuote, 10000);
+</script>
+{% endblock %}

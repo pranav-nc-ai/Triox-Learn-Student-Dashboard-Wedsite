@@ -1,0 +1,686 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content text-center">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> AI-POWERED DOUBT RESOLUTION
+                <span class="live-badge">LIVE</span>
+            </div>
+            <div class="doubt-icon">
+                <i class="fas fa-question-circle"></i>
+                <div class="icon-ring"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">DOUBT</span>
+                <span class="neon-text">RESOLUTION</span>
+            </h1>
+            <p class="cyber-subtitle">Ask anything • Get instant AI answers • Teacher assistance available</p>
+        </div>
+    </div>
+
+    <!-- Stats Dashboard (for Teachers only) -->
+    {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+    <div class="stats-dashboard mb-5" data-aos="fade-up">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-card-neon">
+                    <div class="stat-icon"><i class="fas fa-question-circle"></i></div>
+                    <div class="stat-info">
+                        <span>Total Doubts</span>
+                        <strong id="statTotal">0</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card-neon">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <span>Resolved</span>
+                        <strong id="statResolved">0</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card-neon">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <span>Pending</span>
+                        <strong id="statPending">0</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card-neon">
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="stat-info">
+                        <span>Resolution Rate</span>
+                        <strong id="statRate">0%</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Ask Doubt Section -->
+        <div class="col-lg-5 mb-4" data-aos="fade-right">
+            <div class="ask-glass-card">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-robot"></i> ASK AI ASSISTANT
+                    </div>
+                    <div class="header-right">
+                        <span class="ai-badge">GROQ Llama 3.1</span>
+                    </div>
+                </div>
+                <div class="card-body-cyber">
+                    <form id="doubtForm">
+                        <div class="input-group-cyber mb-3">
+                            <i class="fas fa-tag"></i>
+                            <select id="category" class="cyber-select">
+                                <option value="General">📌 General</option>
+                                <option value="Mathematics">📐 Mathematics</option>
+                                <option value="Science">🔬 Science</option>
+                                <option value="Programming">💻 Programming</option>
+                                <option value="English">📖 English</option>
+                                <option value="History">🏛️ History</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group-cyber mb-3">
+                            <i class="fas fa-flag"></i>
+                            <select id="priority" class="cyber-select">
+                                <option value="low">🟢 Low Priority</option>
+                                <option value="normal">🟡 Normal Priority</option>
+                                <option value="high">🟠 High Priority</option>
+                                <option value="urgent">🔴 Urgent</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group-cyber">
+                            <i class="fas fa-pen-fancy"></i>
+                            <textarea id="question" rows="4" placeholder="What's your question? Ask anything about studies, concepts, assignments..." required></textarea>
+                        </div>
+
+                        <div class="quick-questions mt-3">
+                            <div class="quick-label">
+                                <i class="fas fa-bolt"></i> QUICK QUESTIONS
+                            </div>
+                            <div class="suggestion-chips">
+                                <div class="chip" onclick="setQuestion('How does photosynthesis work?')">🌿 Photosynthesis</div>
+                                <div class="chip" onclick="setQuestion('Explain Newton\'s laws of motion')">⚡ Newton's Laws</div>
+                                <div class="chip" onclick="setQuestion('What is the Pythagorean theorem?')">📐 Pythagoras</div>
+                                <div class="chip" onclick="setQuestion('How to solve quadratic equations?')">📊 Quadratic Eq</div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="cyber-submit-btn w-100 mt-4" id="askBtn">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>ASK AI</span>
+                        </button>
+                    </form>
+                    
+                    <div id="aiAnswer" class="ai-answer-card mt-4" style="display: none;">
+                        <div class="ai-answer-header">
+                            <i class="fas fa-robot"></i>
+                            <span>AI RESPONSE</span>
+                            <button class="close-answer" onclick="closeAnswer()">×</button>
+                        </div>
+                        <div class="ai-answer-body" id="answerText"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doubts Feed Section -->
+        <div class="col-lg-7 mb-4" data-aos="fade-left">
+            <div class="feed-glass-card">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-fire"></i> DOUBTS FEED
+                        <span class="doubt-count" id="doubtCount">0 doubts</span>
+                    </div>
+                    <div class="header-right">
+                        <select id="categoryFilter" class="cyber-select-sm" onchange="loadDoubts()">
+                            <option value="all">All Categories</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Science">Science</option>
+                            <option value="Programming">Programming</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body-cyber p-0" id="doubtsList">
+                    <div class="loading-container">
+                        <div class="cyber-spinner"></div>
+                        <span>Loading doubts...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher View - Pending Doubts -->
+    {% if current_user.role == 'admin' or current_user.role == 'teacher' %}
+    <div class="row mt-4" data-aos="fade-up">
+        <div class="col-12">
+            <div class="pending-glass-card">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-chalkboard-teacher"></i> PENDING DOUBTS FOR REVIEW
+                        <span class="pending-count" id="pendingCount">0</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="export-btn" onclick="exportDoubts()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body-cyber p-0" id="pendingDoubtsList">
+                    <div class="loading-container">
+                        <div class="cyber-spinner"></div>
+                        <span>Loading pending doubts...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Answer Modal -->
+<div class="modal fade" id="answerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-success">
+                <h5 class="modal-title text-success">
+                    <i class="fas fa-chalkboard-teacher"></i> Respond to Doubt
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3 p-3 bg-dark rounded border border-success">
+                    <label class="text-success mb-2">Student's Question:</label>
+                    <p id="doubtQuestion" class="text-light"></p>
+                </div>
+                <div class="mb-3">
+                    <label class="text-success mb-2">Your Answer:</label>
+                    <textarea id="teacherAnswer" class="form-control bg-dark text-light border-success" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" onclick="submitTeacherAnswer()">Submit Answer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-danger">
+                <h5 class="modal-title text-danger">
+                    <i class="fas fa-trash-alt"></i> Delete Doubt
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                <p>Are you sure you want to delete this doubt?</p>
+                <p class="text-danger">This action cannot be undone!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDeleteDoubt()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Base Styles */
+.cyber-header { text-align: center; padding: 40px; background: linear-gradient(135deg, rgba(0,255,136,0.05), rgba(0,212,255,0.02)); border-radius: 50px; }
+.cyber-badge { display: inline-flex; align-items: center; gap: 12px; background: rgba(0,255,136,0.1); padding: 8px 20px; border-radius: 30px; font-size: 0.75rem; color: #00ff88; margin-bottom: 20px; }
+.live-badge { background: #00ff88; color: #000; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+.doubt-icon i { font-size: 3rem; color: #00ff88; }
+.cyber-title { font-size: 2.5rem; font-weight: 800; }
+.gradient-text { background: linear-gradient(135deg, #00ff88, #00d4ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.neon-text { text-shadow: 0 0 20px rgba(0,255,136,0.5); }
+.cyber-subtitle { color: #a0a0a0; }
+
+/* Cards */
+.ask-glass-card, .feed-glass-card, .pending-glass-card {
+    background: linear-gradient(135deg, rgba(15,15,26,0.95), rgba(26,26,46,0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0,255,136,0.3);
+    overflow: hidden;
+}
+.card-header-cyber {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0,255,136,0.1), rgba(0,212,255,0.05));
+    border-bottom: 1px solid rgba(0,255,136,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #00ff88;
+}
+.card-body-cyber { padding: 20px; }
+
+/* Inputs */
+.input-group-cyber { position: relative; margin-bottom: 15px; }
+.input-group-cyber i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #00ff88; z-index: 1; }
+.input-group-cyber textarea, .input-group-cyber select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 15px;
+    color: #fff;
+}
+.input-group-cyber textarea { padding-top: 12px; resize: vertical; min-height: 100px; }
+.cyber-select-sm { padding: 6px 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(0,255,136,0.3); border-radius: 20px; color: #fff; }
+
+/* Quick Questions */
+.suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); border-radius: 20px; padding: 5px 12px; font-size: 0.7rem; color: #00ff88; cursor: pointer; }
+.chip:hover { background: rgba(0,255,136,0.2); }
+
+/* Buttons */
+.cyber-submit-btn {
+    padding: 12px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.cyber-submit-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+.export-btn { background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.3); border-radius: 20px; padding: 6px 15px; color: #00ff88; cursor: pointer; }
+
+/* Stat Cards */
+.stat-card-neon {
+    background: linear-gradient(135deg, rgba(15,15,26,0.95), rgba(26,26,46,0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid rgba(0,255,136,0.2);
+}
+.stat-icon { width: 50px; height: 50px; background: rgba(0,255,136,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.stat-icon i { font-size: 1.5rem; color: #00ff88; }
+.stat-info strong { font-size: 1.5rem; color: #00ff88; }
+.stat-info span { font-size: 0.7rem; color: #6b6b6b; display: block; }
+
+/* Doubt Cards */
+.doubt-card {
+    padding: 20px;
+    border-bottom: 1px solid rgba(0,255,136,0.1);
+}
+.doubt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+.doubt-question { font-weight: bold; color: #00ff88; }
+.priority-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.65rem; }
+.priority-urgent { background: rgba(255,68,68,0.2); color: #ff4444; }
+.priority-high { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+.priority-normal { background: rgba(255,215,0,0.2); color: #ffd700; }
+.priority-low { background: rgba(0,255,136,0.2); color: #00ff88; }
+.doubt-meta { font-size: 0.7rem; color: #6b6b6b; margin-bottom: 10px; display: flex; gap: 15px; flex-wrap: wrap; }
+.category-badge { background: rgba(0,212,255,0.15); padding: 2px 8px; border-radius: 15px; font-size: 0.65rem; }
+.doubt-actions { display: flex; gap: 10px; margin-top: 10px; }
+.vote-btn { background: none; border: none; color: #6b6b6b; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.vote-btn:hover { color: #00ff88; }
+.answer-btn { background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.3); border-radius: 20px; padding: 5px 15px; color: #00ff88; cursor: pointer; font-size: 0.75rem; }
+.delete-btn { background: rgba(255,68,68,0.15); border: 1px solid rgba(255,68,68,0.3); border-radius: 20px; padding: 5px 12px; color: #ff4444; cursor: pointer; font-size: 0.7rem; }
+
+/* Answer Cards */
+.answer-card { margin-top: 12px; padding: 15px; border-radius: 16px; background: linear-gradient(135deg, rgba(0,255,136,0.05), rgba(0,212,255,0.02)); border-left: 4px solid #00ff88; }
+.teacher-answer-card { border-left-color: #00ff88; background: rgba(0,255,136,0.05); }
+.answer-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.answer-avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #00ff88; color: #000; }
+.answer-author { font-weight: bold; color: #00ff88; }
+.answer-badge { font-size: 0.6rem; padding: 2px 8px; border-radius: 12px; background: rgba(0,255,136,0.2); }
+
+/* Loading */
+.loading-container { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 60px; color: #a0a0a0; }
+.cyber-spinner { width: 30px; height: 30px; border: 2px solid rgba(0,255,136,0.2); border-top-color: #00ff88; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* AI Answer */
+.ai-answer-card {
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 20px;
+    overflow: hidden;
+}
+.ai-answer-header { padding: 12px 15px; background: rgba(0,212,255,0.1); display: flex; justify-content: space-between; color: #00d4ff; border-bottom: 1px solid rgba(0,212,255,0.3); }
+.close-answer { background: none; border: none; color: #ff4444; font-size: 1.2rem; cursor: pointer; }
+.ai-answer-body { padding: 15px; font-size: 0.9rem; color: #e0e0e0; }
+
+@media (max-width: 768px) {
+    .cyber-title { font-size: 1.5rem; }
+    .suggestion-chips { flex-direction: column; }
+    .doubt-header { flex-direction: column; }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+const loggedInUserId = '{{ current_user.id }}';
+const loggedInUserRole = '{{ current_user.role }}';
+
+function setQuestion(question) {
+    document.getElementById('question').value = question;
+}
+
+// Submit doubt form
+document.getElementById('doubtForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const question = document.getElementById('question').value.trim();
+    const category = document.getElementById('category').value;
+    const priority = document.getElementById('priority').value;
+    const askBtn = document.getElementById('askBtn');
+    
+    if (!question) {
+        Swal.fire('Error', 'Please enter your question', 'error');
+        return;
+    }
+    
+    askBtn.disabled = true;
+    askBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
+    
+    try {
+        const response = await fetch('/api/ask-doubt-enhanced', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question, category, priority, tags: '' })
+        });
+        
+        const result = await response.json();
+        
+        askBtn.disabled = false;
+        askBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>ASK AI</span>';
+        
+        if (result.success) {
+            document.getElementById('aiAnswer').style.display = 'block';
+            document.getElementById('answerText').innerHTML = result.answer.replace(/\n/g, '<br>');
+            document.getElementById('question').value = '';
+            loadDoubts();
+            loadPendingDoubts();
+            loadStats();
+        } else {
+            Swal.fire('Error', result.error || 'Failed to get answer', 'error');
+        }
+    } catch(error) {
+        askBtn.disabled = false;
+        askBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>ASK AI</span>';
+        Swal.fire('Error', 'Network error. Please try again.', 'error');
+    }
+});
+
+function closeAnswer() {
+    document.getElementById('aiAnswer').style.display = 'none';
+}
+
+// Load doubts feed
+async function loadDoubts() {
+    try {
+        const category = document.getElementById('categoryFilter')?.value || 'all';
+        const response = await fetch(`/api/doubts/enhanced?category=${category}&sort=latest`);
+        const doubts = await response.json();
+        
+        const container = document.getElementById('doubtsList');
+        document.getElementById('doubtCount').innerText = `${doubts.length} doubts`;
+        
+        if (doubts.length === 0) {
+            container.innerHTML = `<div class="text-center py-5"><i class="fas fa-comment-slash fa-3x text-muted mb-3"></i><p>No doubts found. Be the first to ask!</p></div>`;
+            return;
+        }
+        
+        let html = '';
+        doubts.forEach(doubt => {
+            const priorityClass = `priority-${doubt.priority}`;
+            const priorityText = doubt.priority.toUpperCase();
+            const isOwner = (doubt.student_id === loggedInUserId);
+            const canAnswer = (loggedInUserRole === 'admin' || loggedInUserRole === 'teacher');
+            const canDelete = (loggedInUserRole === 'admin' || loggedInUserRole === 'teacher' || isOwner);
+            
+            html += `
+                <div class="doubt-card">
+                    <div class="doubt-header">
+                        <div class="doubt-question">${escapeHtml(doubt.question)}</div>
+                        <div class="priority-badge ${priorityClass}">${priorityText}</div>
+                    </div>
+                    <div class="doubt-meta">
+                        <span><i class="fas fa-user-graduate"></i> ${escapeHtml(doubt.student_name)}</span>
+                        <span><i class="fas fa-clock"></i> ${new Date(doubt.created_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}</span>
+                        <span class="category-badge">${doubt.category}</span>
+                    </div>
+                    <div class="doubt-actions">
+                        <button class="vote-btn" onclick="upvoteDoubt(${doubt.doubt_id})">👍 <span id="likes-${doubt.doubt_id}">${doubt.likes}</span></button>
+                        <button class="vote-btn" onclick="downvoteDoubt(${doubt.doubt_id})">👎 <span id="dislikes-${doubt.doubt_id}">${doubt.dislikes}</span></button>
+                        ${canAnswer && doubt.status !== 'resolved' ? `<button class="answer-btn" onclick="openAnswerModal(${doubt.doubt_id}, '${escapeHtml(doubt.question).replace(/'/g, "\\'")}')">Answer</button>` : ''}
+                        ${canDelete ? `<button class="delete-btn" onclick="showDeleteModal(${doubt.doubt_id})">Delete</button>` : ''}
+                    </div>
+                    ${doubt.teacher_answer ? `
+                        <div class="answer-card teacher-answer-card">
+                            <div class="answer-header">
+                                <div class="answer-avatar"><i class="fas fa-chalkboard-teacher"></i></div>
+                                <div class="answer-author">Teacher</div>
+                                <div class="answer-badge">Verified Answer</div>
+                            </div>
+                            <div class="answer-content">${escapeHtml(doubt.teacher_answer)}</div>
+                        </div>
+                    ` : doubt.ai_answer && !doubt.teacher_answer ? `
+                        <div class="answer-card">
+                            <div class="answer-header">
+                                <div class="answer-avatar"><i class="fas fa-robot"></i></div>
+                                <div class="answer-author">AI Assistant</div>
+                                <div class="answer-badge">Auto-generated</div>
+                            </div>
+                            <div class="answer-content">${escapeHtml(doubt.ai_answer.substring(0, 200))}${doubt.ai_answer.length > 200 ? '...' : ''}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    } catch(err) {
+        console.error('Error:', err);
+        document.getElementById('doubtsList').innerHTML = '<div class="text-center text-danger p-4">Error loading doubts</div>';
+    }
+}
+
+// Load pending doubts for teachers
+async function loadPendingDoubts() {
+    if (loggedInUserRole !== 'admin' && loggedInUserRole !== 'teacher') return;
+    
+    try {
+        const response = await fetch('/api/doubts/enhanced');
+        const doubts = await response.json();
+        const pending = doubts.filter(d => d.status !== 'resolved');
+        
+        const container = document.getElementById('pendingDoubtsList');
+        document.getElementById('pendingCount').innerText = pending.length;
+        
+        if (pending.length === 0) {
+            container.innerHTML = `<div class="text-center py-5"><i class="fas fa-check-circle fa-3x text-success mb-3"></i><p>No pending doubts!</p></div>`;
+            return;
+        }
+        
+        let html = '';
+        pending.forEach(doubt => {
+            html += `
+                <div class="doubt-card">
+                    <div class="doubt-header">
+                        <div class="doubt-question"><strong>${escapeHtml(doubt.student_name)}:</strong> ${escapeHtml(doubt.question)}</div>
+                        <div class="priority-badge priority-${doubt.priority}">${doubt.priority.toUpperCase()}</div>
+                    </div>
+                    <div class="doubt-meta">${new Date(doubt.created_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})} • ${doubt.category}</div>
+                    <button class="answer-btn" onclick="openAnswerModal(${doubt.doubt_id}, '${escapeHtml(doubt.question).replace(/'/g, "\\'")}')">Answer</button>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    } catch(err) {
+        console.error('Error:', err);
+    }
+}
+
+// Load stats for teachers
+async function loadStats() {
+    if (loggedInUserRole !== 'admin' && loggedInUserRole !== 'teacher') return;
+    
+    try {
+        const response = await fetch('/api/doubt/analytics');
+        const stats = await response.json();
+        document.getElementById('statTotal').innerText = stats.total;
+        document.getElementById('statResolved').innerText = stats.resolved;
+        document.getElementById('statPending').innerText = stats.pending;
+        document.getElementById('statRate').innerText = stats.resolution_rate + '%';
+    } catch(err) {
+        console.error('Error:', err);
+    }
+}
+
+// Upvote/Downvote
+async function upvoteDoubt(doubtId) {
+    try {
+        const response = await fetch('/api/doubt/upvote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ doubt_id: doubtId })
+        });
+        const result = await response.json();
+        if (result.success) {
+            document.getElementById(`likes-${doubtId}`).innerText = result.likes;
+            document.getElementById(`dislikes-${doubtId}`).innerText = result.dislikes;
+        }
+    } catch(e) { console.error(e); }
+}
+
+async function downvoteDoubt(doubtId) {
+    try {
+        const response = await fetch('/api/doubt/dislike', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ doubt_id: doubtId })
+        });
+        const result = await response.json();
+        if (result.success) {
+            document.getElementById(`likes-${doubtId}`).innerText = result.likes;
+            document.getElementById(`dislikes-${doubtId}`).innerText = result.dislikes;
+        }
+    } catch(e) { console.error(e); }
+}
+
+// Open answer modal
+let currentAnswerDoubtId = null;
+
+function openAnswerModal(doubtId, question) {
+    if (loggedInUserRole !== 'admin' && loggedInUserRole !== 'teacher') {
+        Swal.fire('Access Denied', 'Only teachers can answer doubts', 'error');
+        return;
+    }
+    currentAnswerDoubtId = doubtId;
+    document.getElementById('doubtQuestion').innerHTML = question;
+    document.getElementById('teacherAnswer').value = '';
+    new bootstrap.Modal(document.getElementById('answerModal')).show();
+}
+
+async function submitTeacherAnswer() {
+    const answer = document.getElementById('teacherAnswer').value.trim();
+    if (!answer) {
+        Swal.fire('Error', 'Please enter an answer', 'error');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/answer-doubt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ doubt_id: currentAnswerDoubtId, answer: answer })
+        });
+        const result = await response.json();
+        if (result.success) {
+            Swal.fire('Success!', 'Answer submitted', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('answerModal')).hide();
+            loadDoubts();
+            loadPendingDoubts();
+        } else {
+            Swal.fire('Error', result.error, 'error');
+        }
+    } catch(error) {
+        Swal.fire('Error', 'Network error', 'error');
+    }
+}
+
+// Delete functions
+let deleteDoubtId = null;
+
+function showDeleteModal(doubtId) {
+    deleteDoubtId = doubtId;
+    new bootstrap.Modal(document.getElementById('deleteModal')).show();
+}
+
+async function confirmDeleteDoubt() {
+    const response = await fetch(`/api/delete-doubt/${deleteDoubtId}`, { method: 'DELETE' });
+    const result = await response.json();
+    if (result.success) {
+        Swal.fire('Deleted!', 'Doubt deleted', 'success');
+        bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+        loadDoubts();
+        loadPendingDoubts();
+        loadStats();
+    } else {
+        Swal.fire('Error', result.error, 'error');
+    }
+}
+
+function exportDoubts() {
+    fetch('/api/doubts/enhanced')
+        .then(res => res.json())
+        .then(doubts => {
+            let csv = 'ID,Student,Question,Category,Priority,Status,Created\n';
+            doubts.forEach(d => {
+                csv += `"${d.doubt_id}","${d.student_name}","${d.question.replace(/"/g, '""')}","${d.category}","${d.priority}","${d.status}","${d.created_at}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `doubts_export.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            Swal.fire('Exported!', 'CSV downloaded', 'success');
+        });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Initial load
+loadDoubts();
+loadPendingDoubts();
+loadStats();
+</script>
+{% endblock %}

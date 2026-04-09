@@ -1,0 +1,800 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-primary"><i class="fas fa-chalkboard-teacher"></i> Study Room / Virtual Classroom</h2>
+            <p class="text-muted">Create or join study rooms to learn together! Real-time collaboration enabled.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <!-- Create Room Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-plus"></i> Create Study Room</h5>
+                </div>
+                <div class="card-body">
+                    <form id="createRoomForm">
+                        <div class="mb-3">
+                            <label class="form-label">Room Name</label>
+                            <input type="text" class="form-control" id="roomName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Subject / Topic</label>
+                            <select class="form-select" id="subject">
+                                <option>Mathematics</option>
+                                <option>Science</option>
+                                <option>English</option>
+                                <option>History</option>
+                                <option>Computer Science</option>
+                                <option>General Study</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-plus"></i> Create Room
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Join Room Card -->
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-door-open"></i> Join Room</h5>
+                </div>
+                <div class="card-body">
+                    <form id="joinRoomForm">
+                        <div class="mb-3">
+                            <label class="form-label">Room Code</label>
+                            <input type="text" class="form-control" id="roomCode" placeholder="Enter 6-digit code" maxlength="6" required>
+                        </div>
+                        <button type="submit" class="btn btn-info w-100">
+                            <i class="fas fa-sign-in-alt"></i> Join Room
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 mb-4">
+            <!-- My Study Rooms -->
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-users"></i> My Study Rooms</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr><th>Room Name</th><th>Subject</th><th>Members</th><th>Actions</th><th>Delete</th></tr>
+                            </thead>
+                            <tbody id="roomsList">
+                                <tr><td colspan="4" class="text-center">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Study Room Modal with Tabs -->
+<div class="modal fade" id="studyRoomModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="roomModalTitle">Study Room</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" id="roomTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#chatTab" type="button">
+                            <i class="fas fa-comments"></i> Chat
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#whiteboardTab" type="button">
+                            <i class="fas fa-paintbrush"></i> Whiteboard
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#filesTab" type="button">
+                            <i class="fas fa-file-alt"></i> Shared Files
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#membersTab" type="button">
+                            <i class="fas fa-users"></i> Members
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content mt-3">
+                    <!-- Chat Tab -->
+                    <div class="tab-pane fade show active" id="chatTab">
+                        <div class="row">
+                            <div class="col-12">
+                                <div id="chatMessages" style="height: 400px; overflow-y: auto; border: 1px solid #ddd; border-radius: 10px; padding: 10px; background: #f9f9f9;">
+                                    <div class="text-center text-muted">Loading messages...</div>
+                                </div>
+                                <div class="input-group mt-2">
+                                    <input type="text" class="form-control" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') sendMessage()">
+                                    <button class="btn btn-primary" onclick="sendMessage()">
+                                        <i class="fas fa-paper-plane"></i> Send
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Whiteboard Tab -->
+                    <div class="tab-pane fade" id="whiteboardTab">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-2">
+                                    <button class="btn btn-sm btn-danger" onclick="clearWhiteboard()">
+                                        <i class="fas fa-trash"></i> Clear All
+                                    </button>
+                                    <button class="btn btn-sm btn-primary" onclick="setColor('#2E86AB')">
+                                        <i class="fas fa-palette"></i> Blue
+                                    </button>
+                                    <button class="btn btn-sm btn-success" onclick="setColor('#28a745')">
+                                        <i class="fas fa-palette"></i> Green
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="setColor('#ffc107')">
+                                        <i class="fas fa-palette"></i> Yellow
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="setColor('#dc3545')">
+                                        <i class="fas fa-palette"></i> Red
+                                    </button>
+                                    <button class="btn btn-sm btn-dark" onclick="setColor('#000000')">
+                                        <i class="fas fa-palette"></i> Black
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary" onclick="setSize(3)">
+                                        <i class="fas fa-pen"></i> Small
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary" onclick="setSize(6)">
+                                        <i class="fas fa-pen-fancy"></i> Medium
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary" onclick="setSize(10)">
+                                        <i class="fas fa-paintbrush"></i> Large
+                                    </button>
+                                    <button class="btn btn-sm btn-info" onclick="saveWhiteboard()">
+                                        <i class="fas fa-save"></i> Save
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="testSocket()">
+                                        <i class="fas fa-plug"></i> Test
+                                    </button>
+                                    <span class="ms-3" id="liveIndicator">
+                                        <i class="fas fa-circle" style="font-size: 10px; color: #dc3545;"></i> Connecting...
+                                    </span>
+                                </div>
+                                <canvas id="whiteboard" style="border: 2px solid #ddd; border-radius: 10px; cursor: crosshair; background: white; width: 100%; height: 450px; touch-action: none;"></canvas>
+                                <div class="mt-2 text-center text-muted small">
+                                    <i class="fas fa-info-circle"></i> Draw on the whiteboard - everyone in the room sees it in real-time!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Files Tab -->
+                    <div class="tab-pane fade" id="filesTab">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <form id="uploadFileForm" enctype="multipart/form-data">
+                                            <div class="input-group">
+                                                <input type="file" class="form-control" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif,.xlsx,.csv">
+                                                <button type="submit" class="btn btn-primary">Upload</button>
+                                            </div>
+                                            <small class="text-muted">Allowed: PDF, DOC, PPT, Images, Excel, Text (Max 10MB)</small>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="filesList" style="max-height: 400px; overflow-y: auto;">
+                                    <div class="text-center text-muted">No files shared yet</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Members Tab -->
+                    <div class="tab-pane fade" id="membersTab">
+                        <div id="membersList" style="max-height: 400px; overflow-y: auto;">
+                            <div class="text-center text-muted">Loading members...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+<script>
+// ============ VARIABLES ============
+let currentRoomId = null;
+let messageInterval = null;
+let socket = null;
+let whiteboardCanvas = null;
+let whiteboardCtx = null;
+let drawing = false;
+let lastX = 0, lastY = 0;
+let currentColor = '#2E86AB';
+let currentSize = 3;
+let saveTimeout = null;
+let isRemoteUpdate = false;
+
+// ============ ROOM MANAGEMENT ============
+async function loadRooms() {
+    const response = await fetch('/api/study-rooms');
+    const rooms = await response.json();
+    
+    const tbody = document.getElementById('roomsList');
+    if (rooms.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">No study rooms yet. Create or join one!</td></tr>';
+        return;
+    }
+    
+    let html = '';
+    rooms.forEach(room => {
+        html += `
+            <tr>
+                <td><strong>${escapeHtml(room.room_name)}</strong><br><small class="text-muted">Code: ${room.room_code}</small></td>
+                <td>${escapeHtml(room.subject)}</td>
+                <td>${room.member_count}</td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="openRoom(${room.room_id}, '${escapeHtml(room.room_name)}')">
+                        <i class="fas fa-door-open"></i> Enter
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="deleteRoom(${room.room_id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+document.getElementById('createRoomForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const roomName = document.getElementById('roomName').value;
+    const subject = document.getElementById('subject').value;
+    
+    const response = await fetch('/api/create-study-room', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_name: roomName, subject: subject })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        alert(`✅ Room created! Room Code: ${result.room_code}\nShare this code with friends to join!`);
+        loadRooms();
+        document.getElementById('createRoomForm').reset();
+    } else {
+        alert('Error: ' + result.error);
+    }
+});
+
+document.getElementById('joinRoomForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const roomCode = document.getElementById('roomCode').value;
+    
+    const response = await fetch('/api/join-study-room', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_code: roomCode })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        alert(`✅ Joined ${result.room_name}!`);
+        loadRooms();
+        document.getElementById('joinRoomForm').reset();
+        openRoom(result.room_id, result.room_name);
+    } else {
+        alert('Error: ' + result.error);
+    }
+});
+
+async function openRoom(roomId, roomName) {
+    currentRoomId = roomId;
+    document.getElementById('roomModalTitle').innerText = roomName;
+    
+    await loadMessages();
+    await loadMembers();
+    await loadFiles();
+    
+    // Initialize SocketIO connection
+    initSocket(roomId);
+    
+    // Initialize whiteboard
+    setTimeout(() => {
+        initWhiteboard();
+        loadWhiteboard();
+    }, 500);
+    
+    if (messageInterval) clearInterval(messageInterval);
+    messageInterval = setInterval(() => {
+        if (document.getElementById('studyRoomModal').classList.contains('show')) {
+            loadMessages();
+            loadMembers();
+        }
+    }, 5000);
+    
+    new bootstrap.Modal(document.getElementById('studyRoomModal')).show();
+}
+
+// ============ SOCKET.IO REAL-TIME ============
+function initSocket(roomId) {
+    if (socket) {
+        socket.disconnect();
+    }
+    
+    socket = io();
+    
+    socket.on('connect', function() {
+        console.log('✅ Socket connected successfully');
+        socket.emit('join_room', { room_id: roomId });
+        document.getElementById('liveIndicator').innerHTML = '<i class="fas fa-circle" style="font-size: 10px; color: #28a745;"></i> Live - Connected';
+    });
+    
+    socket.on('disconnect', function() {
+        console.log('❌ Socket disconnected');
+        document.getElementById('liveIndicator').innerHTML = '<i class="fas fa-circle" style="font-size: 10px; color: #dc3545;"></i> Offline';
+    });
+    
+    socket.on('whiteboard_update', function(data) {
+        console.log('📡 Received whiteboard update from server');
+        if (data.action === 'draw' && data.drawing_data) {
+            console.log('Updating whiteboard from remote');
+            isRemoteUpdate = true;
+            
+            const img = new Image();
+            img.onload = function() {
+                if (whiteboardCtx && whiteboardCanvas) {
+                    whiteboardCtx.clearRect(0, 0, whiteboardCanvas.width, whiteboardCanvas.height);
+                    whiteboardCtx.drawImage(img, 0, 0, whiteboardCanvas.width, whiteboardCanvas.height);
+                    console.log('✅ Whiteboard updated from remote');
+                }
+                setTimeout(() => { isRemoteUpdate = false; }, 100);
+            };
+            img.onerror = function() {
+                console.error('Failed to load image');
+                isRemoteUpdate = false;
+            };
+            img.src = data.drawing_data;
+        }
+    });
+    
+    socket.on('whiteboard_clear', function(data) {
+        console.log('📡 Received whiteboard clear event');
+        isRemoteUpdate = true;
+        if (whiteboardCtx) {
+            whiteboardCtx.clearRect(0, 0, whiteboardCanvas.width, whiteboardCanvas.height);
+        }
+        setTimeout(() => { isRemoteUpdate = false; }, 100);
+    });
+    
+    socket.on('joined_room', function(data) {
+        console.log('✅ Successfully joined room:', data.room_id);
+    });
+}
+
+function testSocket() {
+    if (socket && socket.connected) {
+        alert('✅ Socket is connected! Room ID: ' + currentRoomId + '\nSocket ID: ' + socket.id);
+        console.log('Socket connected:', socket.connected);
+        console.log('Socket ID:', socket.id);
+        console.log('Room ID:', currentRoomId);
+    } else {
+        alert('❌ Socket not connected! Please refresh and try again.');
+        console.log('Socket not connected');
+    }
+}
+
+// ============ CHAT FUNCTIONS ============
+async function loadMessages() {
+    if (!currentRoomId) return;
+    
+    const response = await fetch(`/api/room-messages/${currentRoomId}`);
+    const messages = await response.json();
+    
+    const container = document.getElementById('chatMessages');
+    if (messages.length === 0) {
+        container.innerHTML = '<div class="text-center text-muted">No messages yet. Start the conversation!</div>';
+        return;
+    }
+    
+    let html = '';
+    messages.forEach(msg => {
+        const isOwn = msg.student_id === '{{ current_user.id }}';
+        html += `
+            <div class="mb-2 ${isOwn ? 'text-end' : 'text-start'}">
+                <small class="text-muted">${escapeHtml(msg.student_name)}</small>
+                <div class="d-inline-block p-2 rounded ${isOwn ? 'bg-primary text-white' : 'bg-light'}" style="max-width: 70%;">
+                    ${escapeHtml(msg.message)}
+                </div>
+                <br><small class="text-muted" style="font-size: 10px;">${new Date(msg.sent_at).toLocaleTimeString()}</small>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+    container.scrollTop = container.scrollHeight;
+}
+
+async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message || !currentRoomId) return;
+    
+    await fetch('/api/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ room_id: currentRoomId, message: message })
+    });
+    
+    input.value = '';
+    loadMessages();
+}
+
+// ============ MEMBERS FUNCTIONS ============
+async function loadMembers() {
+    if (!currentRoomId) return;
+    
+    const response = await fetch(`/api/room-members/${currentRoomId}`);
+    const members = await response.json();
+    
+    let html = '<div class="list-group">';
+    members.forEach(m => {
+        html += `<div class="list-group-item"><i class="fas fa-user-circle"></i> <strong>${escapeHtml(m.name)}</strong><br><small class="text-muted">Grade: ${m.grade}</small></div>`;
+    });
+    html += '</div>';
+    document.getElementById('membersList').innerHTML = html;
+}
+
+// ============ FILE SHARING FUNCTIONS ============
+async function loadFiles() {
+    if (!currentRoomId) return;
+    
+    const response = await fetch(`/api/room-files/${currentRoomId}`);
+    const files = await response.json();
+    
+    const container = document.getElementById('filesList');
+    if (files.length === 0) {
+        container.innerHTML = '<div class="text-center text-muted">No files shared yet. Upload your first file!</div>';
+        return;
+    }
+    
+    let html = '<div class="list-group">';
+    files.forEach(file => {
+        let fileIcon = 'fa-file';
+        if (file.file_type && file.file_type.includes('pdf')) fileIcon = 'fa-file-pdf';
+        else if (file.file_type && file.file_type.includes('doc')) fileIcon = 'fa-file-word';
+        else if (file.file_type && file.file_type.includes('ppt')) fileIcon = 'fa-file-powerpoint';
+        else if (file.file_type && (file.file_type.includes('jpg') || file.file_type.includes('png') || file.file_type.includes('gif'))) fileIcon = 'fa-file-image';
+        else if (file.file_type && (file.file_type.includes('xlsx') || file.file_type.includes('csv'))) fileIcon = 'fa-file-excel';
+        
+        const fileSizeKB = (file.file_size / 1024).toFixed(1);
+        
+        html += `
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas ${fileIcon} fa-2x me-3 text-primary"></i>
+                    <strong>${escapeHtml(file.file_name)}</strong><br>
+                    <small class="text-muted">Uploaded by ${escapeHtml(file.uploaded_by)} • ${fileSizeKB} KB • ${new Date(file.uploaded_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}</small>
+                </div>
+                <div>
+                    <a href="/api/download-file/${file.file_url}" class="btn btn-sm btn-success me-1" download>
+                        <i class="fas fa-download"></i>
+                    </a>
+                    <button class="btn btn-sm btn-danger" onclick="deleteFile(${file.file_id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+document.getElementById('uploadFileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        alert('Please select a file');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('room_id', currentRoomId);
+    formData.append('file', file);
+    
+    const response = await fetch('/api/upload-file', {
+        method: 'POST',
+        body: formData
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        alert(`✅ File "${result.filename}" uploaded successfully!`);
+        fileInput.value = '';
+        loadFiles();
+    } else {
+        alert('Error: ' + result.error);
+    }
+});
+
+async function deleteFile(fileId) {
+    if (!confirm('Are you sure you want to delete this file?')) return;
+    
+    const response = await fetch(`/api/delete-file/${fileId}`, {
+        method: 'DELETE'
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        loadFiles();
+    } else {
+        alert('Error: ' + result.error);
+    }
+}
+
+// ============ WHITEBOARD FUNCTIONS ============
+function initWhiteboard() {
+    whiteboardCanvas = document.getElementById('whiteboard');
+    if (!whiteboardCanvas) return;
+    
+    const container = whiteboardCanvas.parentElement;
+    const width = container.clientWidth - 20;
+    
+    whiteboardCanvas.width = width;
+    whiteboardCanvas.height = 450;
+    whiteboardCanvas.style.width = width + 'px';
+    whiteboardCanvas.style.height = '450px';
+    
+    whiteboardCtx = whiteboardCanvas.getContext('2d');
+    whiteboardCtx.lineCap = 'round';
+    whiteboardCtx.lineJoin = 'round';
+    whiteboardCtx.lineWidth = currentSize;
+    whiteboardCtx.strokeStyle = currentColor;
+    
+    whiteboardCanvas.addEventListener('mousedown', startDrawing);
+    whiteboardCanvas.addEventListener('mousemove', draw);
+    whiteboardCanvas.addEventListener('mouseup', stopDrawing);
+    whiteboardCanvas.addEventListener('mouseleave', stopDrawing);
+    
+    whiteboardCanvas.addEventListener('touchstart', startDrawingTouch);
+    whiteboardCanvas.addEventListener('touchmove', drawTouch);
+    whiteboardCanvas.addEventListener('touchend', stopDrawing);
+    whiteboardCanvas.addEventListener('touchcancel', stopDrawing);
+    
+    console.log('Whiteboard initialized');
+}
+
+function startDrawing(e) {
+    e.preventDefault();
+    drawing = true;
+    const pos = getCanvasCoordinates(e);
+    lastX = pos.x;
+    lastY = pos.y;
+    whiteboardCtx.beginPath();
+    whiteboardCtx.moveTo(lastX, lastY);
+    whiteboardCtx.lineTo(lastX, lastY);
+    whiteboardCtx.stroke();
+}
+
+function startDrawingTouch(e) {
+    e.preventDefault();
+    drawing = true;
+    const pos = getCanvasCoordinates(e);
+    lastX = pos.x;
+    lastY = pos.y;
+    whiteboardCtx.beginPath();
+    whiteboardCtx.moveTo(lastX, lastY);
+    whiteboardCtx.lineTo(lastX, lastY);
+    whiteboardCtx.stroke();
+}
+
+function draw(e) {
+    e.preventDefault();
+    if (!drawing || isRemoteUpdate) return;
+    
+    const pos = getCanvasCoordinates(e);
+    const currentX = pos.x;
+    const currentY = pos.y;
+    
+    whiteboardCtx.lineTo(currentX, currentY);
+    whiteboardCtx.stroke();
+    whiteboardCtx.beginPath();
+    whiteboardCtx.moveTo(currentX, currentY);
+    
+    lastX = currentX;
+    lastY = currentY;
+    
+    // Send drawing data to other users in real-time
+    if (socket && socket.connected && currentRoomId) {
+        const drawingData = whiteboardCanvas.toDataURL();
+        console.log('Sending drawing update to room:', currentRoomId);
+        socket.emit('whiteboard_draw', {
+            room_id: currentRoomId,
+            drawing_data: drawingData,
+            action: 'draw'
+        });
+    }
+    
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => saveWhiteboard(), 1000);
+}
+
+function drawTouch(e) {
+    e.preventDefault();
+    if (!drawing || isRemoteUpdate) return;
+    
+    const pos = getCanvasCoordinates(e);
+    const currentX = pos.x;
+    const currentY = pos.y;
+    
+    whiteboardCtx.lineTo(currentX, currentY);
+    whiteboardCtx.stroke();
+    whiteboardCtx.beginPath();
+    whiteboardCtx.moveTo(currentX, currentY);
+    
+    lastX = currentX;
+    lastY = currentY;
+    
+    if (socket && socket.connected && currentRoomId) {
+        const drawingData = whiteboardCanvas.toDataURL();
+        socket.emit('whiteboard_draw', {
+            room_id: currentRoomId,
+            drawing_data: drawingData,
+            action: 'draw'
+        });
+    }
+    
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => saveWhiteboard(), 1000);
+}
+
+function getCanvasCoordinates(e) {
+    const rect = whiteboardCanvas.getBoundingClientRect();
+    const scaleX = whiteboardCanvas.width / rect.width;
+    const scaleY = whiteboardCanvas.height / rect.height;
+    
+    let clientX, clientY;
+    
+    if (e.touches) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+    
+    let x = (clientX - rect.left) * scaleX;
+    let y = (clientY - rect.top) * scaleY;
+    
+    x = Math.max(0, Math.min(x, whiteboardCanvas.width));
+    y = Math.max(0, Math.min(y, whiteboardCanvas.height));
+    
+    return { x: x, y: y };
+}
+
+function stopDrawing() {
+    drawing = false;
+    whiteboardCtx.beginPath();
+}
+
+function clearWhiteboard() {
+    if (confirm('Clear the entire whiteboard? Everyone in the room will see this.')) {
+        clearWhiteboardLocal();
+        
+        if (socket && socket.connected && currentRoomId) {
+            socket.emit('whiteboard_clear', { room_id: currentRoomId });
+        }
+        
+        saveWhiteboard();
+    }
+}
+
+function clearWhiteboardLocal() {
+    if (whiteboardCtx) {
+        whiteboardCtx.clearRect(0, 0, whiteboardCanvas.width, whiteboardCanvas.height);
+    }
+}
+
+function setColor(color) {
+    currentColor = color;
+    if (whiteboardCtx) whiteboardCtx.strokeStyle = currentColor;
+}
+
+function setSize(size) {
+    currentSize = size;
+    if (whiteboardCtx) whiteboardCtx.lineWidth = currentSize;
+}
+
+async function saveWhiteboard() {
+    if (!currentRoomId || !whiteboardCanvas || isRemoteUpdate) return;
+    
+    try {
+        const drawingData = whiteboardCanvas.toDataURL();
+        await fetch(`/api/whiteboard/${currentRoomId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ drawing_data: drawingData })
+        });
+    } catch (error) {
+        console.error('Save error:', error);
+    }
+}
+
+async function loadWhiteboard() {
+    if (!currentRoomId || !whiteboardCanvas || !whiteboardCtx) return;
+    
+    try {
+        const response = await fetch(`/api/whiteboard/${currentRoomId}`);
+        const data = await response.json();
+        
+        if (data.success && data.drawing_data) {
+            const img = new Image();
+            img.onload = () => {
+                whiteboardCtx.clearRect(0, 0, whiteboardCanvas.width, whiteboardCanvas.height);
+                whiteboardCtx.drawImage(img, 0, 0, whiteboardCanvas.width, whiteboardCanvas.height);
+                console.log('Whiteboard loaded from database');
+            };
+            img.src = data.drawing_data;
+        }
+    } catch (error) {
+        console.error('Load error:', error);
+    }
+}
+
+// ============ UTILITY FUNCTIONS ============
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ============ MODAL CLOSE HANDLER ============
+document.getElementById('studyRoomModal').addEventListener('hidden.bs.modal', function () {
+    if (messageInterval) clearInterval(messageInterval);
+    if (saveTimeout) clearTimeout(saveTimeout);
+    if (whiteboardCanvas) {
+        saveWhiteboard();
+    }
+    if (socket) {
+        socket.emit('leave_room', { room_id: currentRoomId });
+    }
+});
+
+function deleteRoom(roomId) {
+    if(confirm('Delete this room?')){
+        fetch('/api/delete-study-room/' + roomId, {method: 'DELETE'})
+        .then(r => r.json())
+        .then(d => {if(d.success){loadRooms(); alert('Deleted');}else{alert(d.error);}});
+    }
+}
+
+// ============ INITIALIZE ============
+loadRooms();
+</script>
+{% endblock %}

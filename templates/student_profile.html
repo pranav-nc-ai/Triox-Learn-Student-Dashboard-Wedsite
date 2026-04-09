@@ -1,0 +1,1145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content text-center">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> STUDENT ANALYTICS PORTAL
+                <span class="live-badge">LIVE</span>
+            </div>
+            <div class="profile-icon">
+                <i class="fas fa-user-astronaut"></i>
+                <div class="icon-ring"></div>
+                <div class="icon-ring delay-1"></div>
+                <div class="icon-ring delay-2"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">STUDENT</span>
+                <span class="neon-text">PROFILE</span>
+            </h1>
+            <p class="cyber-subtitle">Comprehensive analytics • Performance insights • Academic journey</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <a href="{{ url_for('students') }}" class="cyber-back-btn mb-4">
+                <i class="fas fa-arrow-left"></i> BACK TO ALL STUDENTS
+                <div class="btn-glow"></div>
+            </a>
+        </div>
+    </div>
+
+    <div id="profileContent">
+        <div class="text-center py-5">
+            <div class="cyber-spinner"></div>
+            <p class="mt-3 text-light">Loading student profile...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Credentials Modal -->
+<div class="modal fade cyber-modal" id="credentialsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(90deg, rgba(0,255,136,0.2), rgba(0,212,255,0.1));">
+                <h5 class="modal-title">
+                    <i class="fas fa-key"></i> LOGIN CREDENTIALS
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="credentialsContent">
+                <div class="text-center">
+                    <div class="cyber-spinner"></div>
+                    <p>Loading credentials...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cyber-cancel-btn" data-bs-dismiss="modal">CLOSE</button>
+                <button class="cyber-print-btn" onclick="printCredentialsModal()">
+                    <i class="fas fa-print"></i> PRINT
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ============ STUDENT PROFILE FUTURISTIC STYLES ============ */
+
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.profile-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.profile-icon i {
+    font-size: 3rem;
+    color: #00ff88;
+}
+
+.icon-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+.icon-ring.delay-1 { animation-delay: 0.7s; }
+.icon-ring.delay-2 { animation-delay: 1.4s; }
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Back Button */
+.cyber-back-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 30px;
+    color: #00ff88;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.cyber-back-btn:hover {
+    background: rgba(0, 255, 136, 0.2);
+    transform: translateX(-5px);
+    color: #00ff88;
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.cyber-back-btn:hover .btn-glow {
+    left: 100%;
+}
+
+/* Hero Section */
+.profile-hero {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.profile-hero-content {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.profile-avatar {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: avatarPulse 2s ease-in-out infinite;
+}
+
+@keyframes avatarPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+    50% { box-shadow: 0 0 0 20px rgba(0, 255, 136, 0); }
+}
+
+.profile-avatar i {
+    font-size: 3rem;
+    color: #000;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.profile-id {
+    font-size: 0.85rem;
+    color: #00ff88;
+    margin-bottom: 10px;
+}
+
+.profile-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.profile-badge {
+    background: rgba(0, 255, 136, 0.15);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    color: #00ff88;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 30px;
+}
+
+.profile-stat {
+    text-align: center;
+}
+
+.profile-stat-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.profile-stat-label {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+/* Credentials Button */
+.credentials-btn {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 255, 136, 0.05));
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 30px;
+    padding: 10px 24px;
+    color: #00d4ff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.credentials-btn:hover {
+    background: rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Cards Grid */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-neon {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #00ff88;
+}
+
+.card-header-neon i {
+    font-size: 1rem;
+}
+
+.card-body-neon {
+    padding: 20px;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: #6b6b6b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-label i {
+    width: 20px;
+    color: #00d4ff;
+}
+
+.info-value {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+/* Scores Grid */
+.scores-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.score-card {
+    text-align: center;
+    padding: 15px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+.score-card:hover {
+    transform: translateY(-5px);
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.score-icon {
+    width: 45px;
+    height: 45px;
+    background: rgba(0, 255, 136, 0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+}
+
+.score-icon i {
+    font-size: 1.2rem;
+    color: #00ff88;
+}
+
+.score-label {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+    margin-bottom: 5px;
+}
+
+.score-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+/* Grade Card */
+.grade-card {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 212, 255, 0.05));
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.grade-value {
+    font-size: 4rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.grade-label {
+    font-size: 0.8rem;
+    color: #6b6b6b;
+    margin-top: 5px;
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-top: 15px;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #a0a0a0;
+    margin-bottom: 5px;
+}
+
+.progress-bar-bg {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+/* Performance Indicators */
+.performance-indicator {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 12px;
+}
+
+.indicator-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 255, 136, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.indicator-icon i {
+    font-size: 1.2rem;
+    color: #00ff88;
+}
+
+.indicator-info {
+    flex: 1;
+}
+
+.indicator-label {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.indicator-value {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+/* Loading */
+.cyber-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Modal Styles */
+.cyber-modal .modal-content {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 24px;
+}
+
+.cyber-cancel-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 8px 20px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.cyber-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.cyber-print-btn {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 12px;
+    padding: 8px 20px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cyber-print-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Credentials Display */
+.credentials-card {
+    background: rgba(0, 255, 136, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.credentials-card h4 {
+    color: #00ff88;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.credential-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.credential-label {
+    font-size: 0.8rem;
+    color: #6b6b6b;
+}
+
+.credential-value {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #00ff88;
+    font-family: monospace;
+}
+
+.copy-btn {
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    padding: 4px 12px;
+    color: #00d4ff;
+    cursor: pointer;
+    font-size: 0.7rem;
+    margin-left: 10px;
+}
+
+.copy-btn:hover {
+    background: rgba(0, 212, 255, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+    .scores-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .profile-hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+    .scores-grid {
+        grid-template-columns: 1fr;
+    }
+    .profile-stats {
+        justify-content: center;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once: true });
+
+const studentId = window.location.pathname.split('/').pop();
+const currentUserRole = '{{ current_user.role }}';
+let credentialsData = null;
+
+async function loadProfile() {
+    try {
+        const response = await fetch(`/api/student/${studentId}`);
+        const s = await response.json();
+        
+        const dataResponse = await fetch(`/api/student-data/${studentId}`);
+        const data = await dataResponse.json();
+        
+        // Load credentials for admin/teacher
+        if (currentUserRole === 'admin' || currentUserRole === 'teacher') {
+            await loadCredentials();
+        }
+        
+        document.getElementById('profileContent').innerHTML = `
+            <!-- Hero Section -->
+            <div class="profile-hero" data-aos="fade-up">
+                <div class="profile-hero-content">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-astronaut"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name">${escapeHtml(s.name)}</h1>
+                        <div class="profile-id">Student ID: ${s.student_id}</div>
+                        <div class="profile-badges">
+                            <span class="profile-badge"><i class="fas fa-venus-mars"></i> ${s.gender}</span>
+                            <span class="profile-badge"><i class="fas fa-calendar-alt"></i> Age: ${s.age} years</span>
+                            <span class="profile-badge"><i class="fas fa-clock"></i> Joined: 2024</span>
+                        </div>
+                        ${(currentUserRole === 'admin' || currentUserRole === 'teacher') ? `
+                            <button class="credentials-btn" onclick="showCredentialsModal()">
+                                <i class="fas fa-key"></i> VIEW LOGIN CREDENTIALS
+                            </button>
+                        ` : ''}
+                    </div>
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">${data.rank}</div>
+                            <div class="profile-stat-label">Class Rank</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">${data.total_students}</div>
+                            <div class="profile-stat-label">Total Students</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">${s.attendance_percentage}%</div>
+                            <div class="profile-stat-label">Attendance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-grid">
+                <!-- Personal Information Card -->
+                <div class="glass-card" data-aos="fade-right" data-aos-delay="100">
+                    <div class="card-header-neon">
+                        <i class="fas fa-user-circle"></i>
+                        PERSONAL INFORMATION
+                    </div>
+                    <div class="card-body-neon">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-tag"></i> Student ID</div>
+                                <div class="info-value">${s.student_id}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-user"></i> Full Name</div>
+                                <div class="info-value">${escapeHtml(s.name)}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-venus-mars"></i> Gender</div>
+                                <div class="info-value">${s.gender}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-calendar"></i> Age</div>
+                                <div class="info-value">${s.age} years</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-graduation-cap"></i> Parent Education</div>
+                                <div class="info-value">${s.parent_education_level}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-dollar-sign"></i> Parent Income</div>
+                                <div class="info-value">$${s.parent_income ? s.parent_income.toLocaleString("en-IN", {timeZone: "Asia/Kolkata"}) : 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-wifi"></i> Internet Access</div>
+                                <div class="info-value">${s.internet_access_at_home || 'N/A'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-bed"></i> Sleep Hours</div>
+                                <div class="info-value">${s.sleep_hours} hours/day</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-futbol"></i> Extracurricular</div>
+                                <div class="info-value">${s.extracurricular_activities || 'No'}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-chalkboard"></i> Tuition Classes</div>
+                                <div class="info-value">${s.tuition_classes || 'No'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Performance Card -->
+                <div class="glass-card" data-aos="fade-left" data-aos-delay="100">
+                    <div class="card-header-neon">
+                        <i class="fas fa-chart-line"></i>
+                        ACADEMIC PERFORMANCE
+                    </div>
+                    <div class="card-body-neon">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-clock"></i> Study Hours</div>
+                                <div class="info-value">${s.study_hours} hours/day</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-chart-simple"></i> Previous Score</div>
+                                <div class="info-value">${s.previous_score}%</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-calendar-check"></i> Attendance</div>
+                                <div class="info-value">${s.attendance_percentage}%</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label"><i class="fas fa-star"></i> Class Rank</div>
+                                <div class="info-value">#${data.rank} / ${data.total_students}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-header">
+                                <span>Performance vs Class Average</span>
+                                <span>${s.final_score}% vs ${data.class_average}%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-fill" style="width: ${(s.final_score / data.class_average) * 100}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="performance-indicator">
+                            <div class="indicator-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="indicator-info">
+                                <div class="indicator-label">Performance Status</div>
+                                <div class="indicator-value">
+                                    ${s.final_score >= data.class_average ? 'Above Average 🚀' : 'Below Average 📚'}
+                                </div>
+                            </div>
+                            <div class="indicator-info">
+                                <div class="indicator-label">Gap to Top</div>
+                                <div class="indicator-value">${(100 - s.final_score).toFixed(1)}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Component Scores Section -->
+            <div class="glass-card mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-header-neon">
+                    <i class="fas fa-chart-pie"></i>
+                    COMPONENT SCORES BREAKDOWN
+                </div>
+                <div class="card-body-neon">
+                    <div class="scores-grid">
+                        <div class="score-card">
+                            <div class="score-icon"><i class="fas fa-pen"></i></div>
+                            <div class="score-label">Midterm Exam</div>
+                            <div class="score-value">${s.midterm_score}%</div>
+                            <div class="progress-bar-bg mt-2">
+                                <div class="progress-fill" style="width: ${s.midterm_score}%"></div>
+                            </div>
+                            <small class="text-muted">25% Weight</small>
+                        </div>
+                        <div class="score-card">
+                            <div class="score-icon"><i class="fas fa-book"></i></div>
+                            <div class="score-label">Assignments</div>
+                            <div class="score-value">${s.assignment_score}%</div>
+                            <div class="progress-bar-bg mt-2">
+                                <div class="progress-fill" style="width: ${s.assignment_score}%"></div>
+                            </div>
+                            <small class="text-muted">20% Weight</small>
+                        </div>
+                        <div class="score-card">
+                            <div class="score-icon"><i class="fas fa-question-circle"></i></div>
+                            <div class="score-label">Quizzes</div>
+                            <div class="score-value">${s.quiz_score}%</div>
+                            <div class="progress-bar-bg mt-2">
+                                <div class="progress-fill" style="width: ${s.quiz_score}%"></div>
+                            </div>
+                            <small class="text-muted">15% Weight</small>
+                        </div>
+                        <div class="score-card">
+                            <div class="score-icon"><i class="fas fa-project-diagram"></i></div>
+                            <div class="score-label">Projects</div>
+                            <div class="score-value">${s.project_score}%</div>
+                            <div class="progress-bar-bg mt-2">
+                                <div class="progress-fill" style="width: ${s.project_score}%"></div>
+                            </div>
+                            <small class="text-muted">40% Weight</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Grade Card -->
+            <div class="row">
+                <div class="col-md-6 mx-auto" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="grade-card">
+                        <div class="grade-value">${s.grade}</div>
+                        <div class="grade-label">FINAL GRADE</div>
+                        <div class="progress-container mt-3">
+                            <div class="progress-header">
+                                <span>Final Score</span>
+                                <span>${s.final_score}%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-fill" style="width: ${s.final_score}%"></div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                ${s.final_score >= 90 ? '🏆 Excellent Performance! Keep it up!' : 
+                                  s.final_score >= 80 ? '🌟 Very Good! Aim for A+ next time!' :
+                                  s.final_score >= 70 ? '📈 Good Progress! Consistent effort needed!' :
+                                  s.final_score >= 60 ? '📚 Need Improvement! Focus on weak areas!' :
+                                  '💪 Needs Significant Improvement! Seek help!'}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="glass-card mt-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-header-neon">
+                    <i class="fas fa-chart-line"></i>
+                    PERFORMANCE COMPARISON
+                </div>
+                <div class="card-body-neon">
+                    <canvas id="performanceChart" height="250"></canvas>
+                </div>
+            </div>
+        `;
+        
+        // Create performance chart
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Midterm', 'Assignment', 'Quiz', 'Project', 'Final Score'],
+                datasets: [
+                    {
+                        label: 'Student Score',
+                        data: [s.midterm_score, s.assignment_score, s.quiz_score, s.project_score, s.final_score],
+                        backgroundColor: 'rgba(0, 255, 136, 0.7)',
+                        borderRadius: 10,
+                        borderWidth: 0
+                    },
+                    {
+                        label: 'Class Average',
+                        data: [data.class_average, data.class_average, data.class_average, data.class_average, data.class_average],
+                        backgroundColor: 'rgba(0, 212, 255, 0.5)',
+                        borderRadius: 10,
+                        borderWidth: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: { backgroundColor: '#000', titleColor: '#fff', bodyColor: '#fff' }
+                },
+                scales: {
+                    y: { 
+                        min: 0, 
+                        max: 100, 
+                        ticks: { color: '#fff' }, 
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        title: { display: true, text: 'Score (%)', color: '#00ff88' }
+                    },
+                    x: { 
+                        ticks: { color: '#fff' },
+                        title: { display: true, text: 'Components', color: '#00ff88' }
+                    }
+                }
+            }
+        });
+        
+    } catch(err) {
+        console.error('Error:', err);
+        document.getElementById('profileContent').innerHTML = `<div class="alert alert-danger text-center">Error loading profile: ${err.message}</div>`;
+    }
+}
+
+async function loadCredentials() {
+    try {
+        const response = await fetch(`/api/student-credentials/${studentId}`);
+        const data = await response.json();
+        if (data.success) {
+            credentialsData = data;
+        }
+    } catch(err) {
+        console.error('Error loading credentials:', err);
+    }
+}
+
+async function showCredentialsModal() {
+    // Show loading
+    document.getElementById('credentialsContent').innerHTML = `
+        <div class="text-center">
+            <div class="cyber-spinner"></div>
+            <p>Loading credentials...</p>
+        </div>
+    `;
+    
+    try {
+        const response = await fetch(`/api/student-credentials/${studentId}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            credentialsData = data;
+            document.getElementById('credentialsContent').innerHTML = `
+                <div class="credentials-card">
+                    <h4><i class="fas fa-user-graduate"></i> Student Login Credentials</h4>
+                    <div class="credential-row">
+                        <span class="credential-label">Student ID:</span>
+                        <span class="credential-value">${escapeHtml(data.student_id)}</span>
+                        <button class="copy-btn" onclick="copyToClipboard('${data.student_id}')">Copy</button>
+                    </div>
+                    <div class="credential-row">
+                        <span class="credential-label">Student Name:</span>
+                        <span class="credential-value">${escapeHtml(data.student_name)}</span>
+                    </div>
+                    <div class="credential-row">
+                        <span class="credential-label">Email:</span>
+                        <span class="credential-value">${escapeHtml(data.student_email)}</span>
+                        <button class="copy-btn" onclick="copyToClipboard('${data.student_email}')">Copy</button>
+                    </div>
+                    <div class="credential-row">
+                        <span class="credential-label">Password:</span>
+                        <span class="credential-value"><code>${escapeHtml(data.student_password)}</code></span>
+                        <button class="copy-btn" onclick="copyToClipboard('${data.student_password}')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="credentials-card">
+                    <h4><i class="fas fa-users"></i> Parent Login Credentials</h4>
+                    <div class="credential-row">
+                        <span class="credential-label">Parent Email:</span>
+                        <span class="credential-value">${escapeHtml(data.parent_email)}</span>
+                        <button class="copy-btn" onclick="copyToClipboard('${data.parent_email}')">Copy</button>
+                    </div>
+                    <div class="credential-row">
+                        <span class="credential-label">Parent Password:</span>
+                        <span class="credential-value"><code>${escapeHtml(data.parent_password)}</code></span>
+                        <button class="copy-btn" onclick="copyToClipboard('${data.parent_password}')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle"></i>
+                    <small>Student Portal: /student-login | Parent Portal: /parent-login</small>
+                </div>
+            `;
+        } else {
+            document.getElementById('credentialsContent').innerHTML = `
+                <div class="text-center text-danger">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                    <p>${data.error || 'Unable to load credentials'}</p>
+                    <button class="btn btn-primary mt-2" onclick="showCredentialsModal()">Retry</button>
+                </div>
+            `;
+        }
+    } catch(err) {
+        console.error('Error:', err);
+        document.getElementById('credentialsContent').innerHTML = `
+            <div class="text-center text-danger">
+                <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                <p>Network error. Please try again.</p>
+                <button class="btn btn-primary mt-2" onclick="showCredentialsModal()">Retry</button>
+            </div>
+        `;
+    }
+    
+    new bootstrap.Modal(document.getElementById('credentialsModal')).show();
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text);
+    Swal.fire({
+        title: 'Copied!',
+        text: 'Credential copied to clipboard',
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false,
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+}
+
+function printCredentialsModal() {
+    if (!credentialsData) return;
+    
+    const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Login Credentials - ${credentialsData.student_id}</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 40px; background: white; }
+                .header { text-align: center; border-bottom: 2px solid #28a745; padding-bottom: 20px; margin-bottom: 30px; }
+                .credentials { display: flex; gap: 30px; margin: 30px 0; flex-wrap: wrap; }
+                .student-card, .parent-card { flex: 1; border: 1px solid #ddd; border-radius: 10px; padding: 20px; }
+                .student-card { border-left: 4px solid #28a745; }
+                .parent-card { border-left: 4px solid #17a2b8; }
+                .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #666; }
+                code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+                h3 { margin-top: 0; }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>NEXUSLEARN - Login Credentials</h2>
+                <p>Student: ${credentialsData.student_name} (${credentialsData.student_id})</p>
+            </div>
+            
+            <div class="credentials">
+                <div class="student-card">
+                    <h3>🎓 Student Login</h3>
+                    <p><strong>Student ID:</strong> ${credentialsData.student_id}</p>
+                    <p><strong>Email:</strong> ${credentialsData.student_email}</p>
+                    <p><strong>Password:</strong> <code>${credentialsData.student_password}</code></p>
+                </div>
+                
+                <div class="parent-card">
+                    <h3>👪 Parent Login</h3>
+                    <p><strong>Email:</strong> ${credentialsData.parent_email}</p>
+                    <p><strong>Password:</strong> <code>${credentialsData.parent_password}</code></p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Login URL: http://localhost:5000</p>
+                <p>Student Portal: /student-login | Parent Portal: /parent-login</p>
+                <p>Please keep these credentials safe.</p>
+            </div>
+        </body>
+        </html>
+    `;
+    
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.print();
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+loadProfile();
+</script>
+{% endblock %}

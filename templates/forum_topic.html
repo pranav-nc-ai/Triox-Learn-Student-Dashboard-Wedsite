@@ -1,0 +1,884 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> TOPIC DISCUSSION
+                <span class="live-badge">ACTIVE</span>
+            </div>
+            <div class="topic-detail-icon">
+                <i class="fas fa-comment-dots"></i>
+                <div class="topic-ring"></div>
+            </div>
+            <h1 class="cyber-title" id="topicTitle">
+                <span class="gradient-text">DISCUSSION</span>
+                <span class="neon-text">THREAD</span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-9 mx-auto">
+            <!-- Back Button -->
+            <a href="/forum" class="cyber-back-btn mb-4">
+                <i class="fas fa-arrow-left"></i> BACK TO FORUM
+                <div class="btn-glow"></div>
+            </a>
+
+            <!-- Topic Content Card -->
+            <div class="topic-glass-card mb-4" data-aos="fade-up">
+                <div class="topic-header-cyber" id="topicHeader">
+                    <div class="topic-author-avatar">
+                        <i class="fas fa-user-astronaut"></i>
+                    </div>
+                    <div class="topic-author-info">
+                        <div class="topic-author-name" id="topicAuthor">--</div>
+                        <div class="topic-date" id="topicDate">--</div>
+                    </div>
+                    <div class="topic-stats">
+                        <div class="stat-badge"><i class="fas fa-eye"></i> <span id="topicViews">0</span> views</div>
+                    </div>
+                </div>
+                <div class="topic-body-cyber">
+                    <h2 class="topic-title-text" id="topicTitleText">Loading...</h2>
+                    <div class="topic-content" id="topicContent"></div>
+                </div>
+                <div class="topic-footer-cyber" id="topicActions" style="display: none; padding: 15px 25px; border-top: 1px solid rgba(0, 255, 136, 0.1);">
+                    <button class="delete-topic-btn" id="deleteTopicBtn" onclick="deleteCurrentTopic()">
+                        <i class="fas fa-trash"></i> DELETE THIS TOPIC
+                    </button>
+                </div>
+            </div>
+
+            <!-- Replies Section -->
+            <div class="replies-glass-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-header-cyber">
+                    <div class="header-left">
+                        <i class="fas fa-reply-all"></i> REPLIES
+                        <span class="reply-count" id="replyCount">0</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="sort-btn" onclick="sortReplies('oldest')">
+                            <i class="fas fa-sort-amount-down"></i> Oldest First
+                        </button>
+                        <button class="sort-btn" onclick="sortReplies('newest')">
+                            <i class="fas fa-sort-amount-up"></i> Newest First
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="repliesContainer" class="replies-container">
+                    <div class="loading-container">
+                        <div class="cyber-spinner"></div>
+                        <span>Loading replies...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Reply Section -->
+            <div class="reply-glass-card mt-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-header-cyber">
+                    <i class="fas fa-edit"></i> WRITE YOUR REPLY
+                    <div class="header-glow"></div>
+                </div>
+                <div class="card-body-cyber">
+                    <form id="replyForm">
+                        <div class="input-group-cyber">
+                            <i class="fas fa-pen-fancy"></i>
+                            <textarea id="replyContent" rows="5" placeholder="Write your reply here..."></textarea>
+                            <div class="input-focus-glow"></div>
+                        </div>
+                        
+                        <div class="reply-actions mt-3">
+                            <button type="submit" class="cyber-submit-btn" id="replySubmitBtn">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>POST REPLY</span>
+                                <div class="btn-glow"></div>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="replyMessage" class="mt-3" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ============ FUTURISTIC FORUM TOPIC STYLES ============ */
+
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.topic-detail-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.topic-detail-icon i {
+    font-size: 3rem;
+    color: #00ff88;
+}
+
+.topic-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.cyber-back-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 30px;
+    color: #00ff88;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.cyber-back-btn:hover {
+    background: rgba(0, 255, 136, 0.2);
+    transform: translateX(-5px);
+    color: #00ff88;
+}
+
+.topic-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.topic-header-cyber {
+    padding: 20px 25px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.topic-author-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topic-author-avatar i {
+    font-size: 1.5rem;
+    color: #000;
+}
+
+.topic-author-info {
+    flex: 1;
+}
+
+.topic-author-name {
+    font-weight: bold;
+    color: #00ff88;
+    margin-bottom: 5px;
+}
+
+.topic-date {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.topic-stats {
+    display: flex;
+    gap: 15px;
+}
+
+.topic-body-cyber {
+    padding: 25px;
+}
+
+.topic-title-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.topic-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+}
+
+.topic-content p {
+    margin-bottom: 15px;
+}
+
+.delete-topic-btn {
+    background: rgba(255, 68, 68, 0.15);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 20px;
+    padding: 8px 20px;
+    color: #ff4444;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-topic-btn:hover {
+    background: rgba(255, 68, 68, 0.3);
+    transform: translateY(-2px);
+}
+
+.replies-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+}
+
+.card-header-cyber {
+    padding: 18px 24px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.05));
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #00d4ff;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reply-count {
+    background: rgba(0, 212, 255, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.sort-btn {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    padding: 6px 15px;
+    color: #00d4ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 8px;
+}
+
+.sort-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+}
+
+.replies-container {
+    padding: 20px;
+}
+
+.reply-card {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.reply-card:hover {
+    border-color: #00d4ff;
+    transform: translateX(5px);
+}
+
+.reply-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.reply-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.reply-avatar {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reply-avatar i {
+    font-size: 1rem;
+    color: #000;
+}
+
+.reply-author-name {
+    font-weight: bold;
+    color: #00d4ff;
+}
+
+.reply-date {
+    font-size: 0.65rem;
+    color: #6b6b6b;
+}
+
+.reply-content {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+}
+
+.reply-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reply-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.like-reply-btn, .dislike-reply-btn, .delete-reply-btn {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.like-reply-btn {
+    color: #00ff88;
+}
+
+.like-reply-btn:hover, .like-reply-btn.liked {
+    background: #00ff88;
+    color: #000;
+}
+
+.dislike-reply-btn {
+    color: #ff4444;
+}
+
+.dislike-reply-btn:hover, .dislike-reply-btn.disliked {
+    background: #ff4444;
+    color: #fff;
+}
+
+.delete-reply-btn {
+    color: #ff4444;
+}
+
+.delete-reply-btn:hover {
+    background: #ff4444;
+    color: #fff;
+}
+
+.reply-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-body-cyber {
+    padding: 24px;
+}
+
+.input-group-cyber {
+    position: relative;
+}
+
+.input-group-cyber i {
+    position: absolute;
+    left: 15px;
+    top: 20px;
+    color: #00ff88;
+    z-index: 1;
+}
+
+.input-group-cyber textarea {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 0.9rem;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.input-group-cyber textarea:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.input-focus-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-group-cyber textarea:focus + .input-focus-glow {
+    opacity: 1;
+}
+
+.reply-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cyber-submit-btn {
+    position: relative;
+    padding: 10px 30px;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    border-radius: 30px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.cyber-submit-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.cyber-submit-btn:hover .btn-glow {
+    left: 100%;
+}
+
+.loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 60px;
+    color: #a0a0a0;
+}
+
+.cyber-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0, 255, 136, 0.2);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .topic-header-cyber {
+        flex-wrap: wrap;
+    }
+    .reply-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once: true });
+
+const topicId = {{ topic_id }};
+let currentSort = 'oldest';
+let allReplies = [];
+let currentUserId = '{{ current_user.id }}';
+let currentUserRole = '{{ current_user.role }}';
+let topicData = null;
+
+async function loadTopic() {
+    try {
+        const response = await fetch(`/api/topic/${topicId}`);
+        topicData = await response.json();
+        
+        document.getElementById('topicTitleText').innerText = topicData.title;
+        document.getElementById('topicTitle').innerHTML = `<span class="gradient-text">${escapeHtml(topicData.title)}</span>`;
+        document.getElementById('topicAuthor').innerText = topicData.author;
+        document.getElementById('topicDate').innerHTML = `<i class="fas fa-calendar-alt"></i> ${new Date(topicData.created_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}`;
+        document.getElementById('topicViews').innerText = topicData.views;
+        document.getElementById('topicContent').innerHTML = formatContent(topicData.content);
+        
+        // Show delete button for topic owner or admin
+        const canDeleteTopic = (currentUserRole === 'admin' || topicData.student_id === currentUserId);
+        document.getElementById('topicActions').style.display = canDeleteTopic ? 'block' : 'none';
+        
+        allReplies = topicData.replies;
+        document.getElementById('replyCount').innerText = allReplies.length;
+        
+        displayReplies();
+        
+    } catch(err) {
+        console.error('Error loading topic:', err);
+        document.getElementById('topicContent').innerHTML = '<div class="text-center text-danger">Error loading topic</div>';
+    }
+}
+
+function displayReplies() {
+    let replies = [...allReplies];
+    
+    if (currentSort === 'oldest') {
+        replies.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    } else {
+        replies.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+    
+    const container = document.getElementById('repliesContainer');
+    
+    if (replies.length === 0) {
+        container.innerHTML = `
+            <div class="empty-replies text-center py-5">
+                <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
+                <p>No replies yet. Be the first to respond!</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    replies.forEach(reply => {
+        const canDeleteReply = (currentUserRole === 'admin' || reply.student_id === currentUserId || topicData.student_id === currentUserId);
+        const likedClass = reply.user_liked ? 'liked' : '';
+        const dislikedClass = reply.user_disliked ? 'disliked' : '';
+        
+        html += `
+            <div class="reply-card" id="reply-${reply.reply_id}">
+                <div class="reply-header">
+                    <div class="reply-author">
+                        <div class="reply-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div class="reply-author-name">${escapeHtml(reply.author)}</div>
+                            <div class="reply-date">${new Date(reply.created_at).toLocaleString("en-IN", {timeZone: "Asia/Kolkata"})}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reply-content">
+                    ${formatContent(reply.content)}
+                </div>
+                <div class="reply-footer">
+                    <div class="reply-actions">
+                        <button class="like-reply-btn ${likedClass}" onclick="likeReply(${reply.reply_id})">
+                            👍 <span id="reply-likes-${reply.reply_id}">${reply.likes || 0}</span>
+                        </button>
+                        <button class="dislike-reply-btn ${dislikedClass}" onclick="dislikeReply(${reply.reply_id})">
+                            👎 <span id="reply-dislikes-${reply.reply_id}">${reply.dislikes || 0}</span>
+                        </button>
+                        ${canDeleteReply ? `<button class="delete-reply-btn" onclick="deleteReply(${reply.reply_id})">
+                            🗑️ Delete
+                        </button>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    container.innerHTML = html;
+}
+
+function formatContent(text) {
+    if (!text) return '';
+    return escapeHtml(text).replace(/\n/g, '<br>');
+}
+
+function sortReplies(sort) {
+    currentSort = sort;
+    displayReplies();
+}
+
+async function likeReply(replyId) {
+    try {
+        const response = await fetch('/api/like-reply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reply_id: replyId })
+        });
+        const result = await response.json();
+        if (result.success) {
+            document.getElementById(`reply-likes-${replyId}`).innerText = result.likes;
+            document.getElementById(`reply-dislikes-${replyId}`).innerText = result.dislikes;
+            loadTopic(); // Refresh to update button states
+        }
+    } catch(e) { console.error(e); }
+}
+
+async function dislikeReply(replyId) {
+    try {
+        const response = await fetch('/api/dislike-reply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reply_id: replyId })
+        });
+        const result = await response.json();
+        if (result.success) {
+            document.getElementById(`reply-likes-${replyId}`).innerText = result.likes;
+            document.getElementById(`reply-dislikes-${replyId}`).innerText = result.dislikes;
+            loadTopic(); // Refresh to update button states
+        }
+    } catch(e) { console.error(e); }
+}
+
+async function deleteReply(replyId) {
+    const result = await Swal.fire({
+        title: 'Delete Reply?',
+        text: 'This action cannot be undone!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+    
+    if (result.isConfirmed) {
+        const response = await fetch(`/api/delete-reply/${replyId}`, { method: 'DELETE' });
+        const data = await response.json();
+        if (data.success) {
+            Swal.fire('Deleted!', 'Reply has been deleted.', 'success');
+            loadTopic();
+        } else {
+            Swal.fire('Error!', data.error, 'error');
+        }
+    }
+}
+
+async function deleteCurrentTopic() {
+    const result = await Swal.fire({
+        title: 'Delete Topic?',
+        html: `Are you sure you want to delete "<strong>${escapeHtml(topicData.title)}</strong>"?<br>All replies will also be deleted!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete it!',
+        background: '#1a1a2e',
+        color: '#ffffff'
+    });
+    
+    if (result.isConfirmed) {
+        const response = await fetch(`/api/delete-topic/${topicId}`, { method: 'DELETE' });
+        const data = await response.json();
+        if (data.success) {
+            Swal.fire('Deleted!', 'Topic has been deleted.', 'success').then(() => {
+                window.location.href = '/forum';
+            });
+        } else {
+            Swal.fire('Error!', data.error, 'error');
+        }
+    }
+}
+
+document.getElementById('replyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const content = document.getElementById('replyContent').value.trim();
+    const submitBtn = document.getElementById('replySubmitBtn');
+    const messageDiv = document.getElementById('replyMessage');
+    
+    if (!content) {
+        messageDiv.className = 'alert alert-warning';
+        messageDiv.innerHTML = 'Please enter your reply';
+        messageDiv.style.display = 'block';
+        setTimeout(() => messageDiv.style.display = 'none', 3000);
+        return;
+    }
+    
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> POSTING...';
+    
+    try {
+        const response = await fetch('/api/add-reply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ topic_id: topicId, content: content })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            document.getElementById('replyContent').value = '';
+            
+            Swal.fire({
+                title: 'Success!',
+                text: 'Reply posted successfully!',
+                icon: 'success',
+                confirmButtonColor: '#00ff88',
+                background: '#1a1a2e',
+                color: '#ffffff'
+            }).then(() => {
+                loadTopic();
+            });
+        } else {
+            messageDiv.className = 'alert alert-danger';
+            messageDiv.innerHTML = '❌ Error: ' + (result.error || 'Failed to post reply');
+            messageDiv.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>POST REPLY</span><div class="btn-glow"></div>';
+            setTimeout(() => messageDiv.style.display = 'none', 5000);
+        }
+    } catch(error) {
+        messageDiv.className = 'alert alert-danger';
+        messageDiv.innerHTML = '❌ Network error. Please try again.';
+        messageDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>POST REPLY</span><div class="btn-glow"></div>';
+        setTimeout(() => messageDiv.style.display = 'none', 5000);
+    }
+});
+
+// Replace existing time formatting
+function formatPostTime(dateString) {
+    return TrioxTime.timeAgo(dateString);
+}
+
+function formatFullTime(dateString) {
+    return TrioxTime.toIST(dateString);
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+loadTopic();
+</script>
+{% endblock %}

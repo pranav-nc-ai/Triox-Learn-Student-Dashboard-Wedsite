@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket Test</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Socket.IO Test</h1>
+    <div id="status">Connecting...</div>
+    <button onclick="sendTest()">Send Test</button>
+    <div id="messages"></div>
+    
+    <script>
+        const socket = io();
+        
+        socket.on('connect', function() {
+            document.getElementById('status').innerHTML = '✅ Connected! ID: ' + socket.id;
+            document.getElementById('status').style.color = 'green';
+        });
+        
+        socket.on('disconnect', function() {
+            document.getElementById('status').innerHTML = '❌ Disconnected';
+            document.getElementById('status').style.color = 'red';
+        });
+        
+        socket.on('test_response', function(data) {
+            document.getElementById('messages').innerHTML += '<p>Received: ' + data.message + '</p>';
+        });
+        
+        function sendTest() {
+            socket.emit('test_message', { message: 'Hello from client!' });
+            document.getElementById('messages').innerHTML += '<p>Sent test message</p>';
+        }
+    </script>
+</body>
+</html>

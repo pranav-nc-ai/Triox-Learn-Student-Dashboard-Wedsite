@@ -1,0 +1,1092 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cyber Header -->
+    <div class="cyber-header mb-5" data-aos="fade-down" data-aos-duration="800">
+        <div class="cyber-header-glow"></div>
+        <div class="cyber-header-content text-center">
+            <div class="cyber-badge">
+                <i class="fas fa-microchip"></i> STUDENT REGISTRATION PORTAL
+                <span class="live-badge">NEW</span>
+            </div>
+            <div class="add-student-icon">
+                <i class="fas fa-user-plus"></i>
+                <div class="icon-ring"></div>
+                <div class="icon-ring delay-1"></div>
+                <div class="icon-ring delay-2"></div>
+            </div>
+            <h1 class="cyber-title">
+                <span class="gradient-text">ADD</span>
+                <span class="neon-text">STUDENT</span>
+            </h1>
+            <p class="cyber-subtitle">Register new student • Automated grade calculation • Real-time analytics</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Main Form Card -->
+            <div class="form-glass-card" data-aos="fade-up" data-aos-duration="800">
+                <div class="card-header-neon">
+                    <div class="header-left">
+                        <i class="fas fa-edit"></i>
+                        <span>STUDENT INFORMATION FORM</span>
+                    </div>
+                    <div class="header-right">
+                        <span class="step-badge">STEP 1 OF 3</span>
+                    </div>
+                    <div class="header-glow-line"></div>
+                </div>
+                <div class="card-body-neon">
+                    <form id="addStudentForm">
+                        <!-- Progress Steps -->
+                        <div class="progress-steps mb-4">
+                            <div class="step active" data-step="1">
+                                <div class="step-number">1</div>
+                                <div class="step-label">Basic Info</div>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step" data-step="2">
+                                <div class="step-number">2</div>
+                                <div class="step-label">Academic</div>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step" data-step="3">
+                                <div class="step-number">3</div>
+                                <div class="step-label">Scores</div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Basic Information -->
+                        <div class="form-step" id="step1">
+                            <div class="section-title">
+                                <i class="fas fa-user-astronaut"></i>
+                                <span>BASIC INFORMATION</span>
+                                <div class="section-line"></div>
+                            </div>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" id="name" placeholder="Enter student's full name (e.g., John Doe)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Full name as per school records</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-venus-mars"></i>
+                                        <select id="gender" class="neon-select">
+                                            <option value="Male">👨 Male</option>
+                                            <option value="Female">👩 Female</option>
+                                        </select>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Select gender</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <input type="number" id="age" min="15" max="19" placeholder="Age (15-19 years)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Student's age in years (15-19)</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <select id="parent_education" class="neon-select">
+                                            <option>High School (10th/12th pass)</option>
+                                            <option>Bachelor's (Graduate)</option>
+                                            <option>Master's (Post Graduate)</option>
+                                            <option>PhD (Doctorate)</option>
+                                        </select>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Highest education level of parents</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <input type="number" id="parent_income" step="5000" placeholder="Annual Parent Income (USD)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Total annual household income (USD)</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-wifi"></i>
+                                        <select id="internet" class="neon-select">
+                                            <option>Yes (Has internet at home)</option>
+                                            <option>No (No internet access)</option>
+                                        </select>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Does student have internet at home?</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-bed"></i>
+                                        <input type="number" id="sleep_hours" step="0.5" min="5" max="9" placeholder="Average sleep hours per day (5-9 hours)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Recommended: 7-8 hours for students</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Academic Information -->
+                        <div class="form-step" id="step2" style="display: none;">
+                            <div class="section-title">
+                                <i class="fas fa-chart-line"></i>
+                                <span>ACADEMIC INFORMATION</span>
+                                <div class="section-line"></div>
+                            </div>
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-clock"></i>
+                                        <input type="number" id="study_hours" step="0.5" min="1" max="12" placeholder="Daily study hours (1-12 hours)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Hours spent studying per day</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-chart-simple"></i>
+                                        <input type="number" id="previous_score" min="40" max="100" placeholder="Previous year percentage (40-100%)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Last year's overall percentage</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-calendar-check"></i>
+                                        <input type="number" id="attendance" min="50" max="100" placeholder="Attendance percentage (50-100%)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Overall attendance this year</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-futbol"></i>
+                                        <select id="extracurricular" class="neon-select">
+                                            <option>Yes (Participates in activities)</option>
+                                            <option>No (No extracurricular activities)</option>
+                                        </select>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Participates in sports/clubs/arts?</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-chalkboard"></i>
+                                        <select id="tuition" class="neon-select">
+                                            <option>Yes (Attends tuition/coaching)</option>
+                                            <option>No (No tuition classes)</option>
+                                        </select>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Attends additional coaching classes?</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Component Scores -->
+                        <div class="form-step" id="step3" style="display: none;">
+                            <div class="section-title">
+                                <i class="fas fa-tasks"></i>
+                                <span>COMPONENT SCORES</span>
+                                <div class="section-line"></div>
+                            </div>
+                            <div class="row g-4">
+                                <div class="col-md-3">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-pen"></i>
+                                        <input type="number" id="midterm" min="40" max="100" placeholder="Midterm Exam Score (%)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Midterm examination score (25% weight)</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-book"></i>
+                                        <input type="number" id="assignment" min="40" max="100" placeholder="Assignment Score (%)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Assignment average score (20% weight)</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-question-circle"></i>
+                                        <input type="number" id="quiz" min="40" max="100" placeholder="Quiz Score (%)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Quiz average score (15% weight)</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group-neon">
+                                        <i class="fas fa-project-diagram"></i>
+                                        <input type="number" id="project" min="40" max="100" placeholder="Project Score (%)" required>
+                                        <div class="input-glow"></div>
+                                    </div>
+                                    <small class="input-hint">Project score (40% weight - most important)</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Live Preview Card -->
+                            <div class="preview-card mt-4">
+                                <div class="preview-header">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>LIVE CALCULATION PREVIEW</span>
+                                </div>
+                                <div class="preview-body">
+                                    <div class="preview-item">
+                                        <span>📊 Calculated Final Score:</span>
+                                        <strong id="previewScore">--</strong>
+                                    </div>
+                                    <div class="preview-item">
+                                        <span>🎓 Predicted Grade:</span>
+                                        <strong id="previewGrade">--</strong>
+                                    </div>
+                                    <div class="preview-progress">
+                                        <div class="progress-bar-calc" id="previewProgress" style="width: 0%"></div>
+                                    </div>
+                                    <div class="preview-note mt-2">
+                                        <small>Formula: Midterm(25%) + Assignment(20%) + Quiz(15%) + Project(40%)<br>
+                                        +5 points if study hours ≥7, +3 points if attendance ≥90%</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="form-navigation mt-4">
+                            <button type="button" class="nav-btn prev-btn" id="prevBtn" style="display: none;" onclick="changeStep(-1)">
+                                <i class="fas fa-arrow-left"></i> BACK
+                            </button>
+                            <button type="button" class="nav-btn next-btn" id="nextBtn" onclick="changeStep(1)">
+                                NEXT <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <button type="submit" class="nav-btn submit-btn" id="submitBtn" style="display: none;">
+                                <i class="fas fa-save"></i> ADD STUDENT
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="messageArea" class="mt-4" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Quick Tips Card -->
+            <div class="tips-card-neon mt-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="tips-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>CALCULATION FORMULA</span>
+                </div>
+                <div class="tips-body">
+                    <div class="tip-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span><strong>Final Score Formula:</strong> Midterm(25%) + Assignment(20%) + Quiz(15%) + Project(40%)</span>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-star"></i>
+                        <span><strong>Bonus Points:</strong> +5 if study hours ≥7 per day | +3 if attendance ≥90%</span>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-trophy"></i>
+                        <span><strong>Grade Scale:</strong> A+ (90+), A (80-89), B (70-79), C (60-69), D (50-59), F (below 50)</span>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-info-circle"></i>
+                        <span><strong>Sample Values:</strong> Midterm:85, Assignment:80, Quiz:78, Project:88 → Score: 84.5% (Grade: A)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Previous styles remain the same, add these new ones */
+
+.input-hint {
+    display: block;
+    font-size: 0.65rem;
+    color: #6b6b6b;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.preview-note {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+    text-align: center;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+/* Enhanced select options */
+.neon-select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+/* Input placeholder styling */
+.input-group-neon input::placeholder {
+    color: #6b6b6b;
+    font-size: 0.85rem;
+}
+
+/* Rest of the styles remain the same as previous version */
+.cyber-header {
+    position: relative;
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 212, 255, 0.02));
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.cyber-header-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1), transparent);
+    animation: headerPulse 3s ease-in-out infinite;
+}
+
+@keyframes headerPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cyber-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    margin-bottom: 20px;
+}
+
+.live-badge {
+    background: #00ff88;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    animation: livePulse 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.add-student-icon {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.add-student-icon i {
+    font-size: 3rem;
+    color: #00ff88;
+}
+
+.icon-ring {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    animation: ringPulse 2s ease-out infinite;
+}
+
+.icon-ring.delay-1 { animation-delay: 0.7s; }
+.icon-ring.delay-2 { animation-delay: 1.4s; }
+
+@keyframes ringPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.cyber-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.cyber-subtitle {
+    color: #a0a0a0;
+    font-size: 1rem;
+}
+
+/* Form Glass Card */
+.form-glass-card {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 28px;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    overflow: hidden;
+}
+
+.card-header-neon {
+    padding: 18px 24px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.05));
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #00ff88;
+}
+
+.step-badge {
+    background: rgba(0, 255, 136, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: #00ff88;
+}
+
+.header-glow-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.card-body-neon {
+    padding: 30px;
+}
+
+/* Progress Steps */
+.progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #a0a0a0;
+    transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border-color: transparent;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+.step-label {
+    font-size: 0.7rem;
+    color: #6b6b6b;
+}
+
+.step.active .step-label {
+    color: #00ff88;
+}
+
+.step-line {
+    width: 80px;
+    height: 1px;
+    background: rgba(0, 255, 136, 0.3);
+    margin: 0 10px;
+}
+
+/* Section Title */
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+    color: #00ff88;
+}
+
+.section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.3), transparent);
+}
+
+/* Input Groups */
+.input-group-neon {
+    position: relative;
+}
+
+.input-group-neon i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff88;
+    z-index: 1;
+}
+
+.input-group-neon input, .input-group-neon select {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.input-group-neon input:focus, .input-group-neon select:focus {
+    outline: none;
+    border-color: #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.input-glow {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ff88, #00d4ff, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-group-neon input:focus + .input-glow,
+.input-group-neon select:focus + .input-glow {
+    opacity: 1;
+}
+
+.neon-select {
+    cursor: pointer;
+}
+
+/* Preview Card */
+.preview-card {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(0, 212, 255, 0.04));
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.preview-header {
+    padding: 12px 20px;
+    background: rgba(0, 255, 136, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: #00ff88;
+}
+
+.preview-body {
+    padding: 20px;
+}
+
+.preview-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.preview-item span {
+    font-size: 0.85rem;
+    color: #a0a0a0;
+}
+
+.preview-item strong {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #00ff88;
+}
+
+.preview-progress {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-calc {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+/* Navigation Buttons */
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.nav-btn {
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.prev-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.prev-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-3px);
+}
+
+.next-btn {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    color: #000;
+    margin-left: auto;
+}
+
+.next-btn:hover {
+    transform: translateX(3px);
+    filter: brightness(1.1);
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    border: none;
+    color: #000;
+    width: 100%;
+    justify-content: center;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Tips Card */
+.tips-card-neon {
+    background: linear-gradient(135deg, rgba(15, 15, 26, 0.95), rgba(26, 26, 46, 0.95));
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+}
+
+.tips-header {
+    padding: 15px 20px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.05));
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #00d4ff;
+}
+
+.tips-body {
+    padding: 15px 20px;
+}
+
+.tip-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.tip-item:last-child {
+    border-bottom: none;
+}
+
+.tip-item i {
+    width: 25px;
+    color: #00d4ff;
+}
+
+.tip-item span {
+    font-size: 0.8rem;
+    color: #a0a0a0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cyber-title {
+        font-size: 1.5rem;
+    }
+    .step-line {
+        width: 30px;
+    }
+    .step-number {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+    .step-label {
+        font-size: 0.6rem;
+    }
+    .form-navigation {
+        flex-direction: column;
+    }
+    .next-btn {
+        margin-left: 0;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 800, once: true });
+
+let currentStep = 1;
+const totalSteps = 3;
+
+// Real-time preview calculation
+const scoreInputs = ['midterm', 'assignment', 'quiz', 'project'];
+scoreInputs.forEach(id => {
+    document.getElementById(id).addEventListener('input', updatePreview);
+});
+document.getElementById('study_hours').addEventListener('input', updatePreview);
+document.getElementById('attendance').addEventListener('input', updatePreview);
+
+// Add this function after the form submit event listener
+function printCredentials() {
+    if (!window.lastAddedStudent) return;
+    
+    const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Login Credentials - ${window.lastAddedStudent.student_id}</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 40px;
+                    background: white;
+                }
+                .header {
+                    text-align: center;
+                    border-bottom: 2px solid #28a745;
+                    padding-bottom: 20px;
+                    margin-bottom: 30px;
+                }
+                .credentials {
+                    display: flex;
+                    gap: 30px;
+                    margin: 30px 0;
+                }
+                .student-card, .parent-card {
+                    flex: 1;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    padding: 20px;
+                }
+                .student-card {
+                    border-left: 4px solid #28a745;
+                }
+                .parent-card {
+                    border-left: 4px solid #17a2b8;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 40px;
+                    font-size: 12px;
+                    color: #666;
+                }
+                code {
+                    background: #f4f4f4;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>NEXUSLEARN - Login Credentials</h2>
+                <p>Student Registration Successful</p>
+            </div>
+            
+            <div class="credentials">
+                <div class="student-card">
+                    <h3>🎓 Student Login</h3>
+                    <p><strong>Student ID:</strong> ${window.lastAddedStudent.student_id}</p>
+                    <p><strong>Name:</strong> ${window.lastAddedStudent.student_name || document.getElementById('name').value}</p>
+                    <p><strong>Password:</strong> <code>${window.lastAddedStudent.student_password}</code></p>
+                    <p><strong>Email:</strong> ${window.lastAddedStudent.student_email}</p>
+                </div>
+                
+                <div class="parent-card">
+                    <h3>👪 Parent Login</h3>
+                    <p><strong>Email:</strong> ${window.lastAddedStudent.parent_email}</p>
+                    <p><strong>Password:</strong> <code>${window.lastAddedStudent.parent_password}</code></p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>Login URL: http://localhost:5000</p>
+                <p>Student Portal: /student-login | Parent Portal: /parent-login</p>
+                <p>Please keep these credentials safe.</p>
+            </div>
+        </body>
+        </html>
+    `;
+    
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.print();
+}
+
+function updatePreview() {
+    const midterm = parseFloat(document.getElementById('midterm').value) || 0;
+    const assignment = parseFloat(document.getElementById('assignment').value) || 0;
+    const quiz = parseFloat(document.getElementById('quiz').value) || 0;
+    const project = parseFloat(document.getElementById('project').value) || 0;
+    const studyHours = parseFloat(document.getElementById('study_hours').value) || 0;
+    const attendance = parseFloat(document.getElementById('attendance').value) || 0;
+    
+    let finalScore = (midterm * 0.25) + (assignment * 0.20) + (quiz * 0.15) + (project * 0.40);
+    
+    if (studyHours >= 7) finalScore += 5;
+    if (attendance >= 90) finalScore += 3;
+    
+    finalScore = Math.min(100, Math.max(40, finalScore));
+    
+    let grade = '';
+    if (finalScore >= 90) grade = 'A+';
+    else if (finalScore >= 80) grade = 'A';
+    else if (finalScore >= 70) grade = 'B';
+    else if (finalScore >= 60) grade = 'C';
+    else if (finalScore >= 50) grade = 'D';
+    else grade = 'F';
+    
+    document.getElementById('previewScore').innerHTML = finalScore.toFixed(1) + '%';
+    document.getElementById('previewGrade').innerHTML = grade;
+    document.getElementById('previewProgress').style.width = finalScore + '%';
+}
+
+function changeStep(delta) {
+    const newStep = currentStep + delta;
+    if (newStep < 1 || newStep > totalSteps) return;
+    
+    document.getElementById(`step${currentStep}`).style.display = 'none';
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+    
+    currentStep = newStep;
+    document.getElementById(`step${currentStep}`).style.display = 'block';
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('active');
+    
+    document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'inline-flex';
+    document.getElementById('nextBtn').style.display = currentStep === totalSteps ? 'none' : 'inline-flex';
+    document.getElementById('submitBtn').style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
+    
+    document.querySelector('.step-badge').innerHTML = `STEP ${currentStep} OF ${totalSteps}`;
+}
+
+// Form submission
+document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const midterm = parseFloat(document.getElementById('midterm').value);
+    const assignment = parseFloat(document.getElementById('assignment').value);
+    const quiz = parseFloat(document.getElementById('quiz').value);
+    const project = parseFloat(document.getElementById('project').value);
+    const studyHours = parseFloat(document.getElementById('study_hours').value);
+    const attendance = parseFloat(document.getElementById('attendance').value);
+    
+    let finalScore = (midterm * 0.25 + assignment * 0.20 + quiz * 0.15 + project * 0.40);
+    if (studyHours >= 7) finalScore += 5;
+    if (attendance >= 90) finalScore += 3;
+    finalScore = Math.min(100, Math.max(40, finalScore));
+    
+    let grade = '';
+    if (finalScore >= 90) grade = 'A+';
+    else if (finalScore >= 80) grade = 'A';
+    else if (finalScore >= 70) grade = 'B';
+    else if (finalScore >= 60) grade = 'C';
+    else if (finalScore >= 50) grade = 'D';
+    else grade = 'F';
+    
+    const studentData = {
+        name: document.getElementById('name').value,
+        gender: document.getElementById('gender').value,
+        age: parseInt(document.getElementById('age').value),
+        study_hours: studyHours,
+        previous_score: parseFloat(document.getElementById('previous_score').value),
+        attendance_percentage: attendance,
+        parent_education_level: document.getElementById('parent_education').value,
+        parent_income: parseFloat(document.getElementById('parent_income').value),
+        internet_access_at_home: document.getElementById('internet').value,
+        sleep_hours: parseFloat(document.getElementById('sleep_hours').value),
+        extracurricular_activities: document.getElementById('extracurricular').value,
+        tuition_classes: document.getElementById('tuition').value,
+        library_access: 'Yes',
+        transport_facility: 'No',
+        midterm_score: midterm,
+        assignment_score: assignment,
+        quiz_score: quiz,
+        project_score: project,
+        final_score: finalScore.toFixed(1),
+        grade: grade
+    };
+    
+    const msgDiv = document.getElementById('messageArea');
+    msgDiv.className = 'alert alert-info';
+    msgDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding student...';
+    msgDiv.style.display = 'block';
+    
+    try {
+        const response = await fetch('/api/add-student', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(studentData)
+        });
+        
+        const result = await response.json();
+        
+        
+        if (result.success) {
+            msgDiv.className = 'alert alert-success';
+            msgDiv.innerHTML = `
+                <div class="text-center">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <h4 class="text-success">Student Added Successfully!</h4>
+                    <p><strong>Student ID:</strong> ${result.student_id}</p>
+                    <p><strong>Final Grade:</strong> ${result.grade} | <strong>Score:</strong> ${result.final_score}%</p>
+                    
+                    <hr class="bg-success">
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="card bg-dark border-success">
+                                <div class="card-header bg-success text-dark">
+                                    <i class="fas fa-user-graduate"></i> Student Login
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Student ID:</strong> ${result.student_id}</p>
+                                    <p><strong>Password:</strong> <code>${result.student_password}</code></p>
+                                    <p><strong>Email:</strong> ${result.student_email}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-dark border-info">
+                                <div class="card-header bg-info text-dark">
+                                    <i class="fas fa-users"></i> Parent Login
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Email:</strong> ${result.parent_email}</p>
+                                    <p><strong>Password:</strong> <code>${result.parent_password}</code></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle"></i> 
+                        <small>Login credentials have been generated. Please share these with the student and parent.</small>
+                    </div>
+                    
+                    <button class="btn btn-outline-success mt-3" onclick="printCredentials()">
+                        <i class="fas fa-print"></i> Print Credentials
+                    </button>
+                </div>
+            `;
+            document.getElementById('addStudentForm').reset();
+            
+            // Store credentials for printing
+            window.lastAddedStudent = result;
+            
+            // Don't auto-redirect, let user see credentials
+            setTimeout(() => {
+                msgDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+    } catch(err) {
+        msgDiv.className = 'alert alert-danger';
+        msgDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Error: ${err.message}`;
+    }
+    
+    setTimeout(() => {
+        if(msgDiv.className !== 'alert-success') {
+            msgDiv.style.display = 'none';
+        }
+    }, 5000);
+});
+
+// Step click navigation
+document.querySelectorAll('.step').forEach(step => {
+    step.addEventListener('click', () => {
+        const stepNum = parseInt(step.dataset.step);
+        while (currentStep < stepNum) changeStep(1);
+        while (currentStep > stepNum) changeStep(-1);
+    });
+});
+</script>
+{% endblock %}
